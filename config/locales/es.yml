@@ -1,0 +1,21 @@
+es:
+  hello: "Hola Mundo"
+  date:
+    abbr_month_names:
+    - 
+    - Ene
+    - Feb
+    - Mar
+    - Abr
+    - May
+    - Jun
+    - Jul
+    - Ago
+    - Sep
+    - Oct
+    - Nov
+    - Dic
+  time:
+    formats:
+      short: "%b %Y"
+      default: "%d %b, %Y - %H:%M"
