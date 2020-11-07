@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Categoria:</strong>
+  <%= @agregacioneses.categoria_id %>
+</p>
+
+<p>
+  <strong>Concepto:</strong>
+  <%= @agregacioneses.concepto_id %>
+</p>
+
+<%= link_to 'Edit', edit_agregacioneses_path(@agregacioneses) %> |
+<%= link_to 'Back', agregaciones_path %>

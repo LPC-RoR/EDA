@@ -1,0 +1,13 @@
+<% c.classify.constantize::FORM_FIELDS.each do |field| %>
+	<% case field[1] %>
+	<% when 'entry' %>
+
+	  <div class="field">
+		<%= form.label field[0] %></br>
+	  	<%= form.text_field field[0] %>
+	  </div>
+
+	<% when 'hidden' %>
+	  <%= form.hidden_field field[0] %>
+	<% end %>
+<% end %>

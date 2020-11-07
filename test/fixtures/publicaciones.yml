@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  titulo: MyString
+  annio: 1
+  paginas: MyString
+  link: MyString
+  abstract: MyString
+  registro_id: 1
+  revista_id: 1
+
+two:
+  titulo: MyString
+  annio: 1
+  paginas: MyString
+  link: MyString
+  abstract: MyString
+  registro_id: 1
+  revista_id: 1

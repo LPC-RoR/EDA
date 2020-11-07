@@ -1,0 +1,27 @@
+<%= form_with(model: referencia, local: true) do |form| %>
+  <% if referencia.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(referencia.errors.count, "error") %> prohibited this referencia from being saved:</h2>
+
+      <ul>
+      <% referencia.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :concepto_id %>
+    <%= form.number_field :concepto_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :publicacion_id %>
+    <%= form.number_field :publicacion_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

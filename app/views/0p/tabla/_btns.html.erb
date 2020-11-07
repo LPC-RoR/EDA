@@ -1,0 +1,10 @@
+<% if a == 'seleccion' %>
+	<%= render partial: '0p/tabla/btn_seleccion', locals: {link_seleccion: "#{@link_seleccion}#{objeto.id}" } %>
+<% else %>
+	<!-- VALIDA QUE SE PUEDA MODIFICAR -->
+	<!--% if objeto.class.name.constantize::ESTADOS.index(objeto.estado) == 0 %-->
+		<%= render partial: '0p/tabla/btns_e', locals: {objeto: objeto} unless Recurso::JOIN_TABLES.include?(objeto.class.name.pluralize.downcase) %>
+		<!-- BOTONES ESTADO EMPLEADO : SOLO -->
+		<%= render partial: '0p/tabla/btns_estado', locals: {objeto: objeto, estados: objeto.class.name.constantize::ESTADOS, link_estado: "/#{objeto.class.name.downcase.pluralize}/#{objeto.id}/estado?estado="} %>
+	<!--% end %-->
+<% end %>

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Revistas</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Revista</th>
+      <th>Idioma</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @revistas.each do |revista| %>
+      <tr>
+        <td><%= revista.revista %></td>
+        <td><%= revista.idioma_id %></td>
+        <td><%= link_to 'Show', revista %></td>
+        <td><%= link_to 'Edit', edit_revista_path(revista) %></td>
+        <td><%= link_to 'Destroy', revista, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Revista', new_revista_path %>

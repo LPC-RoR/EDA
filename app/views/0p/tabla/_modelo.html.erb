@@ -1,0 +1,28 @@
+<tr>
+	<!-- Recorre los campos a desplegar en la table -->
+	<!-- f : [campo, tipo_delpliegue] -->
+	<% m_tabla_fields(objeto).each do |f| %>
+		<% case f[1] %>
+		<% when 'show' %>
+			<!-- el link se hace salvo que sea una tabla de seleccion -->
+			<td><%= render partial: '0p/tabla/show_field', locals: {a: a, campo: objeto.send(f[0]), objeto: objeto} %></td>
+		<% when 'fshow' %>
+			<td><%= render partial: '0p/tabla/show_field', locals: {a: a, campo: f_tabla(objeto).send(f[0]), objeto: objeto} %></td>
+		<!-- campo con formato especial para desplegar, se asume único por tabla -->
+		<% when 'display' %>
+			<td> <%= objeto.nombre_display %> </td>
+		<% when 'fdisplay' %>
+			<td> <%= f_tabla(objeto).nombre_display %> </td>
+		<% when 'diahora' %>
+			<td> <%= l(objeto.send(f[0])) %> </td>
+		<!-- Despliegue normal -->
+		<% when 'normal' %>
+			<td> <%= objeto.send(f[0]) %> </td>
+		<% else %>
+			<td> <%= f_tabla(objeto).send(f[0]) %> </td>
+		<% end %>
+
+	<% end %>
+
+	<td><%= render partial: '0p/tabla/btns', locals: {a: a, objeto: objeto} %></td>
+</tr>

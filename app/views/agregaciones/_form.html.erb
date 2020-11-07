@@ -1,0 +1,27 @@
+<%= form_with(model: agregacioneses, local: true) do |form| %>
+  <% if agregacioneses.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(agregacioneses.errors.count, "error") %> prohibited this agregacioneses from being saved:</h2>
+
+      <ul>
+      <% agregacioneses.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :categoria_id %>
+    <%= form.number_field :categoria_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :concepto_id %>
+    <%= form.number_field :concepto_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

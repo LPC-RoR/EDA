@@ -1,0 +1,27 @@
+<%= form_with(model: metodologia, local: true) do |form| %>
+  <% if metodologia.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(metodologia.errors.count, "error") %> prohibited this metodologia from being saved:</h2>
+
+      <ul>
+      <% metodologia.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :metodologia %>
+    <%= form.text_field :metodologia %>
+  </div>
+
+  <div class="field">
+    <%= form.label :publicacion_id %>
+    <%= form.number_field :publicacion_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

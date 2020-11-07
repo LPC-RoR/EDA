@@ -1,0 +1,34 @@
+<div class="container-fluid">
+	<!--div class="row"-->
+		<!--div class="col-6"></div-->
+		<!--div class="col-6"-->
+			<%= render partial: '0p/general/titulo', locals: {c: c, a: a, titulo: '', size: '4'} %>
+
+			<%= form_with(model: @objeto, local: true) do |form| %>
+			<%#= form_for(@objeto) do |f| %>
+			  <% if @objeto.errors.any? %>
+			    <div id="error_explanation">
+			      <h2><%= pluralize(@objeto.errors.count, "error") %> evitan que este registro sea grabado:</h2>
+
+			      <ul>
+			      <% @objeto.errors.full_messages.each do |message| %>
+			        <li><%= message %></li>
+			      <% end %>
+			      </ul>
+			      
+			    </div>
+			  <% end %>
+
+			  <%= render partial: '0p/form/detail', locals: {c: c, form: form} %>
+
+			  <!--%= render partial: "#{@objeto.class.to_s.tableize}/campos_form", locals: {form: form} %-->
+
+			  </br>
+
+			  <div class="actions">
+			    <%= form.submit %>
+			  </div>
+			<% end %>
+		<!--/div-->
+	<!--/div-->
+</div>
