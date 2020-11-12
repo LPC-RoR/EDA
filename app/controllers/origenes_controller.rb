@@ -4,7 +4,7 @@ class OrigenesController < ApplicationController
   # GET /origenes
   # GET /origenes.json
   def index
-    @origenes = Origen.all
+    @coleccion = Origen.all
   end
 
   # GET /origenes/1
@@ -14,7 +14,7 @@ class OrigenesController < ApplicationController
 
   # GET /origenes/new
   def new
-    @origen = Origen.new
+    @objeto = Origen.new
   end
 
   # GET /origenes/1/edit
@@ -24,15 +24,15 @@ class OrigenesController < ApplicationController
   # POST /origenes
   # POST /origenes.json
   def create
-    @origen = Origen.new(origen_params)
+    @objeto = Origen.new(origen_params)
 
     respond_to do |format|
-      if @origen.save
-        format.html { redirect_to @origen, notice: 'Origen was successfully created.' }
-        format.json { render :show, status: :created, location: @origen }
+      if @objeto.save
+        format.html { redirect_to @objeto, notice: 'Origen was successfully created.' }
+        format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
-        format.json { render json: @origen.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -41,12 +41,12 @@ class OrigenesController < ApplicationController
   # PATCH/PUT /origenes/1.json
   def update
     respond_to do |format|
-      if @origen.update(origen_params)
-        format.html { redirect_to @origen, notice: 'Origen was successfully updated.' }
-        format.json { render :show, status: :ok, location: @origen }
+      if @objeto.update(origen_params)
+        format.html { redirect_to @objeto, notice: 'Origen was successfully updated.' }
+        format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
-        format.json { render json: @origen.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -54,7 +54,7 @@ class OrigenesController < ApplicationController
   # DELETE /origenes/1
   # DELETE /origenes/1.json
   def destroy
-    @origen.destroy
+    @objeto.destroy
     respond_to do |format|
       format.html { redirect_to origenes_url, notice: 'Origen was successfully destroyed.' }
       format.json { head :no_content }
@@ -64,7 +64,7 @@ class OrigenesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_origen
-      @origen = Origen.find(params[:id])
+      @objeto = Origen.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

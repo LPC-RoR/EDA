@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_07_022321) do
+ActiveRecord::Schema.define(version: 2020_11_10_212352) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,6 +98,12 @@ ActiveRecord::Schema.define(version: 2020_11_07_022321) do
     t.integer "revista_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "detalle_autores"
+    t.string "detalle_revista"
+    t.text "keywords"
+    t.text "detalle_instituciones"
+    t.text "fechas"
+    t.string "doi"
     t.index ["registro_id"], name: "index_publicaciones_on_registro_id"
     t.index ["revista_id"], name: "index_publicaciones_on_revista_id"
   end

@@ -4,7 +4,7 @@ class RevistasController < ApplicationController
   # GET /revistas
   # GET /revistas.json
   def index
-    @revistas = Revista.all
+    @coleccion = Revista.all
   end
 
   # GET /revistas/1
@@ -14,7 +14,7 @@ class RevistasController < ApplicationController
 
   # GET /revistas/new
   def new
-    @revista = Revista.new
+    @objeto = Revista.new
   end
 
   # GET /revistas/1/edit
@@ -24,15 +24,15 @@ class RevistasController < ApplicationController
   # POST /revistas
   # POST /revistas.json
   def create
-    @revista = Revista.new(revista_params)
+    @objeto = Revista.new(revista_params)
 
     respond_to do |format|
-      if @revista.save
-        format.html { redirect_to @revista, notice: 'Revista was successfully created.' }
-        format.json { render :show, status: :created, location: @revista }
+      if @objeto.save
+        format.html { redirect_to @objeto, notice: 'Revista was successfully created.' }
+        format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
-        format.json { render json: @revista.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -41,12 +41,12 @@ class RevistasController < ApplicationController
   # PATCH/PUT /revistas/1.json
   def update
     respond_to do |format|
-      if @revista.update(revista_params)
-        format.html { redirect_to @revista, notice: 'Revista was successfully updated.' }
-        format.json { render :show, status: :ok, location: @revista }
+      if @objeto.update(revista_params)
+        format.html { redirect_to @objeto, notice: 'Revista was successfully updated.' }
+        format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
-        format.json { render json: @revista.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -54,7 +54,7 @@ class RevistasController < ApplicationController
   # DELETE /revistas/1
   # DELETE /revistas/1.json
   def destroy
-    @revista.destroy
+    @objeto.destroy
     respond_to do |format|
       format.html { redirect_to revistas_url, notice: 'Revista was successfully destroyed.' }
       format.json { head :no_content }
@@ -64,7 +64,7 @@ class RevistasController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_revista
-      @revista = Revista.find(params[:id])
+      @objeto = Revista.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

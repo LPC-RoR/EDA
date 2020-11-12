@@ -4,7 +4,7 @@ class RecursosController < ApplicationController
   # GET /recursos
   # GET /recursos.json
   def index
-    @recursos = Recurso.all
+    @coleccion = Recurso.all
   end
 
   # GET /recursos/1
@@ -14,7 +14,7 @@ class RecursosController < ApplicationController
 
   # GET /recursos/new
   def new
-    @recurso = Recurso.new
+    @objeto = Recurso.new
   end
 
   # GET /recursos/1/edit
@@ -24,15 +24,15 @@ class RecursosController < ApplicationController
   # POST /recursos
   # POST /recursos.json
   def create
-    @recurso = Recurso.new(recurso_params)
+    @objeto = Recurso.new(recurso_params)
 
     respond_to do |format|
-      if @recurso.save
-        format.html { redirect_to @recurso, notice: 'Recurso was successfully created.' }
-        format.json { render :show, status: :created, location: @recurso }
+      if @objeto.save
+        format.html { redirect_to @objeto, notice: 'Recurso was successfully created.' }
+        format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
-        format.json { render json: @recurso.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -41,12 +41,12 @@ class RecursosController < ApplicationController
   # PATCH/PUT /recursos/1.json
   def update
     respond_to do |format|
-      if @recurso.update(recurso_params)
-        format.html { redirect_to @recurso, notice: 'Recurso was successfully updated.' }
-        format.json { render :show, status: :ok, location: @recurso }
+      if @objeto.update(recurso_params)
+        format.html { redirect_to @objeto, notice: 'Recurso was successfully updated.' }
+        format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
-        format.json { render json: @recurso.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -54,7 +54,7 @@ class RecursosController < ApplicationController
   # DELETE /recursos/1
   # DELETE /recursos/1.json
   def destroy
-    @recurso.destroy
+    @objeto.destroy
     respond_to do |format|
       format.html { redirect_to recursos_url, notice: 'Recurso was successfully destroyed.' }
       format.json { head :no_content }
@@ -64,7 +64,7 @@ class RecursosController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_recurso
-      @recurso = Recurso.find(params[:id])
+      @objeto = Recurso.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

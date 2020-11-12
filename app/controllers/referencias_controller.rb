@@ -4,7 +4,7 @@ class ReferenciasController < ApplicationController
   # GET /referencias
   # GET /referencias.json
   def index
-    @referencias = Referencia.all
+    @coleccion = Referencia.all
   end
 
   # GET /referencias/1
@@ -14,7 +14,7 @@ class ReferenciasController < ApplicationController
 
   # GET /referencias/new
   def new
-    @referencia = Referencia.new
+    @objeto = Referencia.new
   end
 
   # GET /referencias/1/edit
@@ -24,15 +24,15 @@ class ReferenciasController < ApplicationController
   # POST /referencias
   # POST /referencias.json
   def create
-    @referencia = Referencia.new(referencia_params)
+    @objeto = Referencia.new(referencia_params)
 
     respond_to do |format|
-      if @referencia.save
-        format.html { redirect_to @referencia, notice: 'Referencia was successfully created.' }
-        format.json { render :show, status: :created, location: @referencia }
+      if @objeto.save
+        format.html { redirect_to @objeto, notice: 'Referencia was successfully created.' }
+        format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
-        format.json { render json: @referencia.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -41,12 +41,12 @@ class ReferenciasController < ApplicationController
   # PATCH/PUT /referencias/1.json
   def update
     respond_to do |format|
-      if @referencia.update(referencia_params)
-        format.html { redirect_to @referencia, notice: 'Referencia was successfully updated.' }
-        format.json { render :show, status: :ok, location: @referencia }
+      if @objeto.update(referencia_params)
+        format.html { redirect_to @objeto, notice: 'Referencia was successfully updated.' }
+        format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
-        format.json { render json: @referencia.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -54,7 +54,7 @@ class ReferenciasController < ApplicationController
   # DELETE /referencias/1
   # DELETE /referencias/1.json
   def destroy
-    @referencia.destroy
+    @objeto.destroy
     respond_to do |format|
       format.html { redirect_to referencias_url, notice: 'Referencia was successfully destroyed.' }
       format.json { head :no_content }
@@ -64,7 +64,7 @@ class ReferenciasController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_referencia
-      @referencia = Referencia.find(params[:id])
+      @objeto = Referencia.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

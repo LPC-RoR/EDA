@@ -1,1 +1,1 @@
-json.partial! "agregaciones/agregacioneses", agregacioneses: @agregacioneses
+json.partial! "agregaciones/agregacion", agregacion: @agregacion

@@ -6,7 +6,7 @@ class Recurso < ApplicationRecord
 	TABS_CONTROLLERS = ['recursos']
 
 	# estoy tratando de generalizar el despliegue de tablas JOIN
-	JOIN_TABLES = ['registros']
+	JOIN_TABLES = []
 
 	# RECURSOS
 	# ACCIONES de "recursos_controller" que DESPLIEGAN TABS

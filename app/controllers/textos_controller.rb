@@ -4,7 +4,7 @@ class TextosController < ApplicationController
   # GET /textos
   # GET /textos.json
   def index
-    @textos = Texto.all
+    @coleccion = Texto.all
   end
 
   # GET /textos/1
@@ -14,7 +14,7 @@ class TextosController < ApplicationController
 
   # GET /textos/new
   def new
-    @texto = Texto.new
+    @objeto = Texto.new
   end
 
   # GET /textos/1/edit
@@ -24,15 +24,15 @@ class TextosController < ApplicationController
   # POST /textos
   # POST /textos.json
   def create
-    @texto = Texto.new(texto_params)
+    @objeto = Texto.new(texto_params)
 
     respond_to do |format|
-      if @texto.save
-        format.html { redirect_to @texto, notice: 'Texto was successfully created.' }
-        format.json { render :show, status: :created, location: @texto }
+      if @objeto.save
+        format.html { redirect_to @objeto, notice: 'Texto was successfully created.' }
+        format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
-        format.json { render json: @texto.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -41,12 +41,12 @@ class TextosController < ApplicationController
   # PATCH/PUT /textos/1.json
   def update
     respond_to do |format|
-      if @texto.update(texto_params)
-        format.html { redirect_to @texto, notice: 'Texto was successfully updated.' }
-        format.json { render :show, status: :ok, location: @texto }
+      if @objeto.update(texto_params)
+        format.html { redirect_to @objeto, notice: 'Texto was successfully updated.' }
+        format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
-        format.json { render json: @texto.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -54,7 +54,7 @@ class TextosController < ApplicationController
   # DELETE /textos/1
   # DELETE /textos/1.json
   def destroy
-    @texto.destroy
+    @objeto.destroy
     respond_to do |format|
       format.html { redirect_to textos_url, notice: 'Texto was successfully destroyed.' }
       format.json { head :no_content }
@@ -64,7 +64,7 @@ class TextosController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_texto
-      @texto = Texto.find(params[:id])
+      @objeto = Texto.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

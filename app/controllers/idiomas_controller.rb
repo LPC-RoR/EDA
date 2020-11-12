@@ -4,7 +4,7 @@ class IdiomasController < ApplicationController
   # GET /idiomas
   # GET /idiomas.json
   def index
-    @idiomas = Idioma.all
+    @coleccion = Idioma.all
   end
 
   # GET /idiomas/1
@@ -14,7 +14,7 @@ class IdiomasController < ApplicationController
 
   # GET /idiomas/new
   def new
-    @idioma = Idioma.new
+    @objeto = Idioma.new
   end
 
   # GET /idiomas/1/edit
@@ -24,15 +24,15 @@ class IdiomasController < ApplicationController
   # POST /idiomas
   # POST /idiomas.json
   def create
-    @idioma = Idioma.new(idioma_params)
+    @objeto = Idioma.new(idioma_params)
 
     respond_to do |format|
-      if @idioma.save
-        format.html { redirect_to @idioma, notice: 'Idioma was successfully created.' }
-        format.json { render :show, status: :created, location: @idioma }
+      if @objeto.save
+        format.html { redirect_to @objeto, notice: 'Idioma was successfully created.' }
+        format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
-        format.json { render json: @idioma.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -41,12 +41,12 @@ class IdiomasController < ApplicationController
   # PATCH/PUT /idiomas/1.json
   def update
     respond_to do |format|
-      if @idioma.update(idioma_params)
-        format.html { redirect_to @idioma, notice: 'Idioma was successfully updated.' }
-        format.json { render :show, status: :ok, location: @idioma }
+      if @objeto.update(idioma_params)
+        format.html { redirect_to @objeto, notice: 'Idioma was successfully updated.' }
+        format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
-        format.json { render json: @idioma.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -54,7 +54,7 @@ class IdiomasController < ApplicationController
   # DELETE /idiomas/1
   # DELETE /idiomas/1.json
   def destroy
-    @idioma.destroy
+    @objeto.destroy
     respond_to do |format|
       format.html { redirect_to idiomas_url, notice: 'Idioma was successfully destroyed.' }
       format.json { head :no_content }
@@ -64,7 +64,7 @@ class IdiomasController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_idioma
-      @idioma = Idioma.find(params[:id])
+      @objeto = Idioma.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

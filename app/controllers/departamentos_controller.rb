@@ -4,7 +4,7 @@ class DepartamentosController < ApplicationController
   # GET /departamentos
   # GET /departamentos.json
   def index
-    @departamentos = Departamento.all
+    @coleccion = Departamento.all
   end
 
   # GET /departamentos/1
@@ -14,7 +14,7 @@ class DepartamentosController < ApplicationController
 
   # GET /departamentos/new
   def new
-    @departamento = Departamento.new
+    @objeto = Departamento.new
   end
 
   # GET /departamentos/1/edit
@@ -24,15 +24,15 @@ class DepartamentosController < ApplicationController
   # POST /departamentos
   # POST /departamentos.json
   def create
-    @departamento = Departamento.new(departamento_params)
+    @objeto = Departamento.new(departamento_params)
 
     respond_to do |format|
-      if @departamento.save
-        format.html { redirect_to @departamento, notice: 'Departamento was successfully created.' }
-        format.json { render :show, status: :created, location: @departamento }
+      if @objeto.save
+        format.html { redirect_to @objeto, notice: 'Departamento was successfully created.' }
+        format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
-        format.json { render json: @departamento.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -41,12 +41,12 @@ class DepartamentosController < ApplicationController
   # PATCH/PUT /departamentos/1.json
   def update
     respond_to do |format|
-      if @departamento.update(departamento_params)
-        format.html { redirect_to @departamento, notice: 'Departamento was successfully updated.' }
-        format.json { render :show, status: :ok, location: @departamento }
+      if @objeto.update(departamento_params)
+        format.html { redirect_to @objeto, notice: 'Departamento was successfully updated.' }
+        format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
-        format.json { render json: @departamento.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -54,7 +54,7 @@ class DepartamentosController < ApplicationController
   # DELETE /departamentos/1
   # DELETE /departamentos/1.json
   def destroy
-    @departamento.destroy
+    @objeto.destroy
     respond_to do |format|
       format.html { redirect_to departamentos_url, notice: 'Departamento was successfully destroyed.' }
       format.json { head :no_content }
@@ -64,7 +64,7 @@ class DepartamentosController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_departamento
-      @departamento = Departamento.find(params[:id])
+      @objeto = Departamento.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

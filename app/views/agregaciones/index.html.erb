@@ -12,13 +12,13 @@
   </thead>
 
   <tbody>
-    <% @agregaciones.each do |agregacioneses| %>
+    <% @agregaciones.each do |agregacion| %>
       <tr>
-        <td><%= agregacioneses.categoria_id %></td>
-        <td><%= agregacioneses.concepto_id %></td>
-        <td><%= link_to 'Show', agregacioneses %></td>
-        <td><%= link_to 'Edit', edit_agregacioneses_path(agregacioneses) %></td>
-        <td><%= link_to 'Destroy', agregacioneses, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= agregacion.categoria_id %></td>
+        <td><%= agregacion.concepto_id %></td>
+        <td><%= link_to 'Show', agregacion %></td>
+        <td><%= link_to 'Edit', edit_agregacion_path(agregacion) %></td>
+        <td><%= link_to 'Destroy', agregacion, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -26,4 +26,4 @@
 
 <br>
 
-<%= link_to 'New Agregacioneses', new_agregacioneses_path %>
+<%= link_to 'New Agregacion', new_agregacion_path %>

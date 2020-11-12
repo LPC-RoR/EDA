@@ -2,7 +2,7 @@ require 'test_helper'
 
 class AgregacionesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @agregacioneses = agregaciones(:one)
+    @agregacion = agregaciones(:one)
   end
 
   test "should get index" do
@@ -11,36 +11,36 @@ class AgregacionesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get new" do
-    get new_agregacioneses_url
+    get new_agregacion_url
     assert_response :success
   end
 
-  test "should create agregacioneses" do
+  test "should create agregacion" do
     assert_difference('Agregacion.count') do
-      post agregaciones_url, params: { agregacioneses: { categoria_id: @agregacioneses.categoria_id, concepto_id: @agregacioneses.concepto_id } }
+      post agregaciones_url, params: { agregacion: { categoria_id: @agregacion.categoria_id, concepto_id: @agregacion.concepto_id } }
     end
 
-    assert_redirected_to agregacioneses_url(Agregacion.last)
+    assert_redirected_to agregacion_url(Agregacion.last)
   end
 
-  test "should show agregacioneses" do
-    get agregacioneses_url(@agregacioneses)
+  test "should show agregacion" do
+    get agregacion_url(@agregacion)
     assert_response :success
   end
 
   test "should get edit" do
-    get edit_agregacioneses_url(@agregacioneses)
+    get edit_agregacion_url(@agregacion)
     assert_response :success
   end
 
-  test "should update agregacioneses" do
-    patch agregacioneses_url(@agregacioneses), params: { agregacioneses: { categoria_id: @agregacioneses.categoria_id, concepto_id: @agregacioneses.concepto_id } }
-    assert_redirected_to agregacioneses_url(@agregacioneses)
+  test "should update agregacion" do
+    patch agregacion_url(@agregacion), params: { agregacion: { categoria_id: @agregacion.categoria_id, concepto_id: @agregacion.concepto_id } }
+    assert_redirected_to agregacion_url(@agregacion)
   end
 
-  test "should destroy agregacioneses" do
+  test "should destroy agregacion" do
     assert_difference('Agregacion.count', -1) do
-      delete agregacioneses_url(@agregacioneses)
+      delete agregacion_url(@agregacion)
     end
 
     assert_redirected_to agregaciones_url

@@ -4,7 +4,7 @@ class PublicacionesController < ApplicationController
   # GET /publicaciones
   # GET /publicaciones.json
   def index
-    @publicaciones = Publicacion.all
+    @coleccion = Publicacion.all
   end
 
   # GET /publicaciones/1
@@ -14,7 +14,7 @@ class PublicacionesController < ApplicationController
 
   # GET /publicaciones/new
   def new
-    @publicacion = Publicacion.new
+    @objeto = Publicacion.new
   end
 
   # GET /publicaciones/1/edit
@@ -24,15 +24,15 @@ class PublicacionesController < ApplicationController
   # POST /publicaciones
   # POST /publicaciones.json
   def create
-    @publicacion = Publicacion.new(publicacion_params)
+    @objeto = Publicacion.new(publicacion_params)
 
     respond_to do |format|
-      if @publicacion.save
-        format.html { redirect_to @publicacion, notice: 'Publicacion was successfully created.' }
-        format.json { render :show, status: :created, location: @publicacion }
+      if @objeto.save
+        format.html { redirect_to @objeto, notice: 'Publicacion was successfully created.' }
+        format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
-        format.json { render json: @publicacion.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -41,12 +41,12 @@ class PublicacionesController < ApplicationController
   # PATCH/PUT /publicaciones/1.json
   def update
     respond_to do |format|
-      if @publicacion.update(publicacion_params)
-        format.html { redirect_to @publicacion, notice: 'Publicacion was successfully updated.' }
-        format.json { render :show, status: :ok, location: @publicacion }
+      if @objeto.update(publicacion_params)
+        format.html { redirect_to @objeto, notice: 'Publicacion was successfully updated.' }
+        format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
-        format.json { render json: @publicacion.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -54,7 +54,7 @@ class PublicacionesController < ApplicationController
   # DELETE /publicaciones/1
   # DELETE /publicaciones/1.json
   def destroy
-    @publicacion.destroy
+    @objeto.destroy
     respond_to do |format|
       format.html { redirect_to publicaciones_url, notice: 'Publicacion was successfully destroyed.' }
       format.json { head :no_content }
@@ -64,11 +64,11 @@ class PublicacionesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_publicacion
-      @publicacion = Publicacion.find(params[:id])
+      @objeto = Publicacion.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def publicacion_params
-      params.require(:publicacion).permit(:titulo, :annio, :paginas, :link, :abstract, :registro_id, :revista_id)
+      params.require(:publicacion).permit(:titulo, :detalle_autores, :detalle_revista, :keywords, :detalle_instituciones, :fechas, :doi, :annio, :paginas, :link, :abstract, :registro_id, :revista_id)
     end
 end

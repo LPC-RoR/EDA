@@ -35,8 +35,8 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
 
 	inflect.plural 'agregacion', 'agregaciones'
 	inflect.plural 'Agregacion', 'Agregaciones'
-	inflect.singular 'agregacion', 'agregaciones'
-	inflect.singular 'Agregacion', 'Agregaciones'
+	inflect.singular 'agregaciones', 'agregacion'
+	inflect.singular 'Agregaciones', 'Agregacion'
 
 	inflect.plural 'referencia', 'referencias'
 	inflect.plural 'Referencia', 'Referencias'

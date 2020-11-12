@@ -4,7 +4,7 @@ class ConceptosController < ApplicationController
   # GET /conceptos
   # GET /conceptos.json
   def index
-    @conceptos = Concepto.all
+    @coleccion = Concepto.all
   end
 
   # GET /conceptos/1
@@ -14,7 +14,7 @@ class ConceptosController < ApplicationController
 
   # GET /conceptos/new
   def new
-    @concepto = Concepto.new
+    @objeto = Concepto.new
   end
 
   # GET /conceptos/1/edit
@@ -24,15 +24,15 @@ class ConceptosController < ApplicationController
   # POST /conceptos
   # POST /conceptos.json
   def create
-    @concepto = Concepto.new(concepto_params)
+    @objeto = Concepto.new(concepto_params)
 
     respond_to do |format|
-      if @concepto.save
-        format.html { redirect_to @concepto, notice: 'Concepto was successfully created.' }
-        format.json { render :show, status: :created, location: @concepto }
+      if @objeto.save
+        format.html { redirect_to @objeto, notice: 'Concepto was successfully created.' }
+        format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
-        format.json { render json: @concepto.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -41,12 +41,12 @@ class ConceptosController < ApplicationController
   # PATCH/PUT /conceptos/1.json
   def update
     respond_to do |format|
-      if @concepto.update(concepto_params)
-        format.html { redirect_to @concepto, notice: 'Concepto was successfully updated.' }
-        format.json { render :show, status: :ok, location: @concepto }
+      if @objeto.update(concepto_params)
+        format.html { redirect_to @objeto, notice: 'Concepto was successfully updated.' }
+        format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
-        format.json { render json: @concepto.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -54,7 +54,7 @@ class ConceptosController < ApplicationController
   # DELETE /conceptos/1
   # DELETE /conceptos/1.json
   def destroy
-    @concepto.destroy
+    @objeto.destroy
     respond_to do |format|
       format.html { redirect_to conceptos_url, notice: 'Concepto was successfully destroyed.' }
       format.json { head :no_content }
@@ -64,7 +64,7 @@ class ConceptosController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_concepto
-      @concepto = Concepto.find(params[:id])
+      @objeto = Concepto.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

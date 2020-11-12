@@ -4,7 +4,7 @@ class MetodologiasController < ApplicationController
   # GET /metodologias
   # GET /metodologias.json
   def index
-    @metodologias = Metodologia.all
+    @coleccion = Metodologia.all
   end
 
   # GET /metodologias/1
@@ -14,7 +14,7 @@ class MetodologiasController < ApplicationController
 
   # GET /metodologias/new
   def new
-    @metodologia = Metodologia.new
+    @objeto = Metodologia.new
   end
 
   # GET /metodologias/1/edit
@@ -24,15 +24,15 @@ class MetodologiasController < ApplicationController
   # POST /metodologias
   # POST /metodologias.json
   def create
-    @metodologia = Metodologia.new(metodologia_params)
+    @objeto = Metodologia.new(metodologia_params)
 
     respond_to do |format|
-      if @metodologia.save
-        format.html { redirect_to @metodologia, notice: 'Metodologia was successfully created.' }
-        format.json { render :show, status: :created, location: @metodologia }
+      if @objeto.save
+        format.html { redirect_to @objeto, notice: 'Metodologia was successfully created.' }
+        format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
-        format.json { render json: @metodologia.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -41,12 +41,12 @@ class MetodologiasController < ApplicationController
   # PATCH/PUT /metodologias/1.json
   def update
     respond_to do |format|
-      if @metodologia.update(metodologia_params)
-        format.html { redirect_to @metodologia, notice: 'Metodologia was successfully updated.' }
-        format.json { render :show, status: :ok, location: @metodologia }
+      if @objeto.update(metodologia_params)
+        format.html { redirect_to @objeto, notice: 'Metodologia was successfully updated.' }
+        format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
-        format.json { render json: @metodologia.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -54,7 +54,7 @@ class MetodologiasController < ApplicationController
   # DELETE /metodologias/1
   # DELETE /metodologias/1.json
   def destroy
-    @metodologia.destroy
+    @objeto.destroy
     respond_to do |format|
       format.html { redirect_to metodologias_url, notice: 'Metodologia was successfully destroyed.' }
       format.json { head :no_content }
@@ -64,7 +64,7 @@ class MetodologiasController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_metodologia
-      @metodologia = Metodologia.find(params[:id])
+      @objeto = Metodologia.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

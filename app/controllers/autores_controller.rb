@@ -4,7 +4,7 @@ class AutoresController < ApplicationController
   # GET /autores
   # GET /autores.json
   def index
-    @autores = Autor.all
+    @coleccion = Autor.all
   end
 
   # GET /autores/1
@@ -14,7 +14,7 @@ class AutoresController < ApplicationController
 
   # GET /autores/new
   def new
-    @autor = Autor.new
+    @objeto = Autor.new
   end
 
   # GET /autores/1/edit
@@ -24,15 +24,15 @@ class AutoresController < ApplicationController
   # POST /autores
   # POST /autores.json
   def create
-    @autor = Autor.new(autor_params)
+    @objeto = Autor.new(autor_params)
 
     respond_to do |format|
-      if @autor.save
-        format.html { redirect_to @autor, notice: 'Autor was successfully created.' }
-        format.json { render :show, status: :created, location: @autor }
+      if @objeto.save
+        format.html { redirect_to @objeto, notice: 'Autor was successfully created.' }
+        format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
-        format.json { render json: @autor.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -41,12 +41,12 @@ class AutoresController < ApplicationController
   # PATCH/PUT /autores/1.json
   def update
     respond_to do |format|
-      if @autor.update(autor_params)
-        format.html { redirect_to @autor, notice: 'Autor was successfully updated.' }
-        format.json { render :show, status: :ok, location: @autor }
+      if @objeto.update(autor_params)
+        format.html { redirect_to @objeto, notice: 'Autor was successfully updated.' }
+        format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
-        format.json { render json: @autor.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -54,7 +54,7 @@ class AutoresController < ApplicationController
   # DELETE /autores/1
   # DELETE /autores/1.json
   def destroy
-    @autor.destroy
+    @objeto.destroy
     respond_to do |format|
       format.html { redirect_to autores_url, notice: 'Autor was successfully destroyed.' }
       format.json { head :no_content }
@@ -64,7 +64,7 @@ class AutoresController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_autor
-      @autor = Autor.find(params[:id])
+      @objeto = Autor.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

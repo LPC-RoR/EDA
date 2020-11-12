@@ -4,7 +4,7 @@ class RepositoriosController < ApplicationController
   # GET /repositorios
   # GET /repositorios.json
   def index
-    @repositorios = Repositorio.all
+    @coleccion = Repositorio.all
   end
 
   # GET /repositorios/1
@@ -14,7 +14,7 @@ class RepositoriosController < ApplicationController
 
   # GET /repositorios/new
   def new
-    @repositorio = Repositorio.new
+    @objeto = Repositorio.new
   end
 
   # GET /repositorios/1/edit
@@ -24,15 +24,15 @@ class RepositoriosController < ApplicationController
   # POST /repositorios
   # POST /repositorios.json
   def create
-    @repositorio = Repositorio.new(repositorio_params)
+    @objeto = Repositorio.new(repositorio_params)
 
     respond_to do |format|
-      if @repositorio.save
-        format.html { redirect_to @repositorio, notice: 'Repositorio was successfully created.' }
-        format.json { render :show, status: :created, location: @repositorio }
+      if @objeto.save
+        format.html { redirect_to @objeto, notice: 'Repositorio was successfully created.' }
+        format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
-        format.json { render json: @repositorio.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -41,12 +41,12 @@ class RepositoriosController < ApplicationController
   # PATCH/PUT /repositorios/1.json
   def update
     respond_to do |format|
-      if @repositorio.update(repositorio_params)
-        format.html { redirect_to @repositorio, notice: 'Repositorio was successfully updated.' }
-        format.json { render :show, status: :ok, location: @repositorio }
+      if @objeto.update(repositorio_params)
+        format.html { redirect_to @objeto, notice: 'Repositorio was successfully updated.' }
+        format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
-        format.json { render json: @repositorio.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -54,7 +54,7 @@ class RepositoriosController < ApplicationController
   # DELETE /repositorios/1
   # DELETE /repositorios/1.json
   def destroy
-    @repositorio.destroy
+    @objeto.destroy
     respond_to do |format|
       format.html { redirect_to repositorios_url, notice: 'Repositorio was successfully destroyed.' }
       format.json { head :no_content }
@@ -64,7 +64,7 @@ class RepositoriosController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_repositorio
-      @repositorio = Repositorio.find(params[:id])
+      @objeto = Repositorio.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

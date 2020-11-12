@@ -2,7 +2,7 @@ require "application_system_test_case"
 
 class AgregacionesTest < ApplicationSystemTestCase
   setup do
-    @agregacioneses = agregaciones(:one)
+    @agregacion = agregaciones(:one)
   end
 
   test "visiting the index" do
@@ -14,8 +14,8 @@ class AgregacionesTest < ApplicationSystemTestCase
     visit agregaciones_url
     click_on "New Agregacion"
 
-    fill_in "Categoria", with: @agregacioneses.categoria_id
-    fill_in "Concepto", with: @agregacioneses.concepto_id
+    fill_in "Categoria", with: @agregacion.categoria_id
+    fill_in "Concepto", with: @agregacion.concepto_id
     click_on "Create Agregacion"
 
     assert_text "Agregacion was successfully created"
@@ -26,8 +26,8 @@ class AgregacionesTest < ApplicationSystemTestCase
     visit agregaciones_url
     click_on "Edit", match: :first
 
-    fill_in "Categoria", with: @agregacioneses.categoria_id
-    fill_in "Concepto", with: @agregacioneses.concepto_id
+    fill_in "Categoria", with: @agregacion.categoria_id
+    fill_in "Concepto", with: @agregacion.concepto_id
     click_on "Update Agregacion"
 
     assert_text "Agregacion was successfully updated"

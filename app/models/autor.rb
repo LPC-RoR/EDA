@@ -1,4 +1,4 @@
 class Autor < ApplicationRecord
-	belongs_to :investigadores
-	belongs_to :publicaciones
+	belongs_to :investigador
+	belongs_to :publicacion
 end

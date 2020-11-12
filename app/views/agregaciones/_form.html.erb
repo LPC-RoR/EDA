@@ -1,10 +1,10 @@
-<%= form_with(model: agregacioneses, local: true) do |form| %>
-  <% if agregacioneses.errors.any? %>
+<%= form_with(model: agregacion, local: true) do |form| %>
+  <% if agregacion.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(agregacioneses.errors.count, "error") %> prohibited this agregacioneses from being saved:</h2>
+      <h2><%= pluralize(agregacion.errors.count, "error") %> prohibited this agregacion from being saved:</h2>
 
       <ul>
-      <% agregacioneses.errors.full_messages.each do |message| %>
+      <% agregacion.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
       </ul>

@@ -4,7 +4,7 @@ class RegistrosController < ApplicationController
   # GET /registros
   # GET /registros.json
   def index
-    @registros = Registro.all
+    @coleccion = Registro.all
   end
 
   # GET /registros/1
@@ -14,7 +14,7 @@ class RegistrosController < ApplicationController
 
   # GET /registros/new
   def new
-    @registro = Registro.new
+    @objeto = Registro.new
   end
 
   # GET /registros/1/edit
@@ -24,15 +24,15 @@ class RegistrosController < ApplicationController
   # POST /registros
   # POST /registros.json
   def create
-    @registro = Registro.new(registro_params)
+    @objeto = Registro.new(registro_params)
 
     respond_to do |format|
-      if @registro.save
-        format.html { redirect_to @registro, notice: 'Registro was successfully created.' }
-        format.json { render :show, status: :created, location: @registro }
+      if @objeto.save
+        format.html { redirect_to @objeto, notice: 'Registro was successfully created.' }
+        format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
-        format.json { render json: @registro.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -41,12 +41,12 @@ class RegistrosController < ApplicationController
   # PATCH/PUT /registros/1.json
   def update
     respond_to do |format|
-      if @registro.update(registro_params)
-        format.html { redirect_to @registro, notice: 'Registro was successfully updated.' }
-        format.json { render :show, status: :ok, location: @registro }
+      if @objeto.update(registro_params)
+        format.html { redirect_to @objeto, notice: 'Registro was successfully updated.' }
+        format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
-        format.json { render json: @registro.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -54,7 +54,7 @@ class RegistrosController < ApplicationController
   # DELETE /registros/1
   # DELETE /registros/1.json
   def destroy
-    @registro.destroy
+    @objeto.destroy
     respond_to do |format|
       format.html { redirect_to registros_url, notice: 'Registro was successfully destroyed.' }
       format.json { head :no_content }
@@ -64,7 +64,7 @@ class RegistrosController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_registro
-      @registro = Registro.find(params[:id])
+      @objeto = Registro.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
