@@ -1,4 +1,7 @@
 class Recurso < ApplicationRecord
+
+	RUTA_ARCHIVOS_CARGA = "/home/hugo/eda/app/assets/cargas/**/*"
+
 	# GENERAL
 	# CONTROLADORES que NO despliegan el MENU SUPERIOR
 	NOMENU_CONTROLLERS = ['confirmations', 'mailer', 'passwords', 'registrations', 'sessions', 'unlocks']

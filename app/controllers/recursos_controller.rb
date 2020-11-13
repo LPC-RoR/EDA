@@ -1,10 +1,17 @@
 class RecursosController < ApplicationController
-  before_action :set_recurso, only: [:show, :edit, :update, :destroy]
+#  before_action :set_recurso, only: [:show, :edit, :update, :destroy]
 
   # GET /recursos
   # GET /recursos.json
   def index
     @coleccion = Recurso.all
+  end
+
+  def sel_archivo_carga
+    @archivos = Dir.glob(Recurso::RUTA_ARCHIVOS_CARGA)
+    @file = File.open(@archivos[0])
+    @file_data = @file.read
+    @articles = @file_data.split('@article')
   end
 
   # GET /recursos/1
@@ -63,12 +70,5 @@ class RecursosController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_recurso
-      @objeto = Recurso.find(params[:id])
-    end
-
-    # Only allow a list of trusted parameters through.
-    def recurso_params
-      params.fetch(:recurso, {})
-    end
 end
+ 

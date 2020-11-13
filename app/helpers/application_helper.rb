@@ -96,6 +96,8 @@ module ApplicationHelper
 		# {'empleados', 'productos', 'clientes(*)'}
 		when 'detalle_pedido'
 			"/#{controller.classify.constantize::SELECTOR}/seleccion?#{@objeto.class.name.downcase}_id=#{@objeto.id}&empresa_id=#{@objeto.registro.empresa.id}"
+		when 'sel_archivo_carga'
+			"/recursos/sel_archivo_carga"
 		end
 	end
 

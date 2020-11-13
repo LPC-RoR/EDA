@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :cargas
   resources :agregaciones
   devise_for :usuarios
   resources :autores
@@ -25,6 +26,7 @@ Rails.application.routes.draw do
     collection do
       match :inicia_sesion, via: :get
       match :tablas, via: :get
+      match :sel_archivo_carga, via: :get
     end
   end
   resources :referencias
@@ -41,6 +43,6 @@ Rails.application.routes.draw do
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
-  root 'publicaciones#index'
+  root 'cargas#index'
 
 end

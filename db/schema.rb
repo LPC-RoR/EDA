@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_10_212352) do
+ActiveRecord::Schema.define(version: 2020_11_13_212942) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,14 @@ ActiveRecord::Schema.define(version: 2020_11_10_212352) do
     t.datetime "updated_at", null: false
     t.index ["investigador_id"], name: "index_autores_on_investigador_id"
     t.index ["publicacion_id"], name: "index_autores_on_publicacion_id"
+  end
+
+  create_table "cargas", force: :cascade do |t|
+    t.string "archivo"
+    t.string "nota"
+    t.string "estado"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "conceptos", force: :cascade do |t|
@@ -89,23 +97,41 @@ ActiveRecord::Schema.define(version: 2020_11_10_212352) do
   end
 
   create_table "publicaciones", force: :cascade do |t|
-    t.string "titulo"
-    t.integer "annio"
-    t.string "paginas"
     t.string "link"
     t.string "abstract"
     t.integer "registro_id"
     t.integer "revista_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "detalle_autores"
-    t.string "detalle_revista"
-    t.text "keywords"
-    t.text "detalle_instituciones"
-    t.text "fechas"
+    t.string "keywords"
     t.string "doi"
+    t.string "ingreso"
+    t.string "author"
+    t.string "title"
+    t.string "journal"
+    t.string "year"
+    t.string "volume"
+    t.string "month"
+    t.string "publisher"
+    t.string "address"
+    t.string "type"
+    t.string "language"
+    t.string "affiliation"
+    t.integer "carga_id"
+    t.string "article_number"
+    t.string "issn"
+    t.string "eissn"
+    t.string "keywords_plus"
+    t.string "research_areas"
+    t.string "web_of_science_categories"
+    t.string "author_email"
+    t.string "unique_id"
+    t.string "da"
+    t.index ["carga_id"], name: "index_publicaciones_on_carga_id"
     t.index ["registro_id"], name: "index_publicaciones_on_registro_id"
     t.index ["revista_id"], name: "index_publicaciones_on_revista_id"
+    t.index ["title"], name: "index_publicaciones_on_title"
+    t.index ["unique_id"], name: "index_publicaciones_on_unique_id"
   end
 
   create_table "referencias", force: :cascade do |t|

@@ -225,4 +225,153 @@ module PublicacionesHelper
 		resultado << [nombre, llave]
 		resultado
 	end
+	def articulo_bib(bib_article)
+		st = 0
+		resultado = Hash.new
+		llave = ''
+		valor = ''
+		palabra = ''
+
+		# para el manejo de niveles adicionales
+		origen = 0
+		nivel = 0
+#		bib_article.strip.split('').each do |c|
+		bib_article.strip.each_char do |c|
+			break if st == 100
+			palabra += c
+			case st
+			when 0 # INICIO
+				if c.match(/'s/) # elimina espacios (por seguridad)
+				elsif c.match(/\{/) # inicio articulo
+					st = 1
+				else # FATAL
+					st = 100
+				end
+			when 1 # INICIO ARTICULO
+				if c.match(/\s/) # elimina espacios
+				elsif c.match(/I/) # inicio ISI_ID
+					st = 2
+				else # FATAL
+					st = 100
+				end
+			when 2 # INICIO ISI_ID
+				if c.match(/[IS:0-9]/) # consume ISI_ID
+					# no guarda el código porque aparece más adelante
+				elsif c.match(/,/) # fin ISI_ID
+					st = 3
+				else # FATAL
+					st = 100
+				end
+			when 3 # NOMBRE
+				if c.match(/[\s\n]/) # elimina espacios y cambios de línea
+				elsif c.match(/[a-zA-Z]/) # inicio campo
+					llave += c
+					st = 4
+				else # FATAL
+					st = 100
+				end
+			when 4 # LLAVE
+				if c.match(/[a-zA-Z0-9\-\s]/) # inicio Inicial/Apellido? CAMBIAR LO DE ABAJO!
+					llave += c
+				elsif c.match(/=/) # =
+					st = 5
+				else # FATAL
+					st = 100
+				end
+			when 5 # =
+				if c.match(/[\s]/) # elimina espacios
+				elsif c.match(/\{/) # 1er NIVEL
+					st = 6
+				else # FATAL
+					st = 100
+				end
+			when 6 # . 1er NIVEL
+				if c.match(/\{/) # 2do NIVEL
+					st = 10
+				elsif c.match(/\S/) # Inicial
+					valor += c
+					st = 7
+				else # FATAL
+					st = 100
+				end
+			when 7 # VALOR + control de niveles adicionales de {}
+				if c.match(/[\n\\]/) # . Inicial
+#					valor += ' '
+				elsif c.match(/\{/) # . APERTURA nivel adicional
+					valor += c
+					origen = 7
+					nivel = 1
+					st = 50
+				elsif c.match(/[^\}]/) # . Inicial
+					valor += c
+				elsif c.match(/\}/) # fin Inicial
+					st = 8
+				else # FATAL
+					st = 100
+				end
+			when 8 # FIN 1er NIVEL
+				if c.match(/[\s\n]/) # fin campo
+				elsif c.match(/,/) # consume espacios
+					resultado.store(llave.strip, valor.strip.split(' ').join(' '))
+					llave = ''
+					valor = ''
+					st = 9
+				else # FATAL
+					st = 100
+				end
+			when 9 # FIN 1er NIVEL
+				if c.match(/[\s\n]/) # consume espacios y cambios de linea
+				elsif c.match(/\}/) # fin articulo
+					st = 20
+				elsif c.match(/[a-zA-Z]/) # consume espacios
+					llave += c
+					st = 4
+				else # FATAL
+					st = 100
+				end
+			when 10 # VALOR
+				if c.match(/[^\}]/) # completa apellido
+					valor += c
+					st = 11
+				else # FATAL
+					st = 100
+				end
+			when 11 # VALOR
+				if c.match(/[\n\\]/) # 
+				elsif c.match(/\{/) # . APERTURA nivel adicional
+					valor += c
+					origen = 11
+					nivel = 1
+					st = 50
+				elsif c.match(/[^\}]/) # completa valor
+					valor += c
+				elsif c.match(/\}/) # primer cierre
+					st = 12
+				else # FATAL
+					st = 100
+				end
+			when 12 # 1er CIERRE LLAVE
+					#palabra += 'paso por 12 '+c
+				if c.match(/\}/) # segundo cierre
+					st = 8
+				else # FATAL
+					st = 100
+				end
+			when 50
+				if c.match(/[\n\\]/) # 
+				elsif c.match(/\{/) # . APERTURA nivel adicional
+					valor += c
+					nivel += 1
+				elsif c.match(/[^\}]/) # completa valor
+					valor += c
+				elsif c.match(/\}/) # primer cierre
+					nivel -=1
+					st = origen if nivel == 0 # se pone antes!
+				else # FATAL
+					st = 100
+				end
+			end
+		end
+		resultado
+	end
 end

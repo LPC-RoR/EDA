@@ -25,6 +25,8 @@ class Publicacion < ApplicationRecord
 		['fechas',                'text_area']
 	]
 
+	belongs_to :carga, optional: true
+
 	belongs_to :registro, optional: true
 	belongs_to :revista, optional: true
 
