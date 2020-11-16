@@ -323,6 +323,7 @@ module PublicacionesHelper
 				if c.match(/[\s\n]/) # consume espacios y cambios de linea
 				elsif c.match(/\}/) # fin articulo
 					st = 20
+					break
 				elsif c.match(/[a-zA-Z]/) # consume espacios
 					llave += c
 					st = 4

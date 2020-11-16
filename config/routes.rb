@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
 
-  resources :cargas
   resources :agregaciones
   devise_for :usuarios
   resources :autores
+  resources :cargas do
+    match :procesa_carga, via: :get, on: :member
+  end
   resources :conceptos
   resources :departamentos do
     resources :investigadores

@@ -1,19 +1,2 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Archivo:</strong>
-  <%= @carga.archivo %>
-</p>
-
-<p>
-  <strong>Nota:</strong>
-  <%= @carga.nota %>
-</p>
-
-<p>
-  <strong>Estado:</strong>
-  <%= @carga.estado %>
-</p>
-
-<%= link_to 'Edit', edit_carga_path(@carga) %> |
-<%= link_to 'Back', cargas_path %>
+<%= render partial: '0p/show/show' %>
+<%= link_to 'Proceso', procesa_carga_carga_path(@objeto) %>

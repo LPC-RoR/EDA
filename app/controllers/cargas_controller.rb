@@ -1,5 +1,5 @@
 class CargasController < ApplicationController
-  before_action :set_carga, only: [:show, :edit, :update, :destroy]
+  before_action :set_carga, only: [:show, :edit, :update, :destroy, :procesa_carga]
 
   # GET /cargas
   # GET /cargas.json
@@ -10,7 +10,26 @@ class CargasController < ApplicationController
   # GET /cargas/1
   # GET /cargas/1.json
   def show
+    @tab = params[:tab].blank? ? 'publicaciones' : params[:tab]
+#    @estado = params[:estado].blank? ? @tab.classify.constantize::ESTADOS[0] : params[:estado]
+    # tenemos que cubrir todos los casos
+    # 1. has_many : }
+    @coleccion = @objeto.send(@tab) #.where(estado: @estado)
+    # @coleccion = @tab == 'clientes' ? @objeto.clientes.where(estado: @estado) : @tab.classify.constantize.where(empresa_id: @objeto.id, estado: @estado)
   end
+
+  def procesa_carga
+    # Abre archivo
+    carga_archivo_bib(@objeto.archivo)
+
+    @coleccion = Publicacion.all
+
+    procesa_autores_publicaciones(@coleccion)
+
+    procesa_kewwords_publicaciones(@coleccion)
+
+    redirect_to @objeto
+  end # def
 
   # GET /cargas/new
   def new
@@ -28,7 +47,8 @@ class CargasController < ApplicationController
 
     respond_to do |format|
       if @objeto.save
-        format.html { redirect_to @objeto, notice: 'Carga was successfully created.' }
+        set_redireccion
+        format.html { redirect_to @redireccion, notice: 'Carga was successfully created.' }
         format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
@@ -42,7 +62,8 @@ class CargasController < ApplicationController
   def update
     respond_to do |format|
       if @objeto.update(carga_params)
-        format.html { redirect_to @objeto, notice: 'Carga was successfully updated.' }
+        set_redireccion
+        format.html { redirect_to @redireccion, notice: 'Carga was successfully updated.' }
         format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
@@ -55,8 +76,9 @@ class CargasController < ApplicationController
   # DELETE /cargas/1.json
   def destroy
     @objeto.destroy
+    set_redireccion
     respond_to do |format|
-      format.html { redirect_to cargas_url, notice: 'Carga was successfully destroyed.' }
+      format.html { redirect_to @redireccion, notice: 'Carga was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -65,6 +87,10 @@ class CargasController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_carga
       @objeto = Carga.find(params[:id])
+    end
+
+    def set_redireccion
+      @redireccion = '/cargas'
     end
 
     # Only allow a list of trusted parameters through.

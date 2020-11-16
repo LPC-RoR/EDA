@@ -1,4 +1,5 @@
 class Carga < ApplicationRecord
+
 	ESTADOS = ['ingreso', 'procesado']
 	D_TABLA = {
 		titulo:  true,
@@ -18,5 +19,21 @@ class Carga < ApplicationRecord
 		['estado', 'hidden'],
 		['archivo','hidden'],
 	]
+
+
+	D_SHOW = {
+		titulo:   true,
+		nav:      false,
+		detalle:  false,
+		tabs:     true,
+		adjuntos: false,
+		tablas:   false
+	}
+
 	has_many :publicaciones
+
+	def show_title
+		self.archivo.split('/').last
+	end
+
 end

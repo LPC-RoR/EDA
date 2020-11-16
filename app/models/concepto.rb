@@ -1,5 +1,6 @@
 class Concepto < ApplicationRecord
 	has_many :referencias
+	has_many :publicaciones, through: :referencias
 
 	has_many :padres, foreign_key: :categoria_id , class_name: "Agregacion"
 

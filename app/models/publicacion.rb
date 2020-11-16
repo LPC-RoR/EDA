@@ -1,5 +1,7 @@
 class Publicacion < ApplicationRecord
 
+	NOMBRES_BIB = ["Author", "Title", "Journal", "Year", "Volume", "Month", "Abstract", "Publisher", "Address", "Language", "Affiliation", "DOI", "Article-Number", "ISSN", "EISSN", "Keywords", "Keywords-Plus", "Research-Areas", "Web-of-Science-Categories", "Author-Email", "Unique-ID", "DA"]
+
 	D_TABLA = {
 		titulo:  true,
 		tabs:    false,
@@ -9,8 +11,8 @@ class Publicacion < ApplicationRecord
 	}
 
 	TABLA_FIELDS = [
-		['titulo',         'show'], 
-		['annio',        'normal']
+		['title',         'show'], 
+		['year',        'normal']
 	]
 
 	TIPO_NEW = 'new'
@@ -41,4 +43,5 @@ class Publicacion < ApplicationRecord
 
 	has_many :referencias
 	has_many :conceptos, through: :referencias
+
 end
