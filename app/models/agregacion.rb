@@ -1,2 +1,0 @@
-class Agregacion < ApplicationRecord
-end

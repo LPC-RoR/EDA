@@ -4,15 +4,15 @@
 <!-- TABS -->
 <%= render partial: '0p/tabs/tabs', locals: {tabs: m_tabs(c), link_tabs: get_link(c, 'tab'), active: @tab } if d_tabla(c, :tabs) %>
 
-<!-- PAGINAS -->
-<!--%= render partial: "#{d}/selector" if d_tabla(c, :paginas) %-->
-
 <!-- ESTADOS -->
 <%= render partial: '0p/tabla/menu_estados', locals: {estado: @estado, estados: m_estados(c), link_estados: get_link(c, 'estado') } if d_tabla(c, :estados) %>
 
 <!-- BOTON NUEVO (SI HAY MAS DE 15 ELEMENTOS DESPLEGADOS) -->
 <!-- No se activa si la acción es 'seleccion' -->
 <%= render partial: '0p/tabla/nuevo', locals: {c: c} if d_tabla(c, :nuevo) and a != 'seleccion' and @coleccion.count > 15 %>
+
+<!-- PAGINAS -->
+<%= paginate @coleccion if d_tabla(c, :paginas) %>
 
 <!-- CUERPO TABLA -->
 <table class="table table-striped">

@@ -23,6 +23,7 @@ class Carga < ApplicationRecord
 
 	D_SHOW = {
 		titulo:   true,
+		links:    true,
 		nav:      false,
 		detalle:  false,
 		tabs:     true,
@@ -32,6 +33,14 @@ class Carga < ApplicationRecord
 
 	has_many :procesos
 	has_many :publicaciones, through: :procesos
+
+	def show_links
+		[
+			['Cargas', "/cargas"],
+			['Proceso', "/cargas/#{self.id}/procesa_carga"]
+		]
+		
+	end
 
 	def show_title
 		self.archivo.split('/').last

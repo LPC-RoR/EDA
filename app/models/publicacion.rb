@@ -5,7 +5,7 @@ class Publicacion < ApplicationRecord
 	D_TABLA = {
 		titulo:  true,
 		tabs:    false,
-		paginas: false,
+		paginas: true,
 		estados: false,
 		nuevo:   true
 	}
@@ -46,8 +46,6 @@ class Publicacion < ApplicationRecord
 	belongs_to :registro, optional: true
 	belongs_to :revista, optional: true
 
-	has_many :metodologias
-
 	has_many :citas
 	has_many :textos, through: :citas
 
@@ -56,12 +54,6 @@ class Publicacion < ApplicationRecord
 
 	has_many :procesos
 	has_many :cargas, through: :procesos
-
-	has_many :origenes
-	has_many :repositorios, through: :origenes
-
-	has_many :referencias
-	has_many :conceptos, through: :referencias
 
 	def show_title
 		self.title

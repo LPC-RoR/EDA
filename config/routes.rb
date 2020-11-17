@@ -4,13 +4,11 @@ Rails.application.routes.draw do
   resources :citas
   resources :carpetas
   resources :procesos
-  resources :agregaciones
   devise_for :usuarios
   resources :autores
   resources :cargas do
     match :procesa_carga, via: :get, on: :member
   end
-  resources :conceptos
   resources :departamentos do
     resources :investigadores
   end
@@ -26,8 +24,7 @@ Rails.application.routes.draw do
   resources :origenes
   resources :publicaciones do
     resources :textos
-    resources :metodologias
-  end
+    end
   resources :recursos do
     collection do
       match :inicia_sesion, via: :get
@@ -35,13 +32,11 @@ Rails.application.routes.draw do
       match :sel_archivo_carga, via: :get
     end
   end
-  resources :referencias
   resources :registros do
     resources :publicaciones
   end
   resources :repositorios do
-    resources :origenes
-  end
+    end
   resources :revistas do
     resources :publicaciones
   end

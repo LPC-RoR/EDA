@@ -3,8 +3,8 @@
 <!-- TITULO NORMAL: se usa 'titulo_ruta' -->
 <%= render partial: '0p/general/o_titulo', locals: {o: @objeto, a: action_name, size: '5'} if d_show(controller_name, :titulo) %>
 
-<!-- TITULO NAV -->
-<!--%= render partial: '0p/show/detalle', locals: {c: controller_name} if d_show(controller_name, :nav) %-->
+<!-- LINKS -->
+<%= render partial: '0p/show/links', locals: {o: @objeto} if d_show(controller_name, :links)  %>
 
 <!-- SHOW DISPLAY -->
 <%= render partial: '0p/show/detalle', locals: {c: controller_name, o: @objeto} if d_show(controller_name, :detalle) %>

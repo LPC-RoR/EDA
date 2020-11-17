@@ -14,7 +14,7 @@ class CargasController < ApplicationController
 #    @estado = params[:estado].blank? ? @tab.classify.constantize::ESTADOS[0] : params[:estado]
     # tenemos que cubrir todos los casos
     # 1. has_many : }
-    @coleccion = @objeto.send(@tab) #.where(estado: @estado)
+    @coleccion = @objeto.send(@tab).page(params[:page]) #.where(estado: @estado)
     # @coleccion = @tab == 'clientes' ? @objeto.clientes.where(estado: @estado) : @tab.classify.constantize.where(empresa_id: @objeto.id, estado: @estado)
   end
 

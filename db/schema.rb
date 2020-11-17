@@ -10,19 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_17_021934) do
+ActiveRecord::Schema.define(version: 2020_11_17_202721) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "agregaciones", force: :cascade do |t|
-    t.integer "categoria_id"
-    t.integer "concepto_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["categoria_id"], name: "index_agregaciones_on_categoria_id"
-    t.index ["concepto_id"], name: "index_agregaciones_on_concepto_id"
-  end
 
   create_table "autores", force: :cascade do |t|
     t.integer "publicacion_id"
@@ -65,13 +56,6 @@ ActiveRecord::Schema.define(version: 2020_11_17_021934) do
     t.index ["texto_id"], name: "index_clasificaciones_on_texto_id"
   end
 
-  create_table "conceptos", force: :cascade do |t|
-    t.string "concepto"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["concepto"], name: "index_conceptos_on_concepto"
-  end
-
   create_table "departamentos", force: :cascade do |t|
     t.string "departamento"
     t.integer "institucion_id"
@@ -101,23 +85,6 @@ ActiveRecord::Schema.define(version: 2020_11_17_021934) do
     t.datetime "updated_at", null: false
     t.index ["departamento_id"], name: "index_investigadores_on_departamento_id"
     t.index ["investigador"], name: "index_investigadores_on_investigador"
-  end
-
-  create_table "metodologias", force: :cascade do |t|
-    t.string "metodologia"
-    t.integer "publicacion_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["publicacion_id"], name: "index_metodologias_on_publicacion_id"
-  end
-
-  create_table "origenes", force: :cascade do |t|
-    t.integer "repositorio_id"
-    t.integer "publicacion_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["publicacion_id"], name: "index_origenes_on_publicacion_id"
-    t.index ["repositorio_id"], name: "index_origenes_on_repositorio_id"
   end
 
   create_table "procesos", force: :cascade do |t|
@@ -163,15 +130,6 @@ ActiveRecord::Schema.define(version: 2020_11_17_021934) do
     t.index ["unique_id"], name: "index_publicaciones_on_unique_id"
   end
 
-  create_table "referencias", force: :cascade do |t|
-    t.integer "concepto_id"
-    t.integer "publicacion_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["concepto_id"], name: "index_referencias_on_concepto_id"
-    t.index ["publicacion_id"], name: "index_referencias_on_publicacion_id"
-  end
-
   create_table "registros", force: :cascade do |t|
     t.string "doi"
     t.integer "institucion_id"
@@ -179,12 +137,6 @@ ActiveRecord::Schema.define(version: 2020_11_17_021934) do
     t.datetime "updated_at", null: false
     t.index ["doi"], name: "index_registros_on_doi"
     t.index ["institucion_id"], name: "index_registros_on_institucion_id"
-  end
-
-  create_table "repositorios", force: :cascade do |t|
-    t.string "repositorio"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "revistas", force: :cascade do |t|
