@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
-	def carga_archivo_bib(archivo_bib)
-	    @file = File.open(archivo_bib)
+	def carga_archivo_bib(carga)
+	    @file = File.open(carga.archivo)
 	    # Lee el archivo
 	    @file_data = @file.read
 	    # Obtiene un arreglo de 'articulos'
@@ -12,12 +12,29 @@ class ApplicationController < ActionController::Base
 	      hash_articulo = ApplicationController::helpers.articulo_bib(articulo)
 	      # lo carga SOLO si no existe ya
 	      if Publicacion.find_by(unique_id: hash_articulo['Unique-ID']).blank?
-	        p = Publicacion.new(carga_id: @objeto.id)
+	        p = Publicacion.new
 	        Publicacion::NOMBRES_BIB.each do |bib|
 	          p.write_attribute(bib.downcase.split('-').join('_'), hash_articulo[bib])
 	        end
+
+	        # Agrega IDIOMA -> REVISTA
+	        idio = Idioma.find_by(idioma: hash_articulo['Language'])
+	        if idio.blank?
+	          idio = Idioma.create(idioma: hash_articulo['Language'])
+	        end
+
+	        rev = Revista.find_by(revista: hash_articulo['Journal'])
+	        if rev.blank?
+	          rev = Revista.create(revista: hash_articulo['Journal'], idioma_id: idio.id)
+	        end
+	        p.revista_id = rev.id
+
 	        # Guarda la publicacion!
 	        p.save
+
+	        # Agregar Relación de Carga
+	        p.cargas << carga
+
 	      end
 	    end
 	end
@@ -37,26 +54,5 @@ class ApplicationController < ActionController::Base
 	        end
 	      end
 	    end
-	end
-
-	def procesa_kewwords_publicaciones(coleccion)
-	    coleccion.each do |pp|
-	      # PROCESA CLAVES
-	      keys =  pp.keywords.blank?                  ? [] : pp.keywords.split('; ')
-	      keys += pp.keywords_plus.blank?             ? [] : pp.keywords_plus.split('; ')
-	#      keys += p.research_areas.blank?            ? [] :p.research_areas.split('; ')
-	#      keys += p.web_of_science_categories.blank? ? [] :p.web_of_science_categories.split('; ')
-	      keys = keys.uniq.map {|key| key.downcase.capitalize}
-	      keys.each do |k|
-	        c = Concepto.find_by(concepto: k)
-	        if c.blank?
-	          c = Concepto.create(concepto: k)
-	        end
-	        rr = Referencia.find_by(publicacion_id: pp.id, concepto_id: c.id)
-			if rr.blank?
-		        Referencia.create(publicacion_id: pp.id, concepto_id: c.id)
-	    	end
-	      end
-	  	end
 	end
 end

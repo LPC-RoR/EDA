@@ -38,6 +38,11 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
 	inflect.singular 'agregaciones', 'agregacion'
 	inflect.singular 'Agregaciones', 'Agregacion'
 
+	inflect.plural 'clasificacion', 'clasificaciones'
+	inflect.plural 'Clasificacion', 'Clasificaciones'
+	inflect.singular 'clasificaciones', 'clasificacion'
+	inflect.singular 'Clasificaciones', 'Clasificacion'
+
 	inflect.plural 'referencia', 'referencias'
 	inflect.plural 'Referencia', 'Referencias'
 
@@ -47,6 +52,11 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
 	inflect.plural 'revista', 'revistas'
 	inflect.plural 'Revista', 'Revistas'
 
+	inflect.plural 'carpeta', 'carpetas'
+	inflect.plural 'Carpeta', 'Carpetas'
+
+	inflect.plural 'cita', 'citas'
+	inflect.plural 'Cita', 'Citas'
 end
 
 # These inflection rules are supported but not enabled by default:

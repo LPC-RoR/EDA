@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_13_212942) do
+ActiveRecord::Schema.define(version: 2020_11_17_021934) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,30 @@ ActiveRecord::Schema.define(version: 2020_11_13_212942) do
     t.string "estado"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "carpetas", force: :cascade do |t|
+    t.string "carpeta"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "citas", force: :cascade do |t|
+    t.integer "publicacion_id"
+    t.integer "texto_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["publicacion_id"], name: "index_citas_on_publicacion_id"
+    t.index ["texto_id"], name: "index_citas_on_texto_id"
+  end
+
+  create_table "clasificaciones", force: :cascade do |t|
+    t.integer "carpeta_id"
+    t.integer "texto_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["carpeta_id"], name: "index_clasificaciones_on_carpeta_id"
+    t.index ["texto_id"], name: "index_clasificaciones_on_texto_id"
   end
 
   create_table "conceptos", force: :cascade do |t|
@@ -96,6 +120,15 @@ ActiveRecord::Schema.define(version: 2020_11_13_212942) do
     t.index ["repositorio_id"], name: "index_origenes_on_repositorio_id"
   end
 
+  create_table "procesos", force: :cascade do |t|
+    t.integer "carga_id"
+    t.integer "publicacion_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["carga_id"], name: "index_procesos_on_carga_id"
+    t.index ["publicacion_id"], name: "index_procesos_on_publicacion_id"
+  end
+
   create_table "publicaciones", force: :cascade do |t|
     t.string "link"
     t.string "abstract"
@@ -108,16 +141,13 @@ ActiveRecord::Schema.define(version: 2020_11_13_212942) do
     t.string "ingreso"
     t.string "author"
     t.string "title"
-    t.string "journal"
     t.string "year"
     t.string "volume"
     t.string "month"
     t.string "publisher"
     t.string "address"
     t.string "type"
-    t.string "language"
     t.string "affiliation"
-    t.integer "carga_id"
     t.string "article_number"
     t.string "issn"
     t.string "eissn"
@@ -127,7 +157,6 @@ ActiveRecord::Schema.define(version: 2020_11_13_212942) do
     t.string "author_email"
     t.string "unique_id"
     t.string "da"
-    t.index ["carga_id"], name: "index_publicaciones_on_carga_id"
     t.index ["registro_id"], name: "index_publicaciones_on_registro_id"
     t.index ["revista_id"], name: "index_publicaciones_on_revista_id"
     t.index ["title"], name: "index_publicaciones_on_title"
@@ -164,12 +193,12 @@ ActiveRecord::Schema.define(version: 2020_11_13_212942) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["idioma_id"], name: "index_revistas_on_idioma_id"
+    t.index ["revista"], name: "index_revistas_on_revista"
   end
 
   create_table "textos", force: :cascade do |t|
     t.string "texto"
     t.string "calificacion"
-    t.string "publicacion_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

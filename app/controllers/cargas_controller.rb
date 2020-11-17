@@ -20,13 +20,11 @@ class CargasController < ApplicationController
 
   def procesa_carga
     # Abre archivo
-    carga_archivo_bib(@objeto.archivo)
+    carga_archivo_bib(@objeto)
 
     @coleccion = Publicacion.all
 
     procesa_autores_publicaciones(@coleccion)
-
-    procesa_kewwords_publicaciones(@coleccion)
 
     redirect_to @objeto
   end # def

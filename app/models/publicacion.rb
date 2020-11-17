@@ -1,6 +1,6 @@
 class Publicacion < ApplicationRecord
 
-	NOMBRES_BIB = ["Author", "Title", "Journal", "Year", "Volume", "Month", "Abstract", "Publisher", "Address", "Language", "Affiliation", "DOI", "Article-Number", "ISSN", "EISSN", "Keywords", "Keywords-Plus", "Research-Areas", "Web-of-Science-Categories", "Author-Email", "Unique-ID", "DA"]
+	NOMBRES_BIB = ["Author", "Title", "Year", "Volume", "Month", "Abstract", "Publisher", "Address", "Affiliation", "DOI", "Article-Number", "ISSN", "EISSN", "Keywords", "Keywords-Plus", "Research-Areas", "Web-of-Science-Categories", "Author-Email", "Unique-ID", "DA"]
 
 	D_TABLA = {
 		titulo:  true,
@@ -27,21 +27,44 @@ class Publicacion < ApplicationRecord
 		['fechas',                'text_area']
 	]
 
-	belongs_to :carga, optional: true
+	D_SHOW = {
+		titulo:   true,
+		nav:      false,
+		detalle:  true,
+		tabs:     false,
+		adjuntos: false,
+		tablas:   false
+	}
+
+	SHOW_FIELDS = [
+		['year',       'normal'], 
+		['author',     'normal'], 
+		['odi',        'normal'],
+		['abstract',   'normal']
+	]
 
 	belongs_to :registro, optional: true
 	belongs_to :revista, optional: true
 
-	has_many :textos
 	has_many :metodologias
+
+	has_many :citas
+	has_many :textos, through: :citas
 
 	has_many :autores
 	has_many :investigadores, through: :autores
+
+	has_many :procesos
+	has_many :cargas, through: :procesos
 
 	has_many :origenes
 	has_many :repositorios, through: :origenes
 
 	has_many :referencias
 	has_many :conceptos, through: :referencias
+
+	def show_title
+		self.title
+	end
 
 end

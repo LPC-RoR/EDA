@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  resources :clasificaciones
+  resources :citas
+  resources :carpetas
+  resources :procesos
   resources :agregaciones
   devise_for :usuarios
   resources :autores
@@ -45,6 +49,6 @@ Rails.application.routes.draw do
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
-  root 'cargas#index'
+  root 'recursos#tablas'
 
 end

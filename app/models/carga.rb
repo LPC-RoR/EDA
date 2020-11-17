@@ -30,7 +30,8 @@ class Carga < ApplicationRecord
 		tablas:   false
 	}
 
-	has_many :publicaciones
+	has_many :procesos
+	has_many :publicaciones, through: :procesos
 
 	def show_title
 		self.archivo.split('/').last

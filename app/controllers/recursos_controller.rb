@@ -1,10 +1,13 @@
 class RecursosController < ApplicationController
 #  before_action :set_recurso, only: [:show, :edit, :update, :destroy]
 
-  # GET /recursos
-  # GET /recursos.json
-  def index
-    @coleccion = Recurso.all
+  # GET /recursos/tablas
+  def tablas
+    # Manejo de Tablas, Tabs y Estados
+    @ftab = params[:ftab].blank? ? Recurso::TABS[0] : params[:ftab]
+    @estado = params[:estado].blank? ? @ftab.classify.constantize::ESTADOS[0] : params[:estado]
+    @coleccion = @ftab.classify.constantize::all.where(estado: @estado)
+    @coleccion = @ftab.classify.constantize::all
   end
 
   def sel_archivo_carga
