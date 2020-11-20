@@ -15,7 +15,6 @@ class CargasController < ApplicationController
     # tenemos que cubrir todos los casos
     # 1. has_many : }
     @coleccion = @objeto.send(@tab).page(params[:page]) #.where(estado: @estado)
-    # @coleccion = @tab == 'clientes' ? @objeto.clientes.where(estado: @estado) : @tab.classify.constantize.where(empresa_id: @objeto.id, estado: @estado)
   end
 
   def procesa_carga

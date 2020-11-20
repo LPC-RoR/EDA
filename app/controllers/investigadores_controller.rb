@@ -4,17 +4,22 @@ class InvestigadoresController < ApplicationController
   # GET /investigadores
   # GET /investigadores.json
   def index
-    @investigadores = Investigador.all
+    @coleccion = Investigador.all
   end
 
   # GET /investigadores/1
   # GET /investigadores/1.json
   def show
-  end
+    @tab = params[:tab].blank? ? 'publicaciones' : params[:tab]
+#    @estado = params[:estado].blank? ? @tab.classify.constantize::ESTADOS[0] : params[:estado]
+    # tenemos que cubrir todos los casos
+    # 1. has_many : }
+    @coleccion = @objeto.send(@tab).page(params[:page]) #.where(estado: @estado)
+end
 
   # GET /investigadores/new
   def new
-    @investigador = Investigador.new
+    @objeto = Investigador.new
   end
 
   # GET /investigadores/1/edit
@@ -24,15 +29,15 @@ class InvestigadoresController < ApplicationController
   # POST /investigadores
   # POST /investigadores.json
   def create
-    @investigador = Investigador.new(investigador_params)
+    @objeto = Investigador.new(investigador_params)
 
     respond_to do |format|
-      if @investigador.save
-        format.html { redirect_to @investigador, notice: 'Investigador was successfully created.' }
-        format.json { render :show, status: :created, location: @investigador }
+      if @objeto.save
+        format.html { redirect_to @objeto, notice: 'Investigador was successfully created.' }
+        format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
-        format.json { render json: @investigador.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -41,12 +46,12 @@ class InvestigadoresController < ApplicationController
   # PATCH/PUT /investigadores/1.json
   def update
     respond_to do |format|
-      if @investigador.update(investigador_params)
-        format.html { redirect_to @investigador, notice: 'Investigador was successfully updated.' }
-        format.json { render :show, status: :ok, location: @investigador }
+      if @objeto.update(investigador_params)
+        format.html { redirect_to @objeto, notice: 'Investigador was successfully updated.' }
+        format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
-        format.json { render json: @investigador.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -54,7 +59,7 @@ class InvestigadoresController < ApplicationController
   # DELETE /investigadores/1
   # DELETE /investigadores/1.json
   def destroy
-    @investigador.destroy
+    @objeto.destroy
     respond_to do |format|
       format.html { redirect_to investigadores_url, notice: 'Investigador was successfully destroyed.' }
       format.json { head :no_content }
@@ -64,7 +69,7 @@ class InvestigadoresController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_investigador
-      @investigador = Investigador.find(params[:id])
+      @objeto = Investigador.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

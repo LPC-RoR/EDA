@@ -5,17 +5,17 @@
 			<tr>
 				<% case field[1] %>
 				<% when 'normal' %>
-					<td> <%= "#{field[0]}" %> </td>
-					<td> <%=  "#{o[field[0]]}" %> </td>
+					<td><small> <%= "#{field[0]}" %> </small></td>
+					<td><small> <%=  "#{o[field[0]]}" %> </small></td>
 				<% when 'diahora' %>
-					<td> <%= "#{field[0]}" %> </td>
-					<td> <%=  "#{l(o[field[0]])}" %> </td>
+					<td><small> <%= "#{field[0]}" %> </small></td>
+					<td><small> <%=  "#{l(o[field[0]])}" %> </small></td>
 				<% when 'fnormal' %>
-					<td> <%= "#{field[0]}" %> </td>
-					<td> <%= "#{ f_tabla(o).send(field[0]) }" %> </td>
+					<td><small> <%= "#{field[0]}" %> </small></td>
+					<td><small> <%= "#{ f_tabla(o).send(field[0]) }" %> </small></td>
 				<% when 'fdiahora' %>
-					<td> <%= "#{field[0]}" %> </td>
-					<td> <%= "#{ l(f_tabla(o).send(field[0])) }" %> </td>
+					<td><small> <%= "#{field[0]}" %> </small></td>
+					<td><small> <%= "#{ l(f_tabla(o).send(field[0])) }" %> </small></td>
 				<% end %>
 			</tr>
 		<% end %>

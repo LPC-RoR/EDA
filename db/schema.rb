@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_17_202721) do
+ActiveRecord::Schema.define(version: 2020_11_20_012647) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -124,6 +124,11 @@ ActiveRecord::Schema.define(version: 2020_11_17_202721) do
     t.string "author_email"
     t.string "unique_id"
     t.string "da"
+    t.string "d_journal"
+    t.string "d_author"
+    t.string "d_doi"
+    t.string "origen"
+    t.string "pages"
     t.index ["registro_id"], name: "index_publicaciones_on_registro_id"
     t.index ["revista_id"], name: "index_publicaciones_on_revista_id"
     t.index ["title"], name: "index_publicaciones_on_title"
@@ -153,6 +158,8 @@ ActiveRecord::Schema.define(version: 2020_11_17_202721) do
     t.string "calificacion"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "sha1", limit: 40
+    t.index ["sha1"], name: "index_textos_on_sha1"
   end
 
   create_table "usuarios", force: :cascade do |t|

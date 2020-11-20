@@ -9,7 +9,11 @@
     <% unless nomenu?(controller_name) %>
       <li>
         <!-- USUARIO AUTENTICADO -->
+          <% Recurso::MENU.each do |item| %>
+            <%= render partial: '0p/navbar/btn', locals: {nombre: item[0].capitalize, link: item[1], delete: false} %>
+          <% end %>
         <% if usuario_signed_in? %>
+
 
           <!-- EMPLEADOS: acceso sólo a usuarios tipo ['sistema', 'planta'] -->
           <!--% if (['sistema', 'planta'].include? Current.empleado.tipo) %-->
@@ -20,10 +24,10 @@
 
 
           <!-- CUALQUIER USUARIO puede salir de la sesión -->
-          <%= render partial: '0p/general/btn_navbar', locals: {nombre: 'Salir', link: destroy_usuario_session_path, delete: true} %>
+          <%= render partial: '0p/navbar/btn', locals: {nombre: 'Salir', link: destroy_usuario_session_path, delete: true} %>
         <!-- USUARIO NO AUTENTICADO -->
         <% else %>
-          <%= render partial: '0p/general/btn_navbar', locals: {nombre: 'Ingreso', link: new_usuario_session_path, delete: false} %>
+          <%= render partial: '0p/navbar/btn', locals: {nombre: 'Ingreso', link: new_usuario_session_path, delete: false} %>
         <% end %>
       </li>
     <% end %>

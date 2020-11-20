@@ -1,7 +1,9 @@
 <!-- TITULO -->
-<%= render partial: '0p/general/titulo', locals: {c: c, a: a, titulo: '', size: '5'} if d_tabla(c, :titulo) %>
+<!-- ['index'. 'seleccion'].include?(action_name) son las acciones con título -->
+<%= render partial: '0p/general/titulo', locals: {c: c, a: a, titulo: '', size: '5'} if ['index', 'seleccion'].include?(action_name) %>
 
 <!-- TABS -->
+<!-- Este TABS se define en el Modelo, no usa los child porque eso se hace desde SHOW -->
 <%= render partial: '0p/tabs/tabs', locals: {tabs: m_tabs(c), link_tabs: get_link(c, 'tab'), active: @tab } if d_tabla(c, :tabs) %>
 
 <!-- ESTADOS -->
@@ -9,13 +11,20 @@
 
 <!-- BOTON NUEVO (SI HAY MAS DE 15 ELEMENTOS DESPLEGADOS) -->
 <!-- No se activa si la acción es 'seleccion' -->
-<%= render partial: '0p/tabla/nuevo', locals: {c: c} if d_tabla(c, :nuevo) and a != 'seleccion' and @coleccion.count > 15 %>
+<% if d_tabla(c, :nuevo) and a != 'seleccion' %>
+	<% if Recurso::ENTRY_NEW_CONTROLLERS.include?(c) %>
+		<%= render partial: "#{c}/inline_nuevo", locals: {c: c, a: a} %>
+		<%#= render partial: '/textos/nuevo_texto' %>
+	<% elsif @coleccion.count > 15 %>
+		<%= render partial: '0p/tabla/btn_nuevo', locals: {c: c} %>
+	<% end %>
+<% end %>
 
 <!-- PAGINAS -->
 <%= paginate @coleccion if d_tabla(c, :paginas) %>
 
 <!-- CUERPO TABLA -->
-<table class="table table-striped">
+<table class="table table-striped table-sm">
   <thead>
    	<%= render partial: '0p/tabla/th', locals: {c: c} %>
   </thead>
@@ -29,5 +38,9 @@
 </table>
 
 <!-- BOTON NUEVO -->
-<!-- No se activa si la acción es 'seleccion' -->
-<%= render partial: '0p/tabla/nuevo', locals: {c: c} if d_tabla(c, :nuevo) and a != 'seleccion' %>
+<% unless Recurso::ENTRY_NEW_CONTROLLERS.include?(c) %>
+	<!-- No se activa si la acción es 'seleccion' -->
+	<%= render partial: '0p/tabla/btn_nuevo', locals: {c: c} if d_tabla(c, :nuevo) and a != 'seleccion' %>
+<% end %>
+
+</br></br>

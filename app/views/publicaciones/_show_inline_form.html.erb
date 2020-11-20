@@ -1,0 +1,15 @@
+<%= form_for :texto_base, url: "/textos/nuevo?publicacion_id=#{@objeto.id}" do |form| %>
+	<div class='row'>
+		<div class = 'col-sm-3'>
+			<%= form.select :carpeta_id, Carpeta.all.collect { |p| [p.carpeta, p.id] }, include_blank: true %>
+		</div>
+		<div class = 'col-sm-7'>
+		<%= form.text_field(:texto, class: 'form-control' ) %>
+		</div>
+		<div class = 'col-sm-2'>
+		<%= form.submit '+ Texto'  %>
+		</div>
+	</div>
+<% end  %>
+</br>
+

@@ -1,6 +1,7 @@
 <!-- TITULO -->
 <!-- size: determina el tamaño del font -->
 <!-- titulo: Es el texto del título -->
+<!-- a e {'index', 'seleccion', 'new', 'edit' -->
 <h<%= size%>>
 	<% case a %>
 	<% when 'index' %>
@@ -9,8 +10,6 @@
 		<%= "Selecciona #{corrige(c.singularize)}" %>
 	<% when 'new' %>
 		<%= "+ #{corrige(c).singularize.capitalize}" %>
-	<% when 'edit' %>
-		<%= "~ #{corrige(c).singularize.capitalize}" %>
 	<% when 'edit' %>
 		<%= "~ #{corrige(c).singularize.capitalize}" %>
 	<% else %>

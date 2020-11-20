@@ -1,16 +1,17 @@
 class Carga < ApplicationRecord
 
+	HIDDEN_CHILDS = ['procesos']
+
 	ESTADOS = ['ingreso', 'procesado']
 	D_TABLA = {
-		titulo:  true,
 		tabs:    false,
 		paginas: false,
 		estados: true,
 		nuevo:   true
 	}
 	TABLA_FIELDS = [
-		['archivo', 'show'], 
-		['nota',  'normal']
+		['d_archivo',   'show'], 
+		['nota',      'normal']
 	]
 	TIPO_NEW = 'sel_archivo_carga'
 
@@ -36,13 +37,16 @@ class Carga < ApplicationRecord
 
 	def show_links
 		[
-			['Cargas', "/cargas"],
 			['Proceso', "/cargas/#{self.id}/procesa_carga"]
 		]
 		
 	end
 
 	def show_title
+		self.archivo.split('/').last
+	end
+
+	def d_archivo
 		self.archivo.split('/').last
 	end
 

@@ -1,14 +1,1 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Revista:</strong>
-  <%= @revista.revista %>
-</p>
-
-<p>
-  <strong>Idioma:</strong>
-  <%= @revista.idioma_id %>
-</p>
-
-<%= link_to 'Edit', edit_revista_path(@revista) %> |
-<%= link_to 'Back', revistas_path %>
+<%= render partial: '0p/show/show' %>

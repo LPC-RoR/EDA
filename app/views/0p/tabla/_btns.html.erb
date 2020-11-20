@@ -3,8 +3,8 @@
 <% else %>
 	<!-- VALIDA QUE SE PUEDA MODIFICAR -->
 	<!--% if objeto.class.name.constantize::ESTADOS.index(objeto.estado) == 0 %-->
-		<%= render partial: '0p/tabla/btns_e', locals: {objeto: objeto} unless Recurso::JOIN_TABLES.include?(objeto.class.name.pluralize.downcase) %>
+		<%= render partial: '0p/tabla/btns_e', locals: {objeto: objeto} %>
 		<!-- BOTONES ESTADO : SOLO -->
-		<%= render partial: '0p/tabla/btns_estado', locals: {objeto: objeto, estados: objeto.class.name.constantize::ESTADOS, link_estado: "/#{objeto.class.name.downcase.pluralize}/#{objeto.id}/estado?estado="} if d_tabla(objeto.class.name.downcase.pluralize, :estados) %>
+		<%= render partial: '0p/tabla/btns_estado', locals: {objeto: objeto, estados: objeto.class.name.constantize::ESTADOS, link_estado: "/#{objeto.class.name.tableize}/#{objeto.id}/estado?estado="} if d_tabla(objeto.class.name.tableize, :estados) %>
 	<!--% end %-->
 <% end %>

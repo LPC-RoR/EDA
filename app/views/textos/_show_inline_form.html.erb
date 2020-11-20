@@ -1,0 +1,24 @@
+<%= form_for :e_params, url: "/textos/eliminar_carpeta?texto_id=#{@objeto.id}" do |e_form| %>
+	<div class='row'>
+		<div class = 'col-sm-6'>
+			<%= e_form.select :e_carpeta_id, @objeto.carpetas.collect { |p| [p.carpeta, p.id] }, include_blank: true %>
+		</div>
+		<div class = 'col-sm-6'>
+			<%= e_form.submit 'Sacar de carpeta'  %>
+		</div>
+	</div>
+<% end  %>
+</br>
+
+<%= form_for :a_params, url: "/textos/agregar_carpeta?texto_id=#{@objeto.id}" do |a_form| %>
+	<div class='row'>
+		<div class = 'col-sm-6'>
+			<%= a_form.select :a_carpeta_id, Carpeta.find(Carpeta.all.ids - @objeto.carpetas.ids).collect { |p| [p.carpeta, p.id] }, include_blank: true %>
+		</div>
+		<div class = 'col-sm-6'>
+			<%= a_form.submit 'Agregar a Carpeta'  %>
+		</div>
+	</div>
+<% end  %>
+</br>
+

@@ -7,9 +7,19 @@ class CarpetasController < ApplicationController
     @coleccion = Carpeta.all
   end
 
+  def seleccion
+    @link_seleccion = "/textos/new?publicacion_id=#{params[:publicacion_id]}&carpeta_id="
+    @coleccion = Carpeta.all
+  end
+
   # GET /carpetas/1
   # GET /carpetas/1.json
   def show
+    @tab = params[:tab].blank? ? 'textos' : params[:tab]
+#    @estado = params[:estado].blank? ? @tab.classify.constantize::ESTADOS[0] : params[:estado]
+    # tenemos que cubrir todos los casos
+    # 1. has_many : }
+    @coleccion = @objeto.send(@tab).page(params[:page]) #.where(estado: @estado)
   end
 
   # GET /carpetas/new

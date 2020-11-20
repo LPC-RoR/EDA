@@ -2,7 +2,9 @@ Rails.application.routes.draw do
 
   resources :clasificaciones
   resources :citas
-  resources :carpetas
+  resources :carpetas do
+    match :seleccion, via: :get, on: :collection
+  end
   resources :procesos
   devise_for :usuarios
   resources :autores
@@ -40,10 +42,14 @@ Rails.application.routes.draw do
   resources :revistas do
     resources :publicaciones
   end
-  resources :textos
+  resources :textos do
+    match :nuevo, via: :post, on: :collection
+    match :agregar_carpeta, via: :post, on: :collection
+    match :eliminar_carpeta, via: :post, on: :collection
+  end
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
-  root 'recursos#tablas'
+  root 'publicaciones#index'
 
 end
