@@ -24,7 +24,7 @@ class Texto < ApplicationRecord
 		detalle:    false,
 		clasifica:  false,
 		inline_form: true,
-		tabs:       false,
+		tabla:      false,
 		adjuntos:   false
 	}
 

@@ -6,7 +6,7 @@ class Publicacion < ApplicationRecord
 		'Objetivos' =>             ['delineados', 'confusos'],
 		'Metodología' => ['fuerte', 'debil', 'controversial'],
 		'Resultado' =>  ['significativo', 'no significativo'],
-		'Conclusiones' =>      ['aceptadas', 'controversial']
+		'Conclusiones' =>    ['aceptadas', 'controversiales']
 	}
 
 	# tablas child que NO deben ser deplegadas
@@ -49,7 +49,7 @@ class Publicacion < ApplicationRecord
 		detalle:     true,
 		clasifica:   true,
 		inline_form: true,
-		tabs:        true,
+		tabla:       true,
 		adjuntos:    false
 	}
 

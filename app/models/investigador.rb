@@ -7,7 +7,7 @@ class Investigador < ApplicationRecord
 		detalle:     false,
 		clasifica:   false,
 		inline_form: false,
-		tabs:         true,
+		tabla:        true,
 		adjuntos:    false
 	}
 

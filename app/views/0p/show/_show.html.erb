@@ -16,7 +16,7 @@
 <!-- INLINE_FORM -->
 <%= render partial: "/#{@objeto.class.name.tableize}/show_inline_form", locals: {c: controller_name, o: @objeto} if d_show(controller_name, :inline_form) %>
 
-<% if d_show(controller_name, :tabs) %>
+<% if d_show(controller_name, :tabla) %>
 	<!-- TABS generado desde un ARREGLO -->
 	<%= render partial: '0p/tabs/tabs', locals: {tabs: has_many_tabs(controller_name), link_tabs: "/#{controller_name}/#{@objeto.id}?tab=", active: @tab} %>
 	<!--%= @tab %-->

@@ -5,9 +5,18 @@
 			<tr>
 				<td>
 				<small>
-					<%= "#{item} #{get_evaluacion_publicacion(o, item)}" %>
+					<strong>
+					<%= item %>
+					</strong>
 				</small>
 				</td>
+
+				<td>
+				<small>
+					<%= get_evaluacion_publicacion(o, item) %>
+				</small>
+				</td>
+
 				<td>
 				<small>
 					<% get_btns_evaluacion(o, item).each do |btn| %>

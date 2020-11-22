@@ -46,7 +46,9 @@ Rails.application.routes.draw do
   resources :revistas do
     resources :publicaciones
   end
-  resources :temas
+  resources :temas do
+    match :nuevo, via: :post, on: :collection
+  end
   resources :textos do
     match :nuevo, via: :post, on: :collection
     match :agregar_tema, via: :post, on: :collection

@@ -1,3 +1,16 @@
+<%= form_for :nuevo_tema, url: "/temas/nuevo?publicacion_id=#{@objeto.id}" do |form| %>
+	<div class='row'>
+		<div class = 'col-sm-3'>
+		</div>
+		<div class = 'col-sm-7'>
+		<%= form.text_field(:tema, class: 'form-control' ) %>
+		</div>
+		<div class = 'col-sm-2'>
+		<%= form.submit '+ Tema'  %>
+		</div>
+	</div>
+<% end  %>
+
 <%= form_for :texto_base, url: "/textos/nuevo?publicacion_id=#{@objeto.id}" do |form| %>
 	<div class='row'>
 		<div class = 'col-sm-3'>

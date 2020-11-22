@@ -27,11 +27,11 @@ class Tema < ApplicationRecord
 	]
 
 	D_SHOW = {
-		links:       true,
-		detalle:     true,
+		links:        true,
+		detalle:      true,
 		clasifica:   false,
 		inline_form: false,
-		tabs:        true,
+		tabla:        true,
 		adjuntos:    false
 	}
 

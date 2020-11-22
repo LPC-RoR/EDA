@@ -22,6 +22,15 @@ class TemasController < ApplicationController
     @objeto = Tema.new
   end
 
+  def nuevo
+    @nuevo_tema = params[:nuevo_tema][:tema].strip
+    @publicacion   = Publicacion.find(params[:publicacion_id])
+
+    Tema.create(tema: @nuevo_tema)
+
+    redirect_to @publicacion
+  end
+
   # GET /temas/1/edit
   def edit
   end
