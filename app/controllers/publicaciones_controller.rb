@@ -4,7 +4,12 @@ class PublicacionesController < ApplicationController
   # GET /publicaciones
   # GET /publicaciones.json
   def index
-    @coleccion = Publicacion.all.page(params[:page])
+    @tab = params[:tab].blank? ? 'Revisar' : params[:tab]
+    @carpeta = Carpeta.find_by(carpeta: @tab)
+    if @carpeta.blank?
+      Carpeta.create(carpeta: 'Revisar')
+    end
+    @coleccion = @carpeta.publicaciones.page(params[:page])
   end
 
   # GET /publicaciones/1
@@ -20,6 +25,39 @@ class PublicacionesController < ApplicationController
   # GET /publicaciones/new
   def new
     @objeto = Publicacion.new
+  end
+
+  def mask_new
+  end
+  def mask_nuevo
+    @origen = 'ingreso'
+    @title = params[:m_params][:title].strip
+    @author = procesa_autores(params[:m_params][:author].strip)
+
+    @revista = procesa_editorial(params[:m_params][:journal])[:journal].strip
+    @r = Revista.find_by(revista: @revista)
+    if @r.blank?
+      @r = Revista.create(revista: @revista)
+    end
+
+    @journal_id = @r.id
+    @volume = procesa_editorial(params[:m_params][:journal])[:volume].strip
+    @year = procesa_editorial(params[:m_params][:journal])[:year].strip
+    @pages = procesa_editorial(params[:m_params][:journal])[:pages].strip
+    @doi = params[:m_params][:doi].strip
+    @abstract = params[:m_params][:abstract].strip
+    @objeto = Publicacion.create(origen: @origen, title: @title, author: @author, revista_id: @journal_id, volume: @volume, year: @year, pages: @pages, doi: @doi, abstract: @abstract)
+
+    @investigadores = @author.split(' & ')
+    @investigadores.each do |i|
+      @i = Investigador.find_by(investigador: i)
+      if @a.blank?
+        @i = Investigador.create(investigador: i)
+      end
+      @objeto.investigadores << @i
+    end
+
+    redirect_to '/publicaciones'
   end
 
   # GET /publicaciones/1/edit
@@ -54,6 +92,31 @@ class PublicacionesController < ApplicationController
         format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def cambia_carpeta
+    @origen = Carpeta.find_by(carpeta: params[:origen])
+    @destino = Carpeta.find_by(carpeta: params[:destino])
+    @publicacion = Publicacion.find(params[:publicacion_id])
+    @clasificacion = Clasificacion.find_by(carpeta_id: @origen.id, publicacion_id: @publicacion.id)
+
+    @clasificacion.delete 
+    @destino.publicaciones << @publicacion
+
+    redirect_to "/publicaciones?tab=#{@origen.carpeta}"
+  end
+
+  def cambia_evaluacion
+    @publicacion = Publicacion.find(params[:publicacion_id])
+    @evaluacion = @publicacion.evaluaciones.find_by(aspecto: params[:item])
+    if @evaluacion.blank?
+      @publicacion.evaluaciones.create(aspecto: params[:item], evaluacion: params[:evaluacion])
+    else
+      @evaluacion.evaluacion = params[:evaluacion]
+      @evaluacion.save
+    end
+    redirect_to @publicacion
+    
   end
 
   # DELETE /publicaciones/1

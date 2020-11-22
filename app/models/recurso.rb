@@ -2,6 +2,8 @@ class Recurso < ApplicationRecord
 	# ---------------------------------------- CARGA ------------------------------------------------
 	# Esta Constante debiera estar en el Modelo CARGA !!
 	RUTA_ARCHIVOS_CARGA = "/home/hugo/eda/app/assets/cargas/**/*"
+	# Carpeta destino de Publicaciones Cargadas
+	CARPETA_CARGA = 'Revisar'
 
 	# ---------------------------------------- FRAME ------------------------------------------------
 	# MENU PRINCIPAL
@@ -9,6 +11,7 @@ class Recurso < ApplicationRecord
 		["Publicaciones", "/publicaciones"],
 		["Textos", "/textos"],
 		["Carpetas", "/carpetas"],
+		["Temas", "/temas"],
 		["Cargas", "/cargas"] 
 	]
 
@@ -36,7 +39,7 @@ class Recurso < ApplicationRecord
 	# en el modelo se especifican con la constante HIDDEN_CHILDS
 	# en la versión anterior se usaba JOIN_TABLES
 	# se resolvió TODO lo de JOIN_TABLE menos su uso en _btns.html.erb que se puso en comentario
-	HIDDEN_CHILDS_CONTROLLERS = ['cargas', 'publicaciones', 'textos', 'carpetas', 'investigadores']
+	HIDDEN_CHILDS_CONTROLLERS = ['cargas', 'publicaciones', 'textos', 'carpetas', 'investigadores', 'temas']
 
 	# NAVEGACION POR CONTEXTO
 	SHOW_LINKS_MODELS = ['Carga']

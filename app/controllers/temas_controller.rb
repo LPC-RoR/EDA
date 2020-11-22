@@ -1,0 +1,86 @@
+class TemasController < ApplicationController
+  before_action :set_tema, only: [:show, :edit, :update, :destroy]
+
+  # GET /temas
+  # GET /temas.json
+  def index
+    @coleccion = Tema.all
+  end
+
+  # GET /temas/1
+  # GET /temas/1.json
+  def show
+    @tab = params[:tab].blank? ? 'textos' : params[:tab]
+#    @estado = params[:estado].blank? ? @tab.classify.constantize::ESTADOS[0] : params[:estado]
+    # tenemos que cubrir todos los casos
+    # 1. has_many : }
+    @coleccion = @objeto.send(@tab).page(params[:page]) #.where(estado: @estado)
+  end
+
+  # GET /temas/new
+  def new
+    @objeto = Tema.new
+  end
+
+  # GET /temas/1/edit
+  def edit
+  end
+
+  # POST /temas
+  # POST /temas.json
+  def create
+    @objeto = Tema.new(tema_params)
+
+    respond_to do |format|
+      if @objeto.save
+        set_redireccion
+        format.html { redirect_to @redireccion, notice: 'Tema was successfully created.' }
+        format.json { render :show, status: :created, location: @objeto }
+      else
+        format.html { render :new }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /temas/1
+  # PATCH/PUT /temas/1.json
+  def update
+    respond_to do |format|
+      if @objeto.update(tema_params)
+        set_redireccion
+        format.html { redirect_to @redireccion, notice: 'Tema was successfully updated.' }
+        format.json { render :show, status: :ok, location: @objeto }
+      else
+        format.html { render :edit }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /temas/1
+  # DELETE /temas/1.json
+  def destroy
+    @objeto.destroy
+    set_redireccion
+    respond_to do |format|
+      format.html { redirect_to @redireccion, notice: 'Tema was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_tema
+      @objeto = Tema.find(params[:id])
+    end
+
+    def set_redireccion
+      @redireccion = '/temas'
+    end
+
+    # Only allow a list of trusted parameters through.
+    def tema_params
+      params.require(:tema).permit(:tema)
+    end
+end

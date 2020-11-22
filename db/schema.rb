@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_20_012647) do
+ActiveRecord::Schema.define(version: 2020_11_21_162810) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,7 +52,11 @@ ActiveRecord::Schema.define(version: 2020_11_20_012647) do
     t.integer "texto_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "publicacion_id"
+    t.integer "tema_id"
     t.index ["carpeta_id"], name: "index_clasificaciones_on_carpeta_id"
+    t.index ["publicacion_id"], name: "index_clasificaciones_on_publicacion_id"
+    t.index ["tema_id"], name: "index_clasificaciones_on_tema_id"
     t.index ["texto_id"], name: "index_clasificaciones_on_texto_id"
   end
 
@@ -62,6 +66,16 @@ ActiveRecord::Schema.define(version: 2020_11_20_012647) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["institucion_id"], name: "index_departamentos_on_institucion_id"
+  end
+
+  create_table "evaluaciones", force: :cascade do |t|
+    t.integer "publicacion_id"
+    t.string "aspecto"
+    t.string "evaluacion"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["aspecto"], name: "index_evaluaciones_on_aspecto"
+    t.index ["publicacion_id"], name: "index_evaluaciones_on_publicacion_id"
   end
 
   create_table "idiomas", force: :cascade do |t|
@@ -151,6 +165,13 @@ ActiveRecord::Schema.define(version: 2020_11_20_012647) do
     t.datetime "updated_at", null: false
     t.index ["idioma_id"], name: "index_revistas_on_idioma_id"
     t.index ["revista"], name: "index_revistas_on_revista"
+  end
+
+  create_table "temas", force: :cascade do |t|
+    t.string "tema"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tema"], name: "index_temas_on_tema"
   end
 
   create_table "textos", force: :cascade do |t|

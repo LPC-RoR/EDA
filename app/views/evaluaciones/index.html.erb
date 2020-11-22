@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Evaluaciones</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Publicacion</th>
+      <th>Objetivo</th>
+      <th>Resultado</th>
+      <th>Metodologia</th>
+      <th>Conclusion</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @evaluaciones.each do |evaluacion| %>
+      <tr>
+        <td><%= evaluacion.publicacion_id %></td>
+        <td><%= evaluacion.objetivo %></td>
+        <td><%= evaluacion.resultado %></td>
+        <td><%= evaluacion.metodologia %></td>
+        <td><%= evaluacion.conclusion %></td>
+        <td><%= link_to 'Show', evaluacion %></td>
+        <td><%= link_to 'Edit', edit_evaluacion_path(evaluacion) %></td>
+        <td><%= link_to 'Destroy', evaluacion, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Evaluacion', new_evaluacion_path %>

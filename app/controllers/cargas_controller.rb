@@ -18,12 +18,14 @@ class CargasController < ApplicationController
   end
 
   def procesa_carga
-    # Abre archivo
-    carga_archivo_bib(@objeto)
 
-    @coleccion = Publicacion.all
+    if @objeto.estado == 'ingreso'
+      # Abre archivo
+      carga_archivo_bib(@objeto)
 
-    procesa_autores_publicaciones(@coleccion)
+#      @objeto.estado = 'procesada'
+#      @objeto.save
+    end
 
     redirect_to @objeto
   end # def

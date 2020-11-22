@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  publicacion_id: 1
+  objetivo: MyString
+  resultado: MyString
+  metodologia: MyString
+  conclusion: MyString
+
+two:
+  publicacion_id: 1
+  objetivo: MyString
+  resultado: MyString
+  metodologia: MyString
+  conclusion: MyString

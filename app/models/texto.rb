@@ -3,8 +3,8 @@ class Texto < ApplicationRecord
 
 	D_TABLA = {
 		tabs:    false,
-		paginas: false,
 		estados: false,
+		paginas: false,
 		nuevo:   false
 	}
 
@@ -13,27 +13,25 @@ class Texto < ApplicationRecord
 	]
 
 	TIPO_NEW = 'child_sel'
-	TABLA_SEL = 'carpetas'
+	TABLA_SEL = 'temas'
 
  	FORM_FIELDS = [
 		['texto',           'entry']
 	]
 
 	D_SHOW = {
-		titulo:     true,
-		links:      true,
-		nav:        false,
+		links:       true,
 		detalle:    false,
+		clasifica:  false,
 		inline_form: true,
 		tabs:       false,
-		adjuntos:   false,
-		tablas:     false
+		adjuntos:   false
 	}
 
-	SHOW_HMT_COLLECTIONS = ['carpetas', 'publicaciones']
+	SHOW_HMT_COLLECTIONS = ['temas', 'publicaciones']
 
 	has_many :clasificaciones
-	has_many :carpetas, through: :clasificaciones
+	has_many :temas, through: :clasificaciones
 
 	has_many :citas
 	has_many :publicaciones, through: :citas

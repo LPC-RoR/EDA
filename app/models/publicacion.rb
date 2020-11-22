@@ -2,15 +2,23 @@ class Publicacion < ApplicationRecord
 
 	NOMBRES_BIB = ["Author", "Title", "Year", "Volume", "Month", "Abstract", "Publisher", "Address", "Affiliation", "DOI", "Article-Number", "ISSN", "EISSN", "Keywords", "Keywords-Plus", "Research-Areas", "Web-of-Science-Categories", "Author-Email", "Unique-ID", "DA"]
 
+	EVALUACION = {
+		'Objetivos' =>             ['delineados', 'confusos'],
+		'Metodología' => ['fuerte', 'debil', 'controversial'],
+		'Resultado' =>  ['significativo', 'no significativo'],
+		'Conclusiones' =>      ['aceptadas', 'controversial']
+	}
+
 	# tablas child que NO deben ser deplegadas
-	HIDDEN_CHILDS = ['citas', 'autores', 'investigadores', 'procesos', 'cargas']
+	HIDDEN_CHILDS = ['citas', 'autores', 'investigadores', 'procesos', 'cargas', 'clasificaciones', 'carpetas', 'evaluaciones']
 
 	# ------------------- TABLA -----------------------
+	TABS = Carpeta.all.map {|c| c.carpeta}
 	# Configura DESPLIEGUE de la TABLA
 	D_TABLA = {
-		tabs:    false,
-		paginas: true,
+		tabs:    true,
 		estados: false,
+		paginas: true,
 		nuevo:   true
 	}
 
@@ -21,7 +29,7 @@ class Publicacion < ApplicationRecord
 	]
 
 	# Tipo de LINK boton NUEVO
-	TIPO_NEW = 'new'
+	TIPO_NEW = 'mask'
 
 	# Acceso a campos BT
 #	BT_FIELDS = []	
@@ -37,14 +45,12 @@ class Publicacion < ApplicationRecord
 	]
 
 	D_SHOW = {
-		titulo:      true,
 		links:       true,
-		nav:         false,
 		detalle:     true,
+		clasifica:   true,
 		inline_form: true,
 		tabs:        true,
-		adjuntos:    false,
-		tablas:      false
+		adjuntos:    false
 	}
 
 	SHOW_FIELDS = [
@@ -60,6 +66,8 @@ class Publicacion < ApplicationRecord
 	belongs_to :registro, optional: true
 	belongs_to :revista, optional: true
 
+	has_many :evaluaciones
+
 	has_many :citas
 	has_many :textos, through: :citas
 
@@ -68,6 +76,9 @@ class Publicacion < ApplicationRecord
 
 	has_many :procesos
 	has_many :cargas, through: :procesos
+
+	has_many :clasificaciones
+	has_many :carpetas, through: :clasificaciones
 
 	def show_links
 		[

@@ -5,15 +5,16 @@ class Carga < ApplicationRecord
 	ESTADOS = ['ingreso', 'procesado']
 	D_TABLA = {
 		tabs:    false,
+		estados: false,
 		paginas: false,
-		estados: true,
 		nuevo:   true
 	}
 	TABLA_FIELDS = [
 		['d_archivo',   'show'], 
 		['nota',      'normal']
 	]
-	TIPO_NEW = 'sel_archivo_carga'
+	TIPO_NEW = 'ruta_new'
+	RUTA_NEW = '/recursos/sel_archivo_carga'
 
  	FORM_FIELDS = [
 		['nota',    'entry'],
@@ -23,13 +24,12 @@ class Carga < ApplicationRecord
 
 
 	D_SHOW = {
-		titulo:   true,
-		links:    true,
-		nav:      false,
-		detalle:  false,
-		tabs:     true,
-		adjuntos: false,
-		tablas:   false
+		links:        true,
+		detalle:     false,
+		clasifica:   false,
+		inline_form: false,
+		tabs:         true,
+		adjuntos:    false
 	}
 
 	has_many :procesos

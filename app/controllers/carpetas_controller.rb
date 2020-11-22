@@ -15,7 +15,7 @@ class CarpetasController < ApplicationController
   # GET /carpetas/1
   # GET /carpetas/1.json
   def show
-    @tab = params[:tab].blank? ? 'textos' : params[:tab]
+    @tab = params[:tab].blank? ? 'publicaciones' : params[:tab]
 #    @estado = params[:estado].blank? ? @tab.classify.constantize::ESTADOS[0] : params[:estado]
     # tenemos que cubrir todos los casos
     # 1. has_many : }

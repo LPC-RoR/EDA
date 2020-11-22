@@ -24,28 +24,28 @@ class TextosController < ApplicationController
   def nuevo
     @texto_limpio = params[:texto_base][:texto].strip
     @sha1         = Digest::SHA1.hexdigest(@texto_limpio)
-    @carpeta      = Carpeta.find(params[:texto_base][:carpeta_id])
+    @tema         = Tema.find(params[:texto_base][:tema_id])
     @publicacion  = Publicacion.find(params[:publicacion_id])
 
     @texto = Texto.find_by(sha1: @sha1)
     if @texto.blank?
       @texto = Texto.new(texto: @texto_limpio, sha1: @sha1)
     end
-    @carpeta.textos << @texto
+    @tema.textos << @texto
     @publicacion.textos << @texto
     redirect_to @publicacion
   end
 
-  def agregar_carpeta
-    @carpeta = Carpeta.find(params[:a_params][:a_carpeta_id])
+  def agregar_tema
+    @tema = Tema.find(params[:a_params][:a_tema_id])
     @texto = Texto.find(params[:texto_id])
 
-    @carpeta.textos << @texto
+    @tema.textos << @texto
     redirect_to @texto
   end
-  def eliminar_carpeta
+  def eliminar_tema
     @texto = Texto.find(params[:texto_id])
-    @clasificacion = Clasificacion.find_by(carpeta_id: params[:e_params][:e_carpeta_id], texto_id: params[:texto_id])
+    @clasificacion = Clasificacion.find_by(tema_id: params[:e_params][:e_tema_id], texto_id: params[:texto_id])
 
     @clasificacion.delete
     redirect_to @texto

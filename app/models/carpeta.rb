@@ -2,8 +2,8 @@ class Carpeta < ApplicationRecord
 	ESTADOS = ['activa']
 	D_TABLA = {
 		tabs:    false,
-		paginas: false,
 		estados: false,
+		paginas: false,
 		nuevo:   true
 	}
 	TABLA_FIELDS = [
@@ -18,20 +18,19 @@ class Carpeta < ApplicationRecord
 
 
 	D_SHOW = {
-		titulo:   true,
-		links:    true,
-		nav:      false,
-		detalle:  false,
-		tabs:     true,
-		adjuntos: false,
-		tablas:   false
+		links:        true,
+		detalle:     false,
+		clasifica:   false,
+		inline_form: false,
+		tabs:         true,
+		adjuntos:    false
 	}
 
 	HIDDEN_CHILDS = ['clasificaciones']
-	SHOW_HMT_COLLECTIONS = ['textos']
+	SHOW_HMT_COLLECTIONS = ['publicaciones']
 
 	has_many :clasificaciones
-	has_many :textos, through: :clasificaciones
+	has_many :publicaciones, through: :clasificaciones
 
 	def show_title
 		self.carpeta

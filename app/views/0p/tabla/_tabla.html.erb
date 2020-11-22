@@ -31,9 +31,11 @@
 
   <tbody>
   	<!-- Opción para evitar escribir el parcial _modelo.html.erb en cada controlador-->
-  	<% @coleccion.each do |objeto| %>
-	  	<%= render partial: "/0p/tabla/modelo", locals: {a: a, objeto: objeto} %>
-	<% end  %>
+  	<% unless @coleccion.blank? %>
+	  	<% @coleccion.each do |objeto| %>
+		  	<%= render partial: "/0p/tabla/modelo", locals: {a: a, objeto: objeto} %>
+		<% end  %>
+  	<% end %>
   </tbody>
 </table>
 

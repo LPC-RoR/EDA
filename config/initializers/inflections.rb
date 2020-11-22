@@ -57,6 +57,12 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
 
 	inflect.plural 'cita', 'citas'
 	inflect.plural 'Cita', 'Citas'
+
+	inflect.plural 'evaluacion', 'evaluaciones'
+	inflect.plural 'Evaluacion', 'Evaluaciones'
+	inflect.singular 'evaluaciones', 'evaluacion'
+	inflect.singular 'Evaluaciones', 'Evaluacion'
+
 end
 
 # These inflection rules are supported but not enabled by default:

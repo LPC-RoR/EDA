@@ -7,7 +7,7 @@
 <% if Recurso::SHOW_BT_LINKS_MODELS.include?(o.class.name) %>
 	<% o.class::SHOW_BT_OBJECTS.each do |bt| %>
 		<% o_bt = o.send(bt) %>
-		<%= render partial: '0p/tabla/btn', locals: {texto: o_bt.send('show_title'), link: o_bt, delete: false } %>
+		<%= render partial: '0p/tabla/btn', locals: {texto: o_bt.send('show_title'), link: o_bt, delete: false } unless o_bt.blank? %>
 	<% end %>
 <% end %>
 
@@ -19,5 +19,3 @@
 		<% end %>
 	<% end %>
 <% end %>
-
-</br></br>

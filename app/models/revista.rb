@@ -1,16 +1,14 @@
 class Revista < ApplicationRecord
 	D_SHOW = {
-		titulo:       true,
 		links:        true,
-		nav:         false,
 		detalle:     false,
+		clasifica:   false,
 		inline_form: false,
 		tabs:         true,
-		adjuntos:    false,
-		tablas:       true
+		adjuntos:    false
 	}
 
-	belongs_to :idioma
+	belongs_to :idioma, optional: true
 
 	has_many :publicaciones
 

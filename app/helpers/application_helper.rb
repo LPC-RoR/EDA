@@ -48,7 +48,7 @@ module ApplicationHelper
 		when 'ftab'
 			"/#{controller_name}/#{action_name}?ftab="
 		when 'tab'
-			action_name == 'show' ? "/#{controller_name}/#{@objeto.id}?tab=" : "/#{controller_name}/#{action_name}?ftab=#{@ftab}&tab="
+			action_name == 'show' ? "/#{controller_name}/#{@objeto.id}?tab=" : "/#{controller_name}?ftab=#{@ftab}&tab="
 		when 'estado'
 			if action_name == 'show'
 				has_many_tabs(controller_name).empty? ? "/#{controller_name}/#{@objeto.id}?estado=" : "/#{controller_name}/#{@objeto.id}?tab=#{@tab}&estado="
@@ -98,6 +98,8 @@ module ApplicationHelper
 		# {'clientes', 'roles'}
 		when 'new'
 			"/#{controller}/new"
+		when 'mask'
+			"/#{controller}/mask_new"
 		# TIPO_NEW = 'child_new' : show_padre + controller/new
 		# {'categorias', 'zonas'}
 		when 'child_new'
@@ -116,8 +118,8 @@ module ApplicationHelper
 		# {'empleados', 'productos', 'clientes(*)'}
 		when 'detalle_pedido'
 			"/#{controller.classify.constantize::SELECTOR}/seleccion?#{@objeto.class.name.downcase}_id=#{@objeto.id}&empresa_id=#{@objeto.registro.empresa.id}"
-		when 'sel_archivo_carga'
-			"/recursos/sel_archivo_carga"
+		when 'ruta_new'
+			controller.classify.constantize::RUTA_NEW
 		end
 	end
 
@@ -149,6 +151,17 @@ module ApplicationHelper
 		else
 			'FieldNotFound'
 		end
+	end
+
+	def get_evaluacion_publicacion(publicacion, item)
+		e = publicacion.evaluaciones.find_by(aspecto: item)
+		e.blank? ? '[no evaluado]' : e.evaluacion
+	end
+
+	def get_btns_evaluacion(publicacion, item)
+		eval_actual = publicacion.evaluaciones.find_by(aspecto: item)
+		excluido = eval_actual.blank? ? [] : [eval_actual.evaluacion]
+		Publicacion::EVALUACION[item] - excluido
 	end
 
 end
