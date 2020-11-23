@@ -3,9 +3,9 @@ class RecursosController < ApplicationController
 
   # GET /recursos/tablas
   def tablas
-    # Manejo de Tablas, Tabs y Estados
-    @ftab = params[:ftab].blank? ? Recurso::ACTIONS_TABS[action_name][0] : params[:ftab]
+    @ftab = params[:ftab].blank? ? Recurso::RECURSO_ACTIONS_TABS[action_name][0] : params[:ftab]
     @estado = params[:estado].blank? ? @ftab.classify.constantize::ESTADOS[0] : params[:estado]
+    # Manejo de Tablas, Tabs y Estados
 #    @coleccion = @ftab.classify.constantize::all.where(estado: @estado)
     @coleccion = @ftab.classify.constantize::all
   end
@@ -15,6 +15,12 @@ class RecursosController < ApplicationController
     @file = File.open(@archivos[0])
     @file_data = @file.read
     @articles = @file_data.split('@article')
+  end
+
+  def produccion
+    @ftab = params[:ftab].blank? ? Recurso::RECURSO_ACTIONS_TABS[action_name][0] : params[:ftab]
+#    @estado = params[:estado].blank? ? @ftab.classify.constantize::ESTADOS[0] : params[:estado]
+    @coleccion = Publicacion.where(origen: @ftab).page(params[:page])
   end
 
   # GET /recursos/1

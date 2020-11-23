@@ -15,11 +15,10 @@ class Publicacion < ApplicationRecord
 	# ------------------- TABLA -----------------------
 	TABS = Carpeta.all.map {|c| c.carpeta}
 	# Configura DESPLIEGUE de la TABLA
-	D_TABLA = {
-		tabs:    true,
-		estados: false,
-		paginas: true,
-		nuevo:   true
+	TABLE_EXCEPTIONS = {
+		tabs:    ['publicaciones'],
+		paginas:    		 ['*'],
+		nuevo:        ['recursos']
 	}
 
 	# Campos qeu se despliegan en la tabla
@@ -36,6 +35,8 @@ class Publicacion < ApplicationRecord
 #	BT_MODEL = ''
 
 	# -------------------- FORM  -----------------------
+	SHOW_EXCEPTIONS = [:clasifica, :detalle, :inline_form]
+
  	FORM_FIELDS = [
 		['d_journal',    'entry'],
 		['title',        'entry'],
@@ -43,15 +44,6 @@ class Publicacion < ApplicationRecord
 		['d_doi',        'entry'],
 		['abstract', 'text_area']
 	]
-
-	D_SHOW = {
-		links:       true,
-		detalle:     true,
-		clasifica:   true,
-		inline_form: true,
-		tabla:       true,
-		adjuntos:    false
-	}
 
 	SHOW_FIELDS = [
 		['year',       'normal'], 

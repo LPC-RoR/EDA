@@ -1,17 +1,17 @@
 <!-- TITULO -->
 <!-- ['index'. 'seleccion'].include?(action_name) son las acciones con título -->
-<%= render partial: '0p/general/titulo', locals: {c: c, a: a, titulo: '', size: '5'} if ['index', 'seleccion'].include?(action_name) %>
+<%= render partial: '0p/general/titulo', locals: {c: c, a: a, titulo: '', size: '5'} if d_tabla(c, a, :titulo) %>
 
 <!-- TABS -->
 <!-- Este TABS se define en el Modelo, no usa los child porque eso se hace desde SHOW -->
-<%= render partial: '0p/tabs/tabs', locals: {tabs: m_tabs(c), link_tabs: get_link(c, 'tab'), active: @tab } if d_tabla(c, :tabs) and c == controller_name %>
+<%= render partial: '0p/tabs/tabs', locals: {tabs: m_tabs(c), link_tabs: get_link(c, 'tab'), active: @tab } if d_tabla(c, a, :tabs) %>
 
 <!-- ESTADOS -->
-<%= render partial: '0p/tabla/menu_estados', locals: {estado: @estado, estados: m_estados(c), link_estados: get_link(c, 'estado') } if d_tabla(c, :estados) %>
+<%= render partial: '0p/tabla/menu_estados', locals: {estado: @estado, estados: m_estados(c), link_estados: get_link(c, :estados) } if d_tabla(c, a, :estados) %>
 
 <!-- BOTON NUEVO (SI HAY MAS DE 15 ELEMENTOS DESPLEGADOS) -->
 <!-- No se activa si la acción es 'seleccion' -->
-<% if d_tabla(c, :nuevo) and a != 'seleccion' %>
+<% if d_tabla(c, a, :nuevo) and a != 'seleccion' %>
 	<% if Recurso::ENTRY_NEW_CONTROLLERS.include?(c) %>
 		<%= render partial: "#{c}/inline_nuevo", locals: {c: c, a: a} %>
 		<%#= render partial: '/textos/nuevo_texto' %>
@@ -21,7 +21,7 @@
 <% end %>
 
 <!-- PAGINAS -->
-<%= paginate @coleccion if d_tabla(c, :paginas) %>
+<%= paginate @coleccion if d_tabla(c, a, :paginas) %>
 
 <!-- CUERPO TABLA -->
 <table class="table table-striped table-sm">
@@ -42,7 +42,7 @@
 <!-- BOTON NUEVO -->
 <% unless Recurso::ENTRY_NEW_CONTROLLERS.include?(c) %>
 	<!-- No se activa si la acción es 'seleccion' -->
-	<%= render partial: '0p/tabla/btn_nuevo', locals: {c: c} if d_tabla(c, :nuevo) and a != 'seleccion' %>
+	<%= render partial: '0p/tabla/btn_nuevo', locals: {c: c} if d_tabla(c, a, :nuevo) and a != 'seleccion' %>
 <% end %>
 
 </br></br>

@@ -3,12 +3,7 @@ class Carga < ApplicationRecord
 	HIDDEN_CHILDS = ['procesos']
 
 	ESTADOS = ['ingreso', 'procesado']
-	D_TABLA = {
-		tabs:    false,
-		estados: false,
-		paginas: false,
-		nuevo:   true
-	}
+
 	TABLA_FIELDS = [
 		['d_archivo',   'show'], 
 		['nota',      'normal']
@@ -22,15 +17,6 @@ class Carga < ApplicationRecord
 		['archivo','hidden'],
 	]
 
-
-	D_SHOW = {
-		links:        true,
-		detalle:     false,
-		clasifica:   false,
-		inline_form: false,
-		tabla:        true,
-		adjuntos:    false
-	}
 
 	has_many :procesos
 	has_many :publicaciones, through: :procesos

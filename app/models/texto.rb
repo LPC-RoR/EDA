@@ -1,11 +1,9 @@
 class Texto < ApplicationRecord
 	HIDDEN_CHILDS = ['clasificaciones', 'citas']
 
-	D_TABLA = {
-		tabs:    false,
-		estados: false,
-		paginas: false,
-		nuevo:   false
+
+	TABLE_EXCEPTIONS = {
+		nuevo:   ['*']
 	}
 
 	TABLA_FIELDS = [
@@ -19,14 +17,7 @@ class Texto < ApplicationRecord
 		['texto',           'entry']
 	]
 
-	D_SHOW = {
-		links:       true,
-		detalle:    false,
-		clasifica:  false,
-		inline_form: true,
-		tabla:      false,
-		adjuntos:   false
-	}
+	SHOW_EXCEPTIONS = [:inline_form, :tabla]
 
 	SHOW_HMT_COLLECTIONS = ['temas', 'publicaciones']
 

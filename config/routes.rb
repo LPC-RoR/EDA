@@ -36,6 +36,7 @@ Rails.application.routes.draw do
       match :inicia_sesion, via: :get
       match :tablas, via: :get
       match :sel_archivo_carga, via: :get
+      match :produccion, via: :get
     end
   end
   resources :registros do

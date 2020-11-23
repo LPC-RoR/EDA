@@ -5,18 +5,21 @@ module ApplicationHelper
 	end
 
 	def recursos_tabs(accion)
-		Recurso::ACTIONS_TABS[accion]
+		Recurso::RECURSO_ACTIONS_TABS[accion]
 	end
 
 	# Pregunta si la "accion" del "recursos_controller" despliega TABS
 	# "_frame.html.erb"
 	def recursos_tabs?(accion)
-		Recurso::ACTIONS_TABS.keys.include?(accion)
+		Recurso::RECURSO_ACTIONS_TABS.keys.include?(accion)
+	end
+	def recursos_titulo?(accion)
+		Recurso::RECURSO_ACTIONS_TITULO.keys.include?(accion)
 	end
 	# Pregunta si la "accion" del "recursos_controller" despluega TABLA
 	# "_frame.html.erb"
 	def recursos_tabla?(accion)
-		Recurso::ACTIONS_DISPLAY[accion] == 'tabla'
+		Recurso::RECURSO_ACTIONS_DISPLAY[accion] == 'tabla'
 	end
 
 	def frame_controller?(controller)
@@ -36,6 +39,10 @@ module ApplicationHelper
 		case controller
 		when 'clientes'
 			'registros'
+		when 'Referencia'
+			'publicaciones'
+		when 'Produccion'
+			'publicaciones'
 		else
 			controller
 		end
@@ -57,10 +64,42 @@ module ApplicationHelper
 			end
 		end
 	end
-	# Consulta en el modelo que elmentos de la tabla se deben desplegar
-	def d_tabla(controller, label)
-		controller.classify.constantize::D_TABLA[label]
+
+	# Maneja comportamiento por defecto y excepciones de TABLA
+	def d_tabla(c, a, label)
+		excepcion = false
+		# Pregunta si el Modelo TIENE personalizacion
+		if Recurso::EXCEPTIONS_CONTROLLERS.include?(controller_name)
+			# Pregunta si LABEL tiene personalizacion
+			unless c.classify.constantize::TABLE_EXCEPTIONS[label].blank?
+				if c.classify.constantize::TABLE_EXCEPTIONS[label][0] == '*' or c.classify.constantize::TABLE_EXCEPTIONS[label].include?(controller_name)
+					excepcion = true
+				end
+			end
+		end 
+
+		case Recurso::D_TABLA[label][0]
+		when 'all'
+			de = Recurso::D_TABLA[label][1]
+		when 'self'
+			de = (controller_name == c) ? true : false
+		end
+		(excepcion ? (not de) : de)
 	end
+
+	# Maneja comportamiento por defecto y excepciones de SHOW
+	def d_show(objeto, label)
+		excepcion = false
+		# Pregunta si el Modelo TIENE personalizacion
+		if Recurso::EXCEPTIONS_MODELS.include?(objeto.class.name)
+			# Pregunta si LABEL tiene personalizacion
+			excepcion = objeto.class::SHOW_EXCEPTIONS.include?(label)
+		end 
+
+		de = Recurso::D_SHOW[label]
+		(excepcion ? (not de) : de)
+	end
+
 	# Obtiene los campos a desplegar en la tabla desde el objeto
 	def m_tabla_fields(objeto)
 		objeto.class::TABLA_FIELDS
@@ -73,10 +112,6 @@ module ApplicationHelper
 		numero.reverse.insert(4, ' ').insert(9, ' ').reverse
 	end
 
-
-	def d_show(controller, label)
-		controller.classify.constantize::D_SHOW[label]
-	end
 
 	# Toma las relaciones has_many y les descuenta las HIDDEN_CHILDS
 	def has_many_tabs(controller)

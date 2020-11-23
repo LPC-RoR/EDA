@@ -5,10 +5,34 @@ class Recurso < ApplicationRecord
 	# Carpeta destino de Publicaciones Cargadas
 	CARPETA_CARGA = 'Revisar'
 
+	#---------------------------------------- DEFAULT -----------------------------------------------y
+	# TABLE
+	D_TABLA = {
+		titulo:  ['self', true],
+		tabs:    ['all', false], # Es verdadero SOLO cuando controller_name == c
+		estados: ['all', false], # Es falso por defecto
+		paginas: ['all', false], # Es falso por defecto
+		nuevo:   ['self', true] # Es verdadero SOLO cuando contrlller_name == c
+	}
+	EXCEPTIONS_CONTROLLERS = ['publicaciones', 'textos', 'recursos']
+
+	# SHOW
+	D_SHOW = {
+		titulo:       true,
+		links:        true,
+		clasifica:   false,
+		detalle:     false,
+		inline_form: false,
+		tabla:        true,
+		adjuntos:    false
+	}
+	EXCEPTIONS_MODELS = ['Publicacion', 'Texto']
+
 	# ---------------------------------------- FRAME ------------------------------------------------
 	# MENU PRINCIPAL
 	MENU = [
 		["Publicaciones", "/publicaciones"],
+		["Manual",  "/recursos/produccion"],
 		["Textos", "/textos"],
 		["Carpetas", "/carpetas"],
 		["Temas", "/temas"],
@@ -24,14 +48,20 @@ class Recurso < ApplicationRecord
 	FRAME_CONTROLLERS = ['recursos']
 
 	# Cada acción SOLO despliega un tipo 'tabla' o 'valor', para simplifaicar
-	ACTIONS_DISPLAY = {
+	RECURSO_ACTIONS_DISPLAY = {
 		'tablas'     => 'tabla',
+		'produccion' => 'tabla',
 		'parametros' => 'valor'
 	}
 
+	RECURSO_ACTIONS_TITULO = {
+		'produccion' => 'Ingreso Manual de Publicaciones'
+	}
+
 	# Define qué actions de Recursos tienen TABS, y cada TAB
-	ACTIONS_TABS = {
-		'tablas' => ['cargas', 'carpetas']
+	RECURSO_ACTIONS_TABS = {
+		'tablas' => ['cargas', 'carpetas'],
+		'produccion' => ['Referencia', 'Produccion']
 	}
 
 	# --------------------------------------- MODELOS -----------------------------------------------

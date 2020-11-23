@@ -1,11 +1,6 @@
 class Carpeta < ApplicationRecord
 	ESTADOS = ['activa']
-	D_TABLA = {
-		tabs:    false,
-		estados: false,
-		paginas: false,
-		nuevo:   true
-	}
+
 	TABLA_FIELDS = [
 		['carpeta', 'show'], 
 	]
@@ -15,16 +10,6 @@ class Carpeta < ApplicationRecord
  	FORM_FIELDS = [
 		['carpeta',                'entry']
 	]
-
-
-	D_SHOW = {
-		links:        true,
-		detalle:     false,
-		clasifica:   false,
-		inline_form: false,
-		tabla:        true,
-		adjuntos:    false
-	}
 
 	HIDDEN_CHILDS = ['clasificaciones']
 	SHOW_HMT_COLLECTIONS = ['publicaciones']
