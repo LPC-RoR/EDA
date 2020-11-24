@@ -17,10 +17,11 @@ class Recurso < ApplicationRecord
 		paginas: {'self' => false, 'show' => false},
 		nuevo:   {'self' => true,  'show' => false}
 	}
-	EXCEPTIONS_CONTROLLERS = ['publicaciones', 'textos', 'recursos']
+	EXCEPTIONS_CONTROLLERS = ['publicaciones', 'textos', 'recursos', 'equipos']
 	EXCEPTIONS_NEW_CONTROLLERS = {
 		#'controller' => 'tipo_new'
-		'publicaciones' => 'mask'
+		'publicaciones' => 'mask',
+		'equipos' => 'inline_form'
 	}
 
 
@@ -45,6 +46,7 @@ class Recurso < ApplicationRecord
 	MENU = [
 		["Publicaciones", "/publicaciones"],
 		["Manual",  "/recursos/produccion"],
+		["Equipos",  "/equipos"],
 		["Textos", "/textos"],
 		["Carpetas", "/carpetas"],
 		["Temas", "/temas"],
@@ -92,7 +94,4 @@ class Recurso < ApplicationRecord
 	# SHOW INLINE FORMS
 	INLINE_FORM_MODELS = ['Publicacion']
 
-	# ----------------------------------------- NEW -------------------------------------------------
-	# Controladores cuyas tablas usan inline_form
-	ENTRY_NEW_CONTROLLERS = []
 end

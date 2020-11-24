@@ -13,16 +13,24 @@ Rails.application.routes.draw do
   resources :departamentos do
     resources :investigadores
   end
+  resources :equipos do
+    match :nuevo, via: :post, on: :collection
+  end
   resources :evaluaciones
   resources :idiomas do 
     resources :revistas
   end
+  resources :integrantes
   resources :instituciones do
     resources :departamentos
     resources :registros
   end
-  resources :investigadores
-  resources :metodologias
+  resources :investigadores do
+    match :perfil, via: :get, on: :member
+  end
+  resources :metodologias do
+    match :nuevo, via: :post, on: :collection
+  end
   resources :origenes
   resources :procesos
   resources :publicaciones do
@@ -59,6 +67,6 @@ Rails.application.routes.draw do
   devise_for :usuarios
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
-  root 'publicaciones#index'
+  root 'recursos#inicia_sesion'
 
 end

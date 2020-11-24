@@ -26,3 +26,16 @@
 <% end  %>
 </br>
 
+<%= form_for :nueva_metodologia, url: "/metodologias/nuevo?publicacion_id=#{@objeto.id}" do |form| %>
+	<div class='row'>
+		<div class = 'col-sm-3'>
+		</div>
+		<div class = 'col-sm-7'>
+		<%= form.text_field(:metodologia, class: 'form-control' ) %>
+		</div>
+		<div class = 'col-sm-2'>
+		<%= form.submit '+ Metodologia'  %>
+		</div>
+	</div>
+<% end  %>
+

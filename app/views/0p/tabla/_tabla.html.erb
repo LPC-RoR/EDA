@@ -11,8 +11,8 @@
 
 <!-- BOTON NUEVO (SI HAY MAS DE 15 ELEMENTOS DESPLEGADOS) -->
 <!-- No se activa si la acción es 'seleccion' -->
-<% if d_tabla(c, :nuevo) and a != 'seleccion' %>
-	<% if Recurso::ENTRY_NEW_CONTROLLERS.include?(c) %>
+<% if d_tabla(c, :nuevo) and a != 'seleccion' %> 
+	<% if Recurso::EXCEPTIONS_NEW_CONTROLLERS.keys.include?(c) and Recurso::EXCEPTIONS_NEW_CONTROLLERS[c] == 'inline_form' %>
 		<%= render partial: "#{c}/inline_nuevo", locals: {c: c, a: a} %>
 		<%#= render partial: '/textos/nuevo_texto' %>
 	<% elsif @coleccion.count > 15 %>
@@ -40,7 +40,7 @@
 </table>
 
 <!-- BOTON NUEVO -->
-<% unless Recurso::ENTRY_NEW_CONTROLLERS.include?(c) %>
+<% unless Recurso::EXCEPTIONS_NEW_CONTROLLERS.keys.include?(c) %>
 	<!-- No se activa si la acción es 'seleccion' -->
 	<%= render partial: '0p/tabla/btn_nuevo', locals: {c: c} if d_tabla(c, :nuevo) and a != 'seleccion' %>
 <% end %>

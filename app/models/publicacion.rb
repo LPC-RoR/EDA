@@ -56,6 +56,7 @@ class Publicacion < ApplicationRecord
 	belongs_to :revista, optional: true
 
 	has_many :evaluaciones
+	has_many :metodologias
 
 	has_many :citas
 	has_many :textos, through: :citas

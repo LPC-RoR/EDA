@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_21_162810) do
+ActiveRecord::Schema.define(version: 2020_11_24_170535) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,6 +68,17 @@ ActiveRecord::Schema.define(version: 2020_11_21_162810) do
     t.index ["institucion_id"], name: "index_departamentos_on_institucion_id"
   end
 
+  create_table "equipos", force: :cascade do |t|
+    t.string "equipo"
+    t.integer "administrador_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "sha1", limit: 40
+    t.index ["administrador_id"], name: "index_equipos_on_administrador_id"
+    t.index ["equipo"], name: "index_equipos_on_equipo"
+    t.index ["sha1"], name: "index_equipos_on_sha1"
+  end
+
   create_table "evaluaciones", force: :cascade do |t|
     t.integer "publicacion_id"
     t.string "aspecto"
@@ -90,6 +101,15 @@ ActiveRecord::Schema.define(version: 2020_11_21_162810) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "integrantes", force: :cascade do |t|
+    t.integer "investigador_id"
+    t.integer "equipo_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["equipo_id"], name: "index_integrantes_on_equipo_id"
+    t.index ["investigador_id"], name: "index_integrantes_on_investigador_id"
+  end
+
   create_table "investigadores", force: :cascade do |t|
     t.string "investigador"
     t.string "orcid"
@@ -99,6 +119,16 @@ ActiveRecord::Schema.define(version: 2020_11_21_162810) do
     t.datetime "updated_at", null: false
     t.index ["departamento_id"], name: "index_investigadores_on_departamento_id"
     t.index ["investigador"], name: "index_investigadores_on_investigador"
+  end
+
+  create_table "metodologias", force: :cascade do |t|
+    t.string "metodologia"
+    t.integer "orden"
+    t.integer "publicacion_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["orden"], name: "index_metodologias_on_orden"
+    t.index ["publicacion_id"], name: "index_metodologias_on_publicacion_id"
   end
 
   create_table "procesos", force: :cascade do |t|

@@ -1,5 +1,5 @@
 class InvestigadoresController < ApplicationController
-  before_action :set_investigador, only: [:show, :edit, :update, :destroy]
+  before_action :set_investigador, only: [:show, :edit, :update, :destroy, :perfil]
 
   # GET /investigadores
   # GET /investigadores.json
@@ -15,7 +15,11 @@ class InvestigadoresController < ApplicationController
     # tenemos que cubrir todos los casos
     # 1. has_many : }
     @coleccion = @objeto.send(@tab).page(params[:page]) #.where(estado: @estado)
-end
+  end
+
+  def perfil
+    
+  end
 
   # GET /investigadores/new
   def new
