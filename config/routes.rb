@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :autores
   resources :cargas do
     match :procesa_carga, via: :get, on: :member
+    match :sel_archivo, via: :get, on: :collection
   end
   resources :carpetas do
     match :seleccion, via: :get, on: :collection
@@ -35,7 +36,6 @@ Rails.application.routes.draw do
     collection do
       match :inicia_sesion, via: :get
       match :tablas, via: :get
-      match :sel_archivo_carga, via: :get
       match :produccion, via: :get
     end
   end

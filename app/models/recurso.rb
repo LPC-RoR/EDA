@@ -1,20 +1,32 @@
 class Recurso < ApplicationRecord
 	# ---------------------------------------- CARGA ------------------------------------------------
 	# Esta Constante debiera estar en el Modelo CARGA !!
-	RUTA_ARCHIVOS_CARGA = "/home/hugo/eda/app/assets/cargas/**/*"
+	RUTA_ARCHIVOS= {
+		'cargas' => "/home/hugo/eda/app/assets/cargas/"
+	}
+	
 	# Carpeta destino de Publicaciones Cargadas
 	CARPETA_CARGA = 'Revisar'
 
 	#---------------------------------------- DEFAULT -----------------------------------------------y
 	# TABLE
 	D_TABLA = {
-		titulo:  ['self', true],
-		tabs:    ['all', false], # Es verdadero SOLO cuando controller_name == c
-		estados: ['all', false], # Es falso por defecto
-		paginas: ['all', false], # Es falso por defecto
-		nuevo:   ['self', true] # Es verdadero SOLO cuando contrlller_name == c
+		titulo:  {'self' => true,  'show' => false},
+		tabs:    {'self' => false, 'show' => false}, 
+		estados: {'self' => false, 'show' => false},
+		paginas: {'self' => false, 'show' => false},
+		nuevo:   {'self' => true,  'show' => false}
 	}
 	EXCEPTIONS_CONTROLLERS = ['publicaciones', 'textos', 'recursos']
+	EXCEPTIONS_NEW_CONTROLLERS = {
+		#'controller' => 'tipo_new'
+		'publicaciones' => 'mask'
+	}
+
+
+	TABLE_EXCEPTIONS = {
+		nuevo: ['recursos']
+	}
 
 	# SHOW
 	D_SHOW = {
@@ -54,8 +66,9 @@ class Recurso < ApplicationRecord
 		'parametros' => 'valor'
 	}
 
+	# Acciones de Recurso que Tienen Título en el Frame
 	RECURSO_ACTIONS_TITULO = {
-		'produccion' => 'Ingreso Manual de Publicaciones'
+		'produccion' => '// Ingreso Manual de Publicaciones'
 	}
 
 	# Define qué actions de Recursos tienen TABS, y cada TAB

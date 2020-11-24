@@ -10,13 +10,6 @@ class RecursosController < ApplicationController
     @coleccion = @ftab.classify.constantize::all
   end
 
-  def sel_archivo_carga
-    @archivos = Dir.glob(Recurso::RUTA_ARCHIVOS_CARGA)
-    @file = File.open(@archivos[0])
-    @file_data = @file.read
-    @articles = @file_data.split('@article')
-  end
-
   def produccion
     @ftab = params[:ftab].blank? ? Recurso::RECURSO_ACTIONS_TABS[action_name][0] : params[:ftab]
 #    @estado = params[:estado].blank? ? @ftab.classify.constantize::ESTADOS[0] : params[:estado]

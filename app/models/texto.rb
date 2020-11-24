@@ -3,15 +3,12 @@ class Texto < ApplicationRecord
 
 
 	TABLE_EXCEPTIONS = {
-		nuevo:   ['*']
-	}
+		nuevo:   {'self' => true}
+	 	}
 
 	TABLA_FIELDS = [
 		['texto',   'show']
 	]
-
-	TIPO_NEW = 'child_sel'
-	TABLA_SEL = 'temas'
 
  	FORM_FIELDS = [
 		['texto',           'entry']

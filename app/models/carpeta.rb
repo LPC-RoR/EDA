@@ -5,8 +5,6 @@ class Carpeta < ApplicationRecord
 		['carpeta', 'show'], 
 	]
 
-	TIPO_NEW = 'new'
-
  	FORM_FIELDS = [
 		['carpeta',                'entry']
 	]

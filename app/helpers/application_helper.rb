@@ -66,24 +66,28 @@ module ApplicationHelper
 	end
 
 	# Maneja comportamiento por defecto y excepciones de TABLA
-	def d_tabla(c, a, label)
+	def d_tabla(c, label)
 		excepcion = false
 		# Pregunta si el Modelo TIENE personalizacion
-		if Recurso::EXCEPTIONS_CONTROLLERS.include?(controller_name)
+		if Recurso::EXCEPTIONS_CONTROLLERS.include?(c)
 			# Pregunta si LABEL tiene personalizacion
-			unless c.classify.constantize::TABLE_EXCEPTIONS[label].blank?
-				if c.classify.constantize::TABLE_EXCEPTIONS[label][0] == '*' or c.classify.constantize::TABLE_EXCEPTIONS[label].include?(controller_name)
+			# ---------------------------------------------  SELF?  ------------------------------------------------
+			unless c.classify.constantize::TABLE_EXCEPTIONS[label].blank?         # NO HAY EXCEPCION PARA EL LABEL
+			if controller_name == c
+				unless c.classify.constantize::TABLE_EXCEPTIONS[label]['self'].blank? # NO HAY EXCEPCION PARA EL SELF
 					excepcion = true
 				end
+			else
+				unless c.classify.constantize::TABLE_EXCEPTIONS[label]['show'].blank? # NO HAY EXCEPCION PARA EL SHOW
+				if c.classify.constantize::TABLE_EXCEPTIONS[label]['show'].include?(controller_name) or c.classify.constantize::TABLE_EXCEPTIONS[label]['show'][0] == '*'
+					excepcion = true
+				end
+				end
+			end
 			end
 		end 
+		de = (controller_name == c) ? de = Recurso::D_TABLA[label]['self'] : de = Recurso::D_TABLA[label]['show']
 
-		case Recurso::D_TABLA[label][0]
-		when 'all'
-			de = Recurso::D_TABLA[label][1]
-		when 'self'
-			de = (controller_name == c) ? true : false
-		end
 		(excepcion ? (not de) : de)
 	end
 
@@ -128,33 +132,33 @@ module ApplicationHelper
 	end
 
 	def get_new_link(controller)
-		case controller.classify.constantize::TIPO_NEW
-		# TIPO_NEW = 'new'
-		# {'clientes', 'roles'}
-		when 'new'
-			"/#{controller}/new"
-		when 'mask'
-			"/#{controller}/mask_new"
-		# TIPO_NEW = 'child_new' : show_padre + controller/new
-		# {'categorias', 'zonas'}
-		when 'child_new'
-			"/#{@objeto.class.name.tableize}/#{@objeto.id}/#{controller}/new"
-		# TIPO_NEW = 'child_nuevo'
-		# {'pedidos'}
-		when 'child_nuevo'
-			"/#{controller}/nuevo?#{@objeto.class.name.downcase}_id=#{@objeto.id}"
-		# TIPO_NEW = 'child_sel' : seleccion ? parametro_padre
-		# {'empleados', 'productos', 'clientes(*)'}
-		when 'child_sel'
-			# TIPO_NEW = 'child_sel'
-			# TABLA_SEL = 'controller'
-			"/#{controller.classify.constantize::TABLA_SEL}/seleccion?#{@objeto.class.name.downcase}_id=#{@objeto.id}"
-		# TIPO_NEW = 'detalle_pedido' : seleccion ? parametro_padre & empresa
-		# {'empleados', 'productos', 'clientes(*)'}
-		when 'detalle_pedido'
-			"/#{controller.classify.constantize::SELECTOR}/seleccion?#{@objeto.class.name.downcase}_id=#{@objeto.id}&empresa_id=#{@objeto.registro.empresa.id}"
-		when 'ruta_new'
-			controller.classify.constantize::RUTA_NEW
+		if Recurso::EXCEPTIONS_NEW_CONTROLLERS.keys.include?(controller)
+			case Recurso::EXCEPTIONS_NEW_CONTROLLERS[controller]
+			when 'mask'
+				"/#{controller}/mask_new"
+			# TIPO_NEW = 'child_nuevo'
+			# {'pedidos'}
+			when 'child_nuevo'
+				"/#{controller}/nuevo?#{@objeto.class.name.downcase}_id=#{@objeto.id}"
+			# TIPO_NEW = 'child_sel' : seleccion ? parametro_padre
+			# {'empleados', 'productos', 'clientes(*)'}
+			when 'child_sel'
+				# TIPO_NEW = 'child_sel'
+				# TABLA_SEL = 'controller'
+				"/#{controller.classify.constantize::TABLA_SEL}/seleccion?#{@objeto.class.name.downcase}_id=#{@objeto.id}"
+			# TIPO_NEW = 'detalle_pedido' : seleccion ? parametro_padre & empresa
+			# {'empleados', 'productos', 'clientes(*)'}
+			when 'detalle_pedido'
+				"/#{controller.classify.constantize::SELECTOR}/seleccion?#{@objeto.class.name.downcase}_id=#{@objeto.id}&empresa_id=#{@objeto.registro.empresa.id}"
+			when 'ruta_new'
+				controller.classify.constantize::RUTA_NEW
+			end
+		else
+			if Recurso::RUTA_ARCHIVOS.keys.include?(controller)
+				"/#{controller}/sel_archivo"
+			else
+				controller_name == controller ? "/#{controller}/new" : "/#{@objeto.class.name.tableize}/#{@objeto.id}/#{controller}/new"
+			end
 		end
 	end
 

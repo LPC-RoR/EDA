@@ -16,9 +16,9 @@ class Publicacion < ApplicationRecord
 	TABS = Carpeta.all.map {|c| c.carpeta}
 	# Configura DESPLIEGUE de la TABLA
 	TABLE_EXCEPTIONS = {
-		tabs:    ['publicaciones'],
-		paginas:    		 ['*'],
-		nuevo:        ['recursos']
+		tabs:    {'self' => true},
+		paginas: {'self' => true, 'show' => ['*']},
+		nuevo:   {'self' => true, 'show' => ['recursos']}
 	}
 
 	# Campos qeu se despliegan en la tabla
@@ -26,9 +26,6 @@ class Publicacion < ApplicationRecord
 		['title',         'show'], 
 		['year',        'normal']
 	]
-
-	# Tipo de LINK boton NUEVO
-	TIPO_NEW = 'mask'
 
 	# Acceso a campos BT
 #	BT_FIELDS = []	

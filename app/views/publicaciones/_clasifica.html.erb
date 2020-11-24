@@ -1,36 +1,25 @@
-<table  class="table table-striped table-sm">
-	<tbody>
-		
-		<% Publicacion::EVALUACION.keys.each do |item| %>
-			<tr>
-				<td>
-				<small>
-					<strong>
-					<%= item %>
-					</strong>
-				</small>
-				</td>
-
-				<td>
-				<small>
-					<%= get_evaluacion_publicacion(o, item) %>
-				</small>
-				</td>
-
-				<td>
-				<small>
-					<% get_btns_evaluacion(o, item).each do |btn| %>
-						<%= render partial: '0p/tabla/btn', locals: {texto: "> #{btn}", link: "/publicaciones/cambia_evaluacion?publicacion_id=#{o.id}&item=#{item}&evaluacion=#{btn}", delete: false }  %>
-					<% end %>
-				</small>
-				</td>
-			</tr>
-			</br>
-		<% end %>
-
-	</tbody>
-</table>
+</br></br>
+<% Publicacion::EVALUACION.keys.each do |item| %>
+	<div class = 'row'>
+		<div class='col-md-1'></div>
+		<div class='col-md-3'>
+			<small><strong><%= item %></strong></small>
+		</div>
+		<div class='col-md-3'>
+			<small><%= get_evaluacion_publicacion(o, item) %></small>
+		</div>
+		<div class='col-md-4'>
+			<small>
+			<% get_btns_evaluacion(o, item).each do |btn| %>
+				<%= render partial: '0p/tabla/btn', locals: {texto: "> #{btn}", link: "/publicaciones/cambia_evaluacion?publicacion_id=#{o.id}&item=#{item}&evaluacion=#{btn}", delete: false }  %>
+			<% end %>
+			</small>
+		</div>
+		<div class='col-md-1'></div>
+	</div>
+<% end %>
 
 <% Carpeta.find(Carpeta.all.ids - o.carpetas.ids).map {|c| c.carpeta}.each do |carpeta| %>
 	<%= render partial: '0p/tabla/btn', locals: {texto: "> #{carpeta}", link: "/publicaciones/cambia_carpeta?publicacion_id=#{o.id}&origen=#{o.carpetas.first.carpeta}&destino=#{carpeta}", delete: false }  %>
 <% end %>
+</br></br>

@@ -7,6 +7,10 @@ class CargasController < ApplicationController
     @coleccion = Carga.all
   end
 
+  def sel_archivo
+    @archivos = Dir.glob("#{Recurso::RUTA_ARCHIVOS['cargas']}**/*")
+  end
+
   # GET /cargas/1
   # GET /cargas/1.json
   def show
@@ -32,7 +36,8 @@ class CargasController < ApplicationController
 
   # GET /cargas/new
   def new
-    @objeto = Carga.new(archivo: params[:archivo], estado: 'ingreso')
+    @archivo = Recurso::RUTA_ARCHIVOS['cargas']+params[:archivo]
+    @objeto = Carga.new(archivo: @archivo, estado: 'ingreso')
   end
 
   # GET /cargas/1/edit

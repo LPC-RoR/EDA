@@ -7,9 +7,6 @@ class Tema < ApplicationRecord
 		['tema',         'show']
 	]
 
-	# Tipo de LINK boton NUEVO
-	TIPO_NEW = 'new'
-
 	# Acceso a campos BT
 #	BT_FIELDS = []	
 #	BT_MODEL = ''
