@@ -20,6 +20,11 @@ class PublicacionesController < ApplicationController
     # tenemos que cubrir todos los casos
     # 1. has_many : }
     @coleccion = @objeto.send(@tab).page(params[:page]) #.where(estado: @estado)
+
+    # agrega contexto SELF
+    @self = Investigador.find(session[:perfil]['id'])
+    @carpetas_destino = Carpeta.find(@self.carpetas.all.ids - @objeto.carpetas.ids)
+
   end
 
   # GET /publicaciones/new
@@ -28,12 +33,16 @@ class PublicacionesController < ApplicationController
   end
 
   def mask_new
+    @origen = params[:origen]
   end
   def mask_nuevo
-    @origen = 'ingreso'
-    @title = params[:m_params][:title].strip
-    @author = procesa_autores(params[:m_params][:author].strip)
+    @origen = params[:origen] == 'equipos' ? 'Produccion' : 'Manual'
 
+    # TITULO
+    @title = params[:m_params][:title].strip
+    # AUTORES
+    @author = procesa_autores(params[:m_params][:author].strip)
+    # REVISTA
     @revista = procesa_editorial(params[:m_params][:journal])[:journal].strip
     @r = Revista.find_by(revista: @revista)
     if @r.blank?
@@ -41,13 +50,18 @@ class PublicacionesController < ApplicationController
     end
 
     @journal_id = @r.id
+    # VOLUMEN
     @volume = procesa_editorial(params[:m_params][:journal])[:volume].strip
+    # YEAR
     @year = procesa_editorial(params[:m_params][:journal])[:year].strip
+    # PAGES
     @pages = procesa_editorial(params[:m_params][:journal])[:pages].strip
+    # DOI
     @doi = params[:m_params][:doi].strip
+    # ABSTRACT
     @abstract = params[:m_params][:abstract].strip
     @objeto = Publicacion.create(origen: @origen, title: @title, author: @author, revista_id: @journal_id, volume: @volume, year: @year, pages: @pages, doi: @doi, abstract: @abstract)
-
+    # Procesa AUTORES
     @investigadores = @author.split(' & ')
     @investigadores.each do |i|
       @i = Investigador.find_by(investigador: i)
@@ -56,8 +70,18 @@ class PublicacionesController < ApplicationController
       end
       @objeto.investigadores << @i
     end
-
-    redirect_to '/publicaciones'
+    # A Publicaciones del Equipo : equipo#show si origen == 'equipos'
+    # A recursos#tablas si origen == 'recursos'
+    if @origen == 'equipos'
+      @equipo = Equipo.find(session[:equipo_id])
+      @equipo.publicaciones << @objeto
+      redirect_to @equipo
+    elsif @origen == 'Manual'
+      @investigador = Investigador.find(params[:perfil]['id'])
+      @carpeta = @investigador.carpetas.find_by(carpeta: 'Revisar')
+      @carpeta.publicaciones << @objeto
+      redirect_to "/recursos/tablas"
+    end
   end
 
   # GET /publicaciones/1/edit
@@ -95,8 +119,8 @@ class PublicacionesController < ApplicationController
   end
 
   def cambia_carpeta
-    @origen = Carpeta.find_by(carpeta: params[:origen])
-    @destino = Carpeta.find_by(carpeta: params[:destino])
+    @origen = Carpeta.find_by(carpeta: params[:origen], investigador_id: session[:perfil]['id'])
+    @destino = Carpeta.find_by(carpeta: params[:destino], investigador_id: session[:perfil]['id'])
     @publicacion = Publicacion.find(params[:publicacion_id])
     @clasificacion = Clasificacion.find_by(carpeta_id: @origen.id, publicacion_id: @publicacion.id)
 
@@ -107,10 +131,11 @@ class PublicacionesController < ApplicationController
   end
 
   def cambia_evaluacion
+    @my_self = Investigador.find(session[:perfil]['id'])
     @publicacion = Publicacion.find(params[:publicacion_id])
-    @evaluacion = @publicacion.evaluaciones.find_by(aspecto: params[:item])
+    @evaluacion = @publicacion.evaluaciones.find_by(aspecto: params[:item], investigador_id: @my_self.id)
     if @evaluacion.blank?
-      @publicacion.evaluaciones.create(aspecto: params[:item], evaluacion: params[:evaluacion])
+      @publicacion.evaluaciones.create(aspecto: params[:item], evaluacion: params[:evaluacion], investigador_id: @my_self.id)
     else
       @evaluacion.evaluacion = params[:evaluacion]
       @evaluacion.save

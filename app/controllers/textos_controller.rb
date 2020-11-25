@@ -22,17 +22,25 @@ class TextosController < ApplicationController
   end
 
   def nuevo
-    @texto_limpio = params[:texto_base][:texto].strip
-    @sha1         = Digest::SHA1.hexdigest(@texto_limpio)
-    @tema         = Tema.find(params[:texto_base][:tema_id])
+    # se pone fuera para saber donde redireccionar
     @publicacion  = Publicacion.find(params[:publicacion_id])
 
-    @texto = Texto.find_by(sha1: @sha1)
-    if @texto.blank?
-      @texto = Texto.new(texto: @texto_limpio, sha1: @sha1)
+    unless params[:texto_base][:texto].strip.blank? or params[:texto_base][:tema_id].blank?
+      @texto_limpio = params[:texto_base][:texto].strip
+      @sha1         = Digest::SHA1.hexdigest(@texto_limpio)
+      @tema         = Tema.find(params[:texto_base][:tema_id])
+
+      @texto = Texto.find_by(sha1: @sha1)
+      if @texto.blank?
+        @texto = Texto.create(texto: @texto_limpio, sha1: @sha1)
+      end
+      @tema.textos << @texto
+      # Evita duplicados
+      unless @texto.publicaciones.ids.include?(@publicacion.id)
+        @publicacion.textos << @texto
+      end
     end
-    @tema.textos << @texto
-    @publicacion.textos << @texto
+
     redirect_to @publicacion
   end
 

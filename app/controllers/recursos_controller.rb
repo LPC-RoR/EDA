@@ -5,6 +5,10 @@ class RecursosController < ApplicationController
     @i_perfil = Investigador.find_by(investigador: 'Hugo, Chinga')
     if @i_perfil.blank?
       @i_perfil = Investigador.create(investigador: 'Hugo, Chinga', email: 'hugo.chinga.g@gmail.com')
+      @i_perfil.carpetas.create(carpeta: 'Revisar')
+      @i_perfil.carpetas.create(carpeta: 'Excluidas')
+      @i_perfil.carpetas.create(carpeta: 'Postergadas')
+      @i_perfil.carpetas.create(carpeta: 'Revisadas')
     end
 
     session[:perfil] = @i_perfil
@@ -23,9 +27,10 @@ class RecursosController < ApplicationController
   end
 
   def produccion
-    @ftab = params[:ftab].blank? ? Recurso::RECURSO_ACTIONS_TABS[action_name][0] : params[:ftab]
+    @ftab = 'publicaciones'
+#    @ftab = params[:ftab].blank? ? Recurso::RECURSO_ACTIONS_TABS[action_name][0] : params[:ftab]
 #    @estado = params[:estado].blank? ? @ftab.classify.constantize::ESTADOS[0] : params[:estado]
-    @coleccion = Publicacion.where(origen: @ftab).page(params[:page])
+    @coleccion = Publicacion.where(origen: 'Manual').page(params[:page])
   end
 
   private

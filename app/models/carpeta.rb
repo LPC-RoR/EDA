@@ -6,11 +6,14 @@ class Carpeta < ApplicationRecord
 	]
 
  	FORM_FIELDS = [
-		['carpeta',                'entry']
+		['carpeta',              'entry'],
+		['investigador_id',     'hidden']
 	]
 
 	HIDDEN_CHILDS = ['clasificaciones']
 	SHOW_HMT_COLLECTIONS = ['publicaciones']
+
+	belongs_to :investigador
 
 	has_many :clasificaciones
 	has_many :publicaciones, through: :clasificaciones

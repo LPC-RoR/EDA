@@ -4,7 +4,8 @@ class CargasController < ApplicationController
   # GET /cargas
   # GET /cargas.json
   def index
-    @coleccion = Carga.all
+    @investigador = Investigador.find(session[:perfil]['id'])
+    @coleccion = @investigador.cargas
   end
 
   def sel_archivo
@@ -37,7 +38,7 @@ class CargasController < ApplicationController
   # GET /cargas/new
   def new
     @archivo = Recurso::RUTA_ARCHIVOS['cargas']+params[:archivo]
-    @objeto = Carga.new(archivo: @archivo, estado: 'ingreso')
+    @objeto = Carga.new(archivo: @archivo, estado: 'ingreso', investigador_id: session[:perfil]['id'])
   end
 
   # GET /cargas/1/edit
@@ -99,6 +100,6 @@ class CargasController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def carga_params
-      params.require(:carga).permit(:archivo, :nota, :estado)
+      params.require(:carga).permit(:archivo, :nota, :estado, :investigador_id)
     end
 end

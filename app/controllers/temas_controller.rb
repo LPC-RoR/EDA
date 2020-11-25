@@ -4,7 +4,8 @@ class TemasController < ApplicationController
   # GET /temas
   # GET /temas.json
   def index
-    @coleccion = Tema.all
+    @investigador = Investigador.find(session[:perfil]['id'])
+    @coleccion = @investigador.temas
   end
 
   # GET /temas/1
@@ -19,14 +20,21 @@ class TemasController < ApplicationController
 
   # GET /temas/new
   def new
-    @objeto = Tema.new
+    @objeto = Tema.new(investigador_id: session[:perfil]['id'])
   end
 
   def nuevo
-    @nuevo_tema = params[:nuevo_tema][:tema].strip
     @publicacion   = Publicacion.find(params[:publicacion_id])
 
-    Tema.create(tema: @nuevo_tema)
+    unless params[:nuevo_tema][:tema].strip.blank?
+      @nuevo_tema = params[:nuevo_tema][:tema].strip
+  
+      @self = Investigador.find(session[:perfil]['id'])
+      t = @self.temas.find_by(tema: @nuevo_tema)
+      if t.blank?
+        @self.temas.create(tema: @nuevo_tema)
+      end
+    end
 
     redirect_to @publicacion
   end
@@ -90,6 +98,6 @@ class TemasController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def tema_params
-      params.require(:tema).permit(:tema)
+      params.require(:tema).permit(:tema, :investigador_id)
     end
 end

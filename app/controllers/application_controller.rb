@@ -78,12 +78,7 @@ class ApplicationController < ActionController::Base
           p.origen = 'carga' if ['remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
           p.save if ['remplazar_carga', 'remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
 
-          # Agrega a Carpeta
-          cpt = Carpeta.find_by(carpeta: Recurso::CARPETA_CARGA)
-          if cpt.blank? 
-          	cpt = Carpeta.create(carpeta: Recurso::CARPETA_CARGA)
-          end
-
+          # procesa AUTORES
           if ['remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
 				p_autores = p.author.split(' and ')
 				p_autores.each do |aut|
@@ -94,6 +89,18 @@ class ApplicationController < ActionController::Base
 	  	         	p.investigadores << i
 				end
 
+		  end
+
+          # Agrega a Carpeta
+          cpt = Carpeta.find_by(carpeta: Recurso::CARPETA_CARGA, investigador_id: session[:perfil]['id'])
+          if cpt.blank? 
+          	cpt = Carpeta.create(carpeta: Recurso::CARPETA_CARGA, investigador_id: session[:perfil]['id'])
+          end
+          # Uso la condicion que que no este en las carpetas del Investigador hay que cubrir
+          # 1. Publicacion ya revisada por mi puesta en una carpeta distinta a REVISA
+          # 2. Publicacion existente ingresada por otro usuario fuera de mis carpetas
+          my_self = Investigador.find(session[:perfil]['id'])
+		  unless p.carpetas.ids.intercection(my_self.carpetas.ids).any?
 				p.cargas << carga 
 				p.carpetas << cpt
 		  end
@@ -117,7 +124,7 @@ class ApplicationController < ActionController::Base
 		# VERIFICA CARGA
 		c = Publicacion.find_by(unique_id: hash_articulo['Unique-ID']) 
 		unless c.blank?
-			# LO ENCONTRÖ
+			# LO ENCONTRÖ HAY QUE VER SI ESTÁ EN ALGUNA DE MIS CARPETAS
 			c.year.blank? ? 'remplazar_carga' : 'saltar'
 		else
 			# NO ENCONTRADO EN CARGA buscamos por DOI

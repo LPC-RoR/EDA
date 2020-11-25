@@ -18,7 +18,7 @@ class Publicacion < ApplicationRecord
 	TABLE_EXCEPTIONS = {
 		tabs:    {'self' => true},
 		paginas: {'self' => true, 'show' => ['*']},
-		nuevo:   {'self' => true, 'show' => ['recursos']}
+		nuevo:   {'self' => true, 'show' => ['recursos', 'equipos']}
 	}
 
 	# Campos qeu se despliegan en la tabla
@@ -54,6 +54,8 @@ class Publicacion < ApplicationRecord
 
 	belongs_to :registro, optional: true
 	belongs_to :revista, optional: true
+	belongs_to :equipo, optional: true
+	belongs_to :investigador, optional: true
 
 	has_many :evaluaciones
 	has_many :metodologias

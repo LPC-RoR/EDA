@@ -19,7 +19,7 @@
 	</div>
 <% end %>
 
-<% Carpeta.find(Carpeta.all.ids - o.carpetas.ids).map {|c| c.carpeta}.each do |carpeta| %>
+<% @carpetas_destino.map {|c| c.carpeta}.each do |carpeta| %>
 	<%= render partial: '0p/tabla/btn', locals: {texto: "> #{carpeta}", link: "/publicaciones/cambia_carpeta?publicacion_id=#{o.id}&origen=#{o.carpetas.first.carpeta}&destino=#{carpeta}", delete: false }  %>
 <% end %>
 </br></br>

@@ -13,8 +13,11 @@ class Tema < ApplicationRecord
 
 	# -------------------- FORM  -----------------------
  	FORM_FIELDS = [
-		['tema',    'entry']
+		['tema',             'entry'],
+		['investigador_id', 'hidden']
 	]
+
+	belongs_to :investigador
 
 	has_many :clasificaciones
 	has_many :textos, through: :clasificaciones

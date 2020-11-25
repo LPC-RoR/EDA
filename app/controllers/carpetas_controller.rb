@@ -4,7 +4,8 @@ class CarpetasController < ApplicationController
   # GET /carpetas
   # GET /carpetas.json
   def index
-    @coleccion = Carpeta.all
+    @investigador = Investigador.find(session[:perfil]['id'])
+    @coleccion = @investigador.carpetas
   end
 
   def seleccion
@@ -24,7 +25,7 @@ class CarpetasController < ApplicationController
 
   # GET /carpetas/new
   def new
-    @objeto = Carpeta.new
+    @objeto = Carpeta.new(investigador_id: session[:perfil]['id'])
   end
 
   # GET /carpetas/1/edit
@@ -86,6 +87,6 @@ class CarpetasController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def carpeta_params
-      params.require(:carpeta).permit(:carpeta)
+      params.require(:carpeta).permit(:carpeta, :investigador_id)
     end
 end

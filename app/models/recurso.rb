@@ -39,7 +39,7 @@ class Recurso < ApplicationRecord
 		tabla:        true,
 		adjuntos:    false
 	}
-	EXCEPTIONS_MODELS = ['Publicacion', 'Texto']
+	EXCEPTIONS_MODELS = ['Publicacion', 'Texto', 'Equipo']
 
 	# ---------------------------------------- FRAME ------------------------------------------------
 	# MENU PRINCIPAL
@@ -75,8 +75,7 @@ class Recurso < ApplicationRecord
 
 	# Define qué actions de Recursos tienen TABS, y cada TAB
 	RECURSO_ACTIONS_TABS = {
-		'tablas' => ['cargas', 'carpetas'],
-		'produccion' => ['Referencia', 'Produccion']
+		'tablas' => ['cargas', 'carpetas']
 	}
 
 	# --------------------------------------- MODELOS -----------------------------------------------
@@ -84,7 +83,7 @@ class Recurso < ApplicationRecord
 	# en el modelo se especifican con la constante HIDDEN_CHILDS
 	# en la versión anterior se usaba JOIN_TABLES
 	# se resolvió TODO lo de JOIN_TABLE menos su uso en _btns.html.erb que se puso en comentario
-	HIDDEN_CHILDS_CONTROLLERS = ['cargas', 'publicaciones', 'textos', 'carpetas', 'investigadores', 'temas']
+	HIDDEN_CHILDS_CONTROLLERS = ['cargas', 'publicaciones', 'textos', 'carpetas', 'investigadores', 'temas', 'equipos']
 
 	# NAVEGACION POR CONTEXTO
 	SHOW_LINKS_MODELS = ['Carga']

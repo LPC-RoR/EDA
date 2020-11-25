@@ -40,7 +40,7 @@
 </table>
 
 <!-- BOTON NUEVO -->
-<% unless Recurso::EXCEPTIONS_NEW_CONTROLLERS.keys.include?(c) %>
+<% unless Recurso::EXCEPTIONS_NEW_CONTROLLERS.keys.include?(c) and Recurso::EXCEPTIONS_NEW_CONTROLLERS[c] == 'inline_form' %>
 	<!-- No se activa si la acción es 'seleccion' -->
 	<%= render partial: '0p/tabla/btn_nuevo', locals: {c: c} if d_tabla(c, :nuevo) and a != 'seleccion' %>
 <% end %>

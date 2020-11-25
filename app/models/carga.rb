@@ -12,11 +12,13 @@ class Carga < ApplicationRecord
 	RUTA_NEW = '/recursos/sel_archivo_carga'
 
  	FORM_FIELDS = [
-		['nota',    'entry'],
-		['estado', 'hidden'],
-		['archivo','hidden'],
+		['nota',             'entry'],
+		['estado',          'hidden'],
+		['investigador_id', 'hidden'],
+		['archivo',         'hidden']
 	]
 
+	belongs_to :investigador
 
 	has_many :procesos
 	has_many :publicaciones, through: :procesos

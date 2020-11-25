@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_24_170535) do
+ActiveRecord::Schema.define(version: 2020_11_25_003133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,12 +30,16 @@ ActiveRecord::Schema.define(version: 2020_11_24_170535) do
     t.string "estado"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "investigador_id"
+    t.index ["investigador_id"], name: "index_cargas_on_investigador_id"
   end
 
   create_table "carpetas", force: :cascade do |t|
     t.string "carpeta"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "investigador_id"
+    t.index ["investigador_id"], name: "index_carpetas_on_investigador_id"
   end
 
   create_table "citas", force: :cascade do |t|
@@ -70,10 +74,10 @@ ActiveRecord::Schema.define(version: 2020_11_24_170535) do
 
   create_table "equipos", force: :cascade do |t|
     t.string "equipo"
+    t.string "sha1", limit: 40
     t.integer "administrador_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "sha1", limit: 40
     t.index ["administrador_id"], name: "index_equipos_on_administrador_id"
     t.index ["equipo"], name: "index_equipos_on_equipo"
     t.index ["sha1"], name: "index_equipos_on_sha1"
@@ -81,11 +85,13 @@ ActiveRecord::Schema.define(version: 2020_11_24_170535) do
 
   create_table "evaluaciones", force: :cascade do |t|
     t.integer "publicacion_id"
+    t.integer "investigador_id"
     t.string "aspecto"
     t.string "evaluacion"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["aspecto"], name: "index_evaluaciones_on_aspecto"
+    t.index ["investigador_id"], name: "index_evaluaciones_on_investigador_id"
     t.index ["publicacion_id"], name: "index_evaluaciones_on_publicacion_id"
   end
 
@@ -173,6 +179,10 @@ ActiveRecord::Schema.define(version: 2020_11_24_170535) do
     t.string "d_doi"
     t.string "origen"
     t.string "pages"
+    t.integer "equipo_id"
+    t.integer "investigador_id"
+    t.index ["equipo_id"], name: "index_publicaciones_on_equipo_id"
+    t.index ["investigador_id"], name: "index_publicaciones_on_investigador_id"
     t.index ["registro_id"], name: "index_publicaciones_on_registro_id"
     t.index ["revista_id"], name: "index_publicaciones_on_revista_id"
     t.index ["title"], name: "index_publicaciones_on_title"
@@ -199,8 +209,10 @@ ActiveRecord::Schema.define(version: 2020_11_24_170535) do
 
   create_table "temas", force: :cascade do |t|
     t.string "tema"
+    t.integer "investigador_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["investigador_id"], name: "index_temas_on_investigador_id"
     t.index ["tema"], name: "index_temas_on_tema"
   end
 

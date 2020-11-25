@@ -1,4 +1,4 @@
-<%= form_for :m_params, url: "/#{controller_name}/mask_nuevo" do |form| %>
+<%= form_for :m_params, url: "/#{controller_name}/mask_nuevo?origen=#{@origen}" do |form| %>
 	<%= form.label :title %></br>
 	<%= form.text_field(:title, class: 'form-control' ) %>
 

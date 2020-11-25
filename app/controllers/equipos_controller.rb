@@ -14,6 +14,12 @@ class EquiposController < ApplicationController
   # GET /equipos/1
   # GET /equipos/1.json
   def show
+    session[:equipo_id] = @objeto.id
+    @tab = params[:tab].blank? ? 'publicaciones' : params[:tab]
+#    @estado = params[:estado].blank? ? @tab.classify.constantize::ESTADOS[0] : params[:estado]
+    # tenemos que cubrir todos los casos
+    # 1. has_many : }
+    @coleccion = @objeto.send(@tab).page(params[:page]) #.where(estado: @estado)
   end
 
   # GET /equipos/new

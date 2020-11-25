@@ -18,10 +18,6 @@ class MetodologiasController < ApplicationController
   end
 
   def nuevo
-    puts "************************************************************************************"
-    puts "ENTRO"
-
-    puts "************************************************************************************"
     @nueva_metodologia = params[:nueva_metodologia][:metodologia].strip
     @publicacion   = Publicacion.find(params[:publicacion_id])
     @maximo = @publicacion.metodologias.empty? ? 0 : @publicacion.metodologias.all.map {|m| m.orden}.max

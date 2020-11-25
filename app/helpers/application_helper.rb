@@ -135,7 +135,7 @@ module ApplicationHelper
 		if Recurso::EXCEPTIONS_NEW_CONTROLLERS.keys.include?(controller)
 			case Recurso::EXCEPTIONS_NEW_CONTROLLERS[controller]
 			when 'mask'
-				"/#{controller}/mask_new"
+				"/#{controller}/mask_new?origen=#{controller_name}"
 			# TIPO_NEW = 'child_nuevo'
 			# {'pedidos'}
 			when 'child_nuevo'
@@ -193,7 +193,8 @@ module ApplicationHelper
 	end
 
 	def get_evaluacion_publicacion(publicacion, item)
-		e = publicacion.evaluaciones.find_by(aspecto: item)
+		my_self = Investigador.find(session[:perfil]['id'])
+		e = my_self.evaluaciones.find_by(aspecto: item, publicacion_id: publicacion.id)
 		e.blank? ? '[no evaluado]' : e.evaluacion
 	end
 
