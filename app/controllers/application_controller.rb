@@ -1,9 +1,14 @@
 class ApplicationController < ActionController::Base
+
+	def archivo_usuario(email)
+		email.split('@').join('-').split('.').join('_')
+	end
+
 	def carga_archivo_bib(carga)
 
 		if carga.estado == 'ingreso'
 
-	    @file = File.open(carga.archivo)
+ 	    @file = File.open(carga.archivo)
 	    # Lee el archivo
 	    @file_data = @file.read
 	    # Obtiene un arreglo de 'articulos'
@@ -30,6 +35,9 @@ class ApplicationController < ActionController::Base
 	      	# se creará el duplicado para resolver la duplicidad en la aplicación
 	      	p = Publicacion.new
 #	      	p = Publicacion.find_by(title: hash_articulo['Title'])
+		  when 'sin carpeta'
+		  	# Publicacion de otro usuario
+		      	p = Publicacion.find_by(unique_id: hash_articulo['Unique-ID'])
 	      end
 
 	      # llenado desde hash
@@ -100,7 +108,7 @@ class ApplicationController < ActionController::Base
           # 1. Publicacion ya revisada por mi puesta en una carpeta distinta a REVISA
           # 2. Publicacion existente ingresada por otro usuario fuera de mis carpetas
           my_self = Investigador.find(session[:perfil]['id'])
-		  unless p.carpetas.ids.intercection(my_self.carpetas.ids).any?
+		  unless p.carpetas.ids.intersection(my_self.carpetas.ids).any?
 				p.cargas << carga 
 				p.carpetas << cpt
 		  end
@@ -125,7 +133,12 @@ class ApplicationController < ActionController::Base
 		c = Publicacion.find_by(unique_id: hash_articulo['Unique-ID']) 
 		unless c.blank?
 			# LO ENCONTRÖ HAY QUE VER SI ESTÁ EN ALGUNA DE MIS CARPETAS
-			c.year.blank? ? 'remplazar_carga' : 'saltar'
+			my_self = Investigador.find(session[:paerfil]['id'])
+			if p.carpetas.ids.intersection(my_self.carpetas.ids).empty?
+				'sin carpeta'
+			else
+				c.year.blank? ? 'remplazar_carga' : 'saltar'
+			end
 		else
 			# NO ENCONTRADO EN CARGA buscamos por DOI
 			i = Publicacion.find_by(doi: hash_articulo['DOI'])

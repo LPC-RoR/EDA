@@ -14,8 +14,10 @@ class Equipo < ApplicationRecord
 
 	SHOW_FIELDS = [
 		['investigador', 'normal'],
-		['sha1', 'normal']
+		['sha1',         'normal']
 	]
+
+	MY_FIELDS = ['sha1']
 
 	SHOW_EXCEPTIONS = [:detalle]
 

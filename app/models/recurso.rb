@@ -79,6 +79,7 @@ class Recurso < ApplicationRecord
 	}
 
 	# --------------------------------------- MODELOS -----------------------------------------------
+	MODELS_WITH_SELF_FIELDS = ['Equipo']
 	# Controladores que tienen HIDDEN CHILDS
 	# en el modelo se especifican con la constante HIDDEN_CHILDS
 	# en la versión anterior se usaba JOIN_TABLES
@@ -89,8 +90,5 @@ class Recurso < ApplicationRecord
 	SHOW_LINKS_MODELS = ['Carga']
 	SHOW_BT_LINKS_MODELS = ['Publicacion']
 	SHOW_HMT_LINKS_MODELS = ['Publicacion', 'Texto']
-
-	# SHOW INLINE FORMS
-	INLINE_FORM_MODELS = ['Publicacion']
 
 end

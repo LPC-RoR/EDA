@@ -1,31 +1,33 @@
 <table  class="table table-striped">
 	<tbody>
-		
+
 		<% c.classify.constantize::SHOW_FIELDS.each do |field| %>
-			<tr>
-				<% case field[1] %>
-				<% when 'normal' %>
+			<% if despliega_campo?(@objeto, field[0]) %>
+				<tr>
+					<% case field[1] %>
+					<% when 'normal' %>
 
-					<% if c.classify.constantize.column_names.include?(field[0]) %>
-						<td><small> <%= "#{field[0]}" %> </small></td>
-						<td><small> <%=  "#{o[field[0]]}" %> </small></td>
-					<% else %>
-						<td><small> <%= "#{field[0]}" %> </small></td>
-						<td><small> <%= "#{ f_tabla(o).send(field[0]) }" %> </small></td>
+						<% if c.classify.constantize.column_names.include?(field[0]) %>
+							<td><small> <%= "#{field[0]}" %> </small></td>
+							<td><small> <%=  "#{o[field[0]]}" %> </small></td>
+						<% else %>
+							<td><small> <%= "#{field[0]}" %> </small></td>
+							<td><small> <%= "#{ f_tabla(o).send(field[0]) }" %> </small></td>
+						<% end %>
+
+					<% when 'diahora' %>
+
+						<% if c.classify.constantize.column_names.include?(field[0]) %>
+							<td><small> <%= "#{field[0]}" %> </small></td>
+							<td><small> <%=  "#{l(o[field[0]])}" %> </small></td>
+						<% else %>
+							<td><small> <%= "#{field[0]}" %> </small></td>
+							<td><small> <%= "#{ l(f_tabla(o).send(field[0])) }" %> </small></td>
+						<% end %>
+
 					<% end %>
-
-				<% when 'diahora' %>
-
-					<% if c.classify.constantize.column_names.include?(field[0]) %>
-						<td><small> <%= "#{field[0]}" %> </small></td>
-						<td><small> <%=  "#{l(o[field[0]])}" %> </small></td>
-					<% else %>
-						<td><small> <%= "#{field[0]}" %> </small></td>
-						<td><small> <%= "#{ l(f_tabla(o).send(field[0])) }" %> </small></td>
-					<% end %>
-
-				<% end %>
-			</tr>
+				</tr>
+			<% end %>
 		<% end %>
 
 	</tbody>

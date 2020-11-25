@@ -9,6 +9,10 @@ class RecursosController < ApplicationController
       @i_perfil.carpetas.create(carpeta: 'Excluidas')
       @i_perfil.carpetas.create(carpeta: 'Postergadas')
       @i_perfil.carpetas.create(carpeta: 'Revisadas')
+
+      # Crea Directorio del Usuario
+      dir = File.dirname("#{Rails.root}/archivo/#{archivo_usuario(@i_perfil.email)}/archivo")
+      FileUtils.mkdir_p(dir) unless File.directory?(dir)
     end
 
     session[:perfil] = @i_perfil

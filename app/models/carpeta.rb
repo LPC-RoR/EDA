@@ -1,5 +1,5 @@
 class Carpeta < ApplicationRecord
-	ESTADOS = ['activa']
+	NOT_MODIFY = ['Revisar', 'Excluidas', 'Postergadas', 'Revisadas']
 
 	TABLA_FIELDS = [
 		['carpeta', 'show'], 

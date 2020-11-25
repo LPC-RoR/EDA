@@ -204,4 +204,21 @@ module ApplicationHelper
 		Publicacion::EVALUACION[item] - excluido
 	end
 
+	def my_objeto?(objeto)
+		case objeto.class.name
+		when 'Equipo'
+			objeto.administrador.id == session[:perfil]['id']
+		end
+	end
+	def despliega_campo?(objeto, field)
+		if Recurso::MODELS_WITH_SELF_FIELDS.include?(objeto.class.name)
+			if objeto.class::MY_FIELDS.include?(field)
+				my_objeto?(objeto) ? true : false
+			else
+				true
+			end
+		else
+			true
+		end
+	end
 end
