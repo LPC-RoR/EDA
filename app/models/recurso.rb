@@ -18,6 +18,23 @@ class Recurso < ApplicationRecord
 	CARGA_HACIA_CARPETA_CONTROLLERS = ['cargas']
 	
 	# ---------------------------------------- DEFAULT -----------------------------------------------
+	COLECCIONES_PROPIAS = [
+		'publicaciones#index',
+		'recursos#manual',
+		'equipos#index',
+		'carpetas#index',
+		'temas#index',
+		'cargas#index',
+		'cargas#show',
+		'carpetas#show'
+	]
+	OBJETOS_PROPIOS = [
+		'carpetas#show',
+		'temas#show',
+		'cargas#show'
+	]
+	# Buscar self.btns_control
+	BTNS_CONTROL_MODELS = ['Publicacion']
 	# ---------------------------------------- TABLE
 	D_TABLA = {
 		titulo:  {'self' => true,  'show' => false},

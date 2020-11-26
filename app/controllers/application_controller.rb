@@ -26,24 +26,24 @@ class ApplicationController < ActionController::Base
 	      # p
 	      case unicidad
 	      when 'remplazar_carga'
-	      	p = Publicacion.find_by(unique_id: hash_articulo['Unique-ID'])
+	      	pub = Publicacion.find_by(unique_id: hash_articulo['Unique-ID'])
 	      when 'remplazar_doi'
-	      	p = Publicacion.find_by(doi: hash_articulo['DOI'])
+	      	pub = Publicacion.find_by(doi: hash_articulo['DOI'])
 	      when 'nuevo'
-	      	p = Publicacion.new
+	      	pub = Publicacion.new
 	      when 'colision_titulo'
 	      	# se creará el duplicado para resolver la duplicidad en la aplicación
-	      	p = Publicacion.new
+	      	pub = Publicacion.new
 #	      	p = Publicacion.find_by(title: hash_articulo['Title'])
 		  when 'sin carpeta'
 		  	# Publicacion de otro usuario
-		      	p = Publicacion.find_by(unique_id: hash_articulo['Unique-ID'])
+		      	pub = Publicacion.find_by(unique_id: hash_articulo['Unique-ID'])
 	      end
 
 	      # llenado desde hash
 	      if ['remplazar_carga', 'remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
 	        Publicacion::NOMBRES_BIB.each do |bib|
-	          p.write_attribute(bib.downcase.split('-').join('_'), hash_articulo[bib])
+	          pub.write_attribute(bib.downcase.split('-').join('_'), hash_articulo[bib])
 	        end
 	      end
 
@@ -51,17 +51,17 @@ class ApplicationController < ActionController::Base
 	      # Los ingresos manuales no llenan el IDIOMA
 	      # BORRAR REVISTA Y AUTORES
 	      if unicidad == 'remplazar_doi'
-	      	if p.revista.publicaciones.count == 1
-	      		r = p.revista
+	      	if pub.revista.publicaciones.count == 1
+	      		r = pub.revista
 	      		r.delete
 	      	end
-      		p.revista_id = nil
+      		pub.revista_id = nil
 
-	      	p.investigadores.each do |i|
+	      	pub.investigadores.each do |i|
 	      		if i.publicaciones.count == 1
-	      			p.investigadores.delete(i)
+	      			pub.investigadores.delete(i)
 	      		else
-	      			a = Autor.find_by(publicacion_id: p.id, investigador_id: i.id)
+	      			a = Autor.find_by(publicacion_id: pub.id, investigador_id: i.id)
 	      			a.delete
 	      		end
 	      	end
@@ -79,22 +79,22 @@ class ApplicationController < ActionController::Base
 	        if rev.blank?
 	          rev = Revista.create(revista: hash_articulo['Journal'], idioma_id: idio.id)
 	        end
-	        p.revista_id = rev.id
+	        pub.revista_id = rev.id
 	      end
 
 	      # origen = 'carga'
-          p.origen = 'carga' if ['remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
-          p.save if ['remplazar_carga', 'remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
+          pub.origen = 'carga' if ['remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
+          pub.save if ['remplazar_carga', 'remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
 
           # procesa AUTORES
           if ['remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
-				p_autores = p.author.split(' and ')
+				p_autores = pub.author.split(' and ')
 				p_autores.each do |aut|
 					i = Investigador.find_by(investigador: aut.strip)
 					if i.blank?
 					  i = Investigador.create(investigador: aut.strip)
 					end
-	  	         	p.investigadores << i
+	  	         	pub.investigadores << i
 				end
 
 		  end
@@ -108,9 +108,9 @@ class ApplicationController < ActionController::Base
           # 1. Publicacion ya revisada por mi puesta en una carpeta distinta a REVISA
           # 2. Publicacion existente ingresada por otro usuario fuera de mis carpetas
           my_self = Investigador.find(session[:perfil]['id'])
-		  unless p.carpetas.ids.intersection(my_self.carpetas.ids).any?
-				p.cargas << carga 
-				p.carpetas << cpt
+		  unless pub.carpetas.ids.intersection(my_self.carpetas.ids).any?
+				pub.cargas << carga 
+				pub.carpetas << cpt
 		  end
 
 		  carga.estado = 'procesada'

@@ -230,4 +230,31 @@ module ApplicationHelper
 			o.send(o.class.name.downcase)
 		end
 	end
+
+	def coleccion_propia?
+		Recurso::COLECCIONES_PROPIAS.include?("#{controller_name}##{action_name}")
+	end
+	def objeto_propio?(objeto)
+		if Recurso::OBJETOS_PROPIOS.include?("#{controller_name}##{action_name}")
+			true
+		else
+			case objeto.class.name
+			when 'Publicacion'
+				objeto.origen == 'carga' ? objeto.carpetas.ids.intersection(Investigador.find(session[:perfil]['id']).carpetas.ids).any? : (objeto.investigador.id == session[:perfil]['id'])
+			when 'Equipo'
+				objeto.administrador.id == session[:perfil]['id']
+			else
+				false
+			end
+		end
+	end
+
+	def m_despliega_btns?(objeto)
+		Recurso::BTNS_CONTROL_MODELS.include?(objeto.class.name) ? objeto.btns_control : true
+	end
+
+	def despliega_btns?(objeto)
+		coleccion_propia? ? m_despliega_btns?(objeto) : (objeto_propio?(objeto) and m_despliega_btns?(objeto))		
+	end
+
 end

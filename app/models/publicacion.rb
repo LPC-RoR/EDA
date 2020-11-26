@@ -74,4 +74,8 @@ class Publicacion < ApplicationRecord
 		[
 		]
 	end
+
+	def btns_control
+		['ingreso', 'produccion'].include?(self.origen)
+	end
 end
