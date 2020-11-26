@@ -1,9 +1,11 @@
 class Equipo < ApplicationRecord
 
+	# TABS DEL TABLE
 	TABS = ['Administrados', 'Participaciones']
 
 	HIDDEN_CHILDS = ['integrantes']
 
+	# ------------------------------------------------- TABLA
 	TABLE_EXCEPTIONS = {
 		tabs:    {'self' => true}
 	}
@@ -12,16 +14,17 @@ class Equipo < ApplicationRecord
 		['equipo', 'show'], 
 	]
 
+	# ------------------------------------------------- SHOW
 	SHOW_FIELDS = [
 		['investigador', 'normal'],
 		['sha1',         'normal']
 	]
 
-	MY_FIELDS = ['sha1']
-
 	SHOW_EXCEPTIONS = [:detalle]
-
 	F_TABLA = 'administrador'
+
+	# -------------------------------------------------- DESPLIEGUE
+	MY_FIELDS = ['sha1']
 
 	belongs_to :administrador, class_name: 'Investigador'
 
@@ -30,7 +33,4 @@ class Equipo < ApplicationRecord
 	has_many :integrantes
 	has_many :investigadores, through: :integrantes
 
-	def show_title
-		self.equipo
-	end
 end

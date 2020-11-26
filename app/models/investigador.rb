@@ -1,11 +1,10 @@
 class Investigador < ApplicationRecord
-
+	# --------------------------------------------------- TABLA
 	TABLA_FIELDS = [
 		['investigador',         'show']
 	]
 
-	HIDDEN_CHILDS = ['autores']
-
+	# ---------------------------------------------------- SHOW
 	D_SHOW = {
 		links:        true,
 		detalle:     false,
@@ -14,6 +13,9 @@ class Investigador < ApplicationRecord
 		tabla:        true,
 		adjuntos:    false
 	}
+
+	# ----------------------------------------------------- DESPLIEGUE
+	HIDDEN_CHILDS = ['autores']
 
 	belongs_to :departamento, optional: true
 
@@ -31,7 +33,4 @@ class Investigador < ApplicationRecord
 	has_many :participaciones, through: :integrantes, source: :equipo
 
 
-	def show_title
-		self.investigador
-	end
 end

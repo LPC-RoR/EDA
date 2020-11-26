@@ -150,8 +150,6 @@ module ApplicationHelper
 			# {'empleados', 'productos', 'clientes(*)'}
 			when 'detalle_pedido'
 				"/#{controller.classify.constantize::SELECTOR}/seleccion?#{@objeto.class.name.downcase}_id=#{@objeto.id}&empresa_id=#{@objeto.registro.empresa.id}"
-			when 'ruta_new'
-				controller.classify.constantize::RUTA_NEW
 			end
 		else
 			if Recurso::RUTA_ARCHIVOS.keys.include?(controller)
@@ -219,6 +217,17 @@ module ApplicationHelper
 			end
 		else
 			true
+		end
+	end
+
+	def show_title(o)
+		case o.class.name
+		when 'Carga'
+			o.archivo.split('/').last
+		when 'Publicacion'
+			o.title
+		else
+			o.send(o.class.name.downcase)
 		end
 	end
 end

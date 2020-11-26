@@ -1,15 +1,17 @@
 class Carga < ApplicationRecord
+	# ----------------------------------------- CARGA
+	# CARGA HACIA CARPETA
+	# Carpeta destino
+	CARPETA_CARGA = 'Revisar'
 
-	HIDDEN_CHILDS = ['procesos']
+	# SE define pero no se usa, el cambio se hace en código al procesar carga.
+	ESTADOS = ['ingreso', 'procesada']
 
-	ESTADOS = ['ingreso', 'procesado']
-
+	# ------------------------------------- TABLA ------------------------------------------
 	TABLA_FIELDS = [
 		['d_archivo',   'show'], 
 		['nota',      'normal']
 	]
-	TIPO_NEW = 'ruta_new'
-	RUTA_NEW = '/recursos/sel_archivo_carga'
 
  	FORM_FIELDS = [
 		['nota',             'entry'],
@@ -17,6 +19,10 @@ class Carga < ApplicationRecord
 		['investigador_id', 'hidden'],
 		['archivo',         'hidden']
 	]
+
+	# ----------------------------------------- DESPLIEGUE
+	# CHILDS QUE NO SE DEBEN DESPLEGAR
+	HIDDEN_CHILDS = ['procesos']
 
 	belongs_to :investigador
 
@@ -28,10 +34,6 @@ class Carga < ApplicationRecord
 			['Proceso', "/cargas/#{self.id}/procesa_carga"]
 		]
 		
-	end
-
-	def show_title
-		self.archivo.split('/').last
 	end
 
 	def d_archivo

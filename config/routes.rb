@@ -44,7 +44,7 @@ Rails.application.routes.draw do
     collection do
       match :inicia_sesion, via: :get
       match :tablas, via: :get
-      match :produccion, via: :get
+      match :manual, via: :get
     end
   end
   resources :registros do

@@ -1,4 +1,5 @@
 class Revista < ApplicationRecord
+	# ---------------------------------------- SHOW
 	D_SHOW = {
 		links:        true,
 		detalle:     false,
@@ -12,7 +13,4 @@ class Revista < ApplicationRecord
 
 	has_many :publicaciones
 
-	def show_title
-		self.revista
-	end
 end

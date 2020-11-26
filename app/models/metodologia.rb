@@ -1,4 +1,5 @@
 class Metodologia < ApplicationRecord
+	#-------------------------------------------------- TABLA
 	TABLA_FIELDS = [
 		['orden',         'normal'], 
 		['metodologia',   'normal']

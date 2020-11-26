@@ -100,9 +100,9 @@ class ApplicationController < ActionController::Base
 		  end
 
           # Agrega a Carpeta
-          cpt = Carpeta.find_by(carpeta: Recurso::CARPETA_CARGA, investigador_id: session[:perfil]['id'])
+          cpt = Carpeta.find_by(carpeta: Carga::CARPETA_CARGA, investigador_id: session[:perfil]['id'])
           if cpt.blank? 
-          	cpt = Carpeta.create(carpeta: Recurso::CARPETA_CARGA, investigador_id: session[:perfil]['id'])
+          	cpt = Carpeta.create(carpeta: Carga::CARPETA_CARGA, investigador_id: session[:perfil]['id'])
           end
           # Uso la condicion que que no este en las carpetas del Investigador hay que cubrir
           # 1. Publicacion ya revisada por mi puesta en una carpeta distinta a REVISA

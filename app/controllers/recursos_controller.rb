@@ -10,9 +10,13 @@ class RecursosController < ApplicationController
       @i_perfil.carpetas.create(carpeta: 'Postergadas')
       @i_perfil.carpetas.create(carpeta: 'Revisadas')
 
-      # Crea Directorio del Usuario
-      dir = File.dirname("#{Rails.root}/archivo/#{archivo_usuario(@i_perfil.email)}/archivo")
-      FileUtils.mkdir_p(dir) unless File.directory?(dir)
+      # Crea Directorios del Usuario
+      Recurso::CARGA_CONTROLLERS.each do |controlador|
+        # formato directorios de carga : /eda/archivo/<email usuario>/<controlador>/
+        # Por ahora consideramos UNA carga por controlador
+        dir = File.dirname("#{Rails.root}/archivos/#{archivo_usuario(@i_perfil.email)}/#{controlador}/archivo")
+        FileUtils.mkdir_p(dir) unless File.directory?(dir)
+      end
     end
 
     session[:perfil] = @i_perfil
@@ -30,7 +34,7 @@ class RecursosController < ApplicationController
     @coleccion = @ftab.classify.constantize::all
   end
 
-  def produccion
+  def manual
     @ftab = 'publicaciones'
 #    @ftab = params[:ftab].blank? ? Recurso::RECURSO_ACTIONS_TABS[action_name][0] : params[:ftab]
 #    @estado = params[:estado].blank? ? @ftab.classify.constantize::ESTADOS[0] : params[:estado]

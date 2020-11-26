@@ -9,9 +9,6 @@ class Publicacion < ApplicationRecord
 		'Conclusiones' =>    ['aceptadas', 'controversiales']
 	}
 
-	# tablas child que NO deben ser deplegadas
-	HIDDEN_CHILDS = ['citas', 'autores', 'investigadores', 'procesos', 'cargas', 'clasificaciones', 'carpetas', 'evaluaciones']
-
 	# ------------------- TABLA -----------------------
 	TABS = Carpeta.all.map {|c| c.carpeta}
 	# Configura DESPLIEGUE de la TABLA
@@ -27,10 +24,6 @@ class Publicacion < ApplicationRecord
 		['year',        'normal']
 	]
 
-	# Acceso a campos BT
-#	BT_FIELDS = []	
-#	BT_MODEL = ''
-
 	# -------------------- FORM  -----------------------
 	SHOW_EXCEPTIONS = [:clasifica, :detalle, :inline_form]
 
@@ -42,12 +35,17 @@ class Publicacion < ApplicationRecord
 		['abstract', 'text_area']
 	]
 
+	# -------------------- SHOW -------------------------
 	SHOW_FIELDS = [
 		['year',       'normal'], 
 		['author',     'normal'], 
 		['doi',        'normal'],
 		['abstract',   'normal']
 	]
+
+	# --------------------- DESPLIEGUE -------------------------
+	# tablas child que NO deben ser deplegadas
+	HIDDEN_CHILDS = ['citas', 'autores', 'investigadores', 'procesos', 'cargas', 'clasificaciones', 'carpetas', 'evaluaciones']
 
 	SHOW_BT_OBJECTS = ['revista']
 	SHOW_HMT_COLLECTIONS = ['cargas', 'investigadores']
@@ -75,8 +73,5 @@ class Publicacion < ApplicationRecord
 	def show_links
 		[
 		]
-	end
-	def show_title
-		self.title
 	end
 end

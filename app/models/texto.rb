@@ -1,20 +1,22 @@
 class Texto < ApplicationRecord
-	HIDDEN_CHILDS = ['clasificaciones', 'citas']
-
+	# ------------------------------------------ TABLA
+	TABLA_FIELDS = [
+		['texto',   'show']
+	]
 
 	TABLE_EXCEPTIONS = {
 		nuevo:   {'self' => true}
 	 	}
 
-	TABLA_FIELDS = [
-		['texto',   'show']
-	]
-
  	FORM_FIELDS = [
 		['texto',           'entry']
 	]
 
+	# ------------------------------------------ SHOW
 	SHOW_EXCEPTIONS = [:inline_form, :tabla]
+
+	# ------------------------------------------ DESPLIEGUE
+	HIDDEN_CHILDS = ['clasificaciones', 'citas']
 
 	SHOW_HMT_COLLECTIONS = ['temas', 'publicaciones']
 
@@ -24,7 +26,4 @@ class Texto < ApplicationRecord
 	has_many :citas
 	has_many :publicaciones, through: :citas
 
-	def show_title
-		self.texto
-	end
 end
