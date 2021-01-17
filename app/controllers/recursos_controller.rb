@@ -11,7 +11,7 @@ class RecursosController < ApplicationController
       @i_perfil.carpetas.create(carpeta: 'Revisadas')
 
       # Crea Directorios del Usuario
-      Recurso::CARGA_CONTROLLERS.each do |controlador|
+      Configuracion::CARGA_CONTROLLERS.each do |controlador|
         # formato directorios de carga : /eda/archivo/<email usuario>/<controlador>/
         # Por ahora consideramos UNA carga por controlador
         dir = File.dirname("#{Rails.root}/archivos/#{archivo_usuario(@i_perfil.email)}/#{controlador}/archivo")
@@ -27,7 +27,7 @@ class RecursosController < ApplicationController
 
   # GET /recursos/tablas
   def tablas
-    @ftab = params[:ftab].blank? ? Recurso::RECURSO_ACTIONS_TABS[action_name][0] : params[:ftab]
+    @ftab = params[:ftab].blank? ? Configuracion::RECURSO_ACTIONS_TABS[action_name][0] : params[:ftab]
     @estado = params[:estado].blank? ? @ftab.classify.constantize::ESTADOS[0] : params[:estado]
     # Manejo de Tablas, Tabs y Estados
 #    @coleccion = @ftab.classify.constantize::all.where(estado: @estado)
@@ -36,7 +36,7 @@ class RecursosController < ApplicationController
 
   def manual
     @ftab = 'publicaciones'
-#    @ftab = params[:ftab].blank? ? Recurso::RECURSO_ACTIONS_TABS[action_name][0] : params[:ftab]
+#    @ftab = params[:ftab].blank? ? Configuracion::RECURSO_ACTIONS_TABS[action_name][0] : params[:ftab]
 #    @estado = params[:estado].blank? ? @ftab.classify.constantize::ESTADOS[0] : params[:estado]
     @coleccion = Publicacion.where(origen: 'Manual').page(params[:page])
   end

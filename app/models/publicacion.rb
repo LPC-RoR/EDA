@@ -11,11 +11,13 @@ class Publicacion < ApplicationRecord
 
 	# ------------------- TABLA -----------------------
 	TABS = Carpeta.all.map {|c| c.carpeta}
+
+	## CORREGIDO
 	# Configura DESPLIEGUE de la TABLA
-	TABLE_EXCEPTIONS = {
-		tabs:    {'self' => true},
-		paginas: {'self' => true, 'show' => ['*']},
-		nuevo:   {'self' => true, 'show' => ['recursos', 'equipos']}
+	T_EXCEPTIONS = {
+		tabs:    ['self'],
+		paginas: ['*'],
+		nuevo:   ['self', 'recursos', 'equipos']
 	}
 
 	# Campos qeu se despliegan en la tabla

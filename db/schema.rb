@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_25_003133) do
+ActiveRecord::Schema.define(version: 2020_11_27_151545) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,9 @@ ActiveRecord::Schema.define(version: 2020_11_25_003133) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "investigador_id"
+    t.integer "equipo_id"
+    t.index ["carpeta"], name: "index_carpetas_on_carpeta"
+    t.index ["equipo_id"], name: "index_carpetas_on_equipo_id"
     t.index ["investigador_id"], name: "index_carpetas_on_investigador_id"
   end
 
@@ -99,6 +102,7 @@ ActiveRecord::Schema.define(version: 2020_11_25_003133) do
     t.string "idioma"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["idioma"], name: "index_idiomas_on_idioma"
   end
 
   create_table "instituciones", force: :cascade do |t|
@@ -183,6 +187,7 @@ ActiveRecord::Schema.define(version: 2020_11_25_003133) do
     t.integer "investigador_id"
     t.index ["equipo_id"], name: "index_publicaciones_on_equipo_id"
     t.index ["investigador_id"], name: "index_publicaciones_on_investigador_id"
+    t.index ["origen"], name: "index_publicaciones_on_origen"
     t.index ["registro_id"], name: "index_publicaciones_on_registro_id"
     t.index ["revista_id"], name: "index_publicaciones_on_revista_id"
     t.index ["title"], name: "index_publicaciones_on_title"

@@ -10,7 +10,7 @@ class CargasController < ApplicationController
 
   def sel_archivo
     @self = Investigador.find(session[:perfil]['id'])
-    @archivos = Dir.glob("#{Recurso::RUTA_ARCHIVOS['cargas']}**/*") - @self.cargas.map {|c| c.archivo}
+    @archivos = Dir.glob("#{Configuracion::RUTA_ARCHIVOS['cargas']}**/*") - @self.cargas.map {|c| c.archivo}
   end
 
   # GET /cargas/1
@@ -38,7 +38,7 @@ class CargasController < ApplicationController
 
   # GET /cargas/new
   def new
-    @archivo = Recurso::RUTA_ARCHIVOS['cargas']+params[:archivo]
+    @archivo = Configuracion::RUTA_ARCHIVOS['cargas']+params[:archivo]
     @objeto = Carga.new(archivo: @archivo, estado: 'ingreso', investigador_id: session[:perfil]['id'])
   end
 

@@ -29,6 +29,7 @@ class Equipo < ApplicationRecord
 	belongs_to :administrador, class_name: 'Investigador'
 
 	has_many :publicaciones
+	has_many :carpetas
 
 	has_many :integrantes
 	has_many :investigadores, through: :integrantes

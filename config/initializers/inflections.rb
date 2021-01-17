@@ -8,60 +8,17 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
 #   inflect.singular /^(ox)en/i, '\1'
 #   inflect.irregular 'person', 'people'
 #   inflect.uncountable %w( fish sheep )
-	inflect.plural 'institucion', 'instituciones'
-	inflect.plural 'Institucion', 'Instituciones'
-	inflect.singular 'instituciones', 'institucion'
-	inflect.singular 'Instituciones', 'Institucion'
 
-	inflect.plural 'investigador', 'investigadores'
-	inflect.plural 'Investigador', 'Investigadores'
-	inflect.singular 'investigadores', 'investigador'
-	inflect.singular 'Investigadores', 'Investigador'
+	# palabras terminadas en 'or' {'investigador', 'autor'} y en 'en' {origen}
+    inflect.plural /(.[eo][rn])$/i, '\1es'
+    inflect.singular /(.[eo][rn])es/i, '\1'
 
-	inflect.plural 'publicacion', 'publicaciones'
-	inflect.plural 'Publicacion', 'Publicaciones'
-	inflect.singular 'publicaciones', 'publicacion'
-	inflect.singular 'Publicaciones', 'Publicacion'
+	# palabras terminadas en 'a', no agregue las otras vocales porque no hay problema
+    inflect.plural /(a)$/i, '\1s'
 
-	inflect.plural 'autor', 'autores'
-	inflect.plural 'Autor', 'Autores'
-	inflect.singular 'autores', 'autor'
-	inflect.singular 'Autores', 'Autor'
-
-	inflect.plural 'origen', 'origenes'
-	inflect.plural 'Origen', 'Origenes'
-	inflect.singular 'origenes', 'origen'
-	inflect.singular 'Origenes', 'Origen'
-
-	inflect.plural 'agregacion', 'agregaciones'
-	inflect.plural 'Agregacion', 'Agregaciones'
-	inflect.singular 'agregaciones', 'agregacion'
-	inflect.singular 'Agregaciones', 'Agregacion'
-
-	inflect.plural 'clasificacion', 'clasificaciones'
-	inflect.plural 'Clasificacion', 'Clasificaciones'
-	inflect.singular 'clasificaciones', 'clasificacion'
-	inflect.singular 'Clasificaciones', 'Clasificacion'
-
-	inflect.plural 'referencia', 'referencias'
-	inflect.plural 'Referencia', 'Referencias'
-
-	inflect.plural 'metodologia', 'metodologias'
-	inflect.plural 'Metodologia', 'Metodologias'
-
-	inflect.plural 'revista', 'revistas'
-	inflect.plural 'Revista', 'Revistas'
-
-	inflect.plural 'carpeta', 'carpetas'
-	inflect.plural 'Carpeta', 'Carpetas'
-
-	inflect.plural 'cita', 'citas'
-	inflect.plural 'Cita', 'Citas'
-
-	inflect.plural 'evaluacion', 'evaluaciones'
-	inflect.plural 'Evaluacion', 'Evaluaciones'
-	inflect.singular 'evaluaciones', 'evaluacion'
-	inflect.singular 'Evaluaciones', 'Evaluacion'
+	# palabras terminadas en 'cion' y 'sion'
+    inflect.plural /(ion)$/i, '\1es'
+    inflect.singular /(ion)es/i, '\1'
 
 end
 

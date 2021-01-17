@@ -9,6 +9,6 @@ class AddDFieldsToPublicacion < ActiveRecord::Migration[5.2]
     add_column :publicaciones, :investigador_id, :integer
     add_index :publicaciones, :equipo_id
     add_index :publicaciones, :investigador_id
-
+    add_index :publicaciones, :origen
   end
 end

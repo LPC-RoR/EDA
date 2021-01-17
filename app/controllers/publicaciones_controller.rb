@@ -4,12 +4,16 @@ class PublicacionesController < ApplicationController
   # GET /publicaciones
   # GET /publicaciones.json
   def index
-    @tab = params[:tab].blank? ? 'Revisar' : params[:tab]
+    @tab = params[:html_options].blank? ? 'Revisar' : (params[:html_options][:tab].blank? ? 'Revisar' : params[:html_options][:tab])
+#    @tab = params[:tab].blank? ? 'Revisar' : params[:tab]
     @carpeta = Carpeta.find_by(carpeta: @tab)
     if @carpeta.blank?
       Carpeta.create(carpeta: 'Revisar')
     end
     @coleccion = @carpeta.publicaciones.page(params[:page])
+
+    # opciones para los links
+    @options = {'tab' => @tab}
   end
 
   # GET /publicaciones/1

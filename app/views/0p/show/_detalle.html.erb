@@ -2,7 +2,7 @@
 	<tbody>
 
 		<% c.classify.constantize::SHOW_FIELDS.each do |field| %>
-			<% if despliega_campo?(@objeto, field[0]) %>
+			<% if filtro_self_field?(@objeto, field[0]) and filtro_conditional_field?(@objeto, field[0]) %>
 				<tr>
 					<% case field[1] %>
 					<% when 'normal' %>
@@ -15,6 +15,9 @@
 							<td><small> <%= "#{ f_tabla(o).send(field[0]) }" %> </small></td>
 						<% end %>
 
+					<% when 'metodo' %>
+						<td><small> <%= "#{field[0]}" %> </small></td>
+						<td><small> <%=  "#{o.send(field[0])}" %> </small></td>
 					<% when 'diahora' %>
 
 						<% if c.classify.constantize.column_names.include?(field[0]) %>

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :configuraciones
   resources :autores
   resources :cargas do
     match :procesa_carga, via: :get, on: :member

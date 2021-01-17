@@ -16,9 +16,13 @@ class Carpeta < ApplicationRecord
 	HIDDEN_CHILDS = ['clasificaciones']
 	SHOW_HMT_COLLECTIONS = ['publicaciones']
 
-	belongs_to :investigador
+	belongs_to :investigador, optional: true
+	belongs_to :equipo, optional: true
 
 	has_many :clasificaciones
 	has_many :publicaciones, through: :clasificaciones
 
+	def btns_control
+		not NOT_MODIFY.include?(self.carpeta)
+	end
 end

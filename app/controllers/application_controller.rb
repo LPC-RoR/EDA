@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
-
+	## USO GENERAL
+	# Este método se usa para construir un nombre de directorio a partir de un correo electrónico.
 	def archivo_usuario(email)
 		email.split('@').join('-').split('.').join('_')
 	end
