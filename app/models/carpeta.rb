@@ -2,6 +2,9 @@ class Carpeta < ApplicationRecord
 	# MARCA CARPETAS QUE NO SE MODIFICAN NI ELIMINAN
 	NOT_MODIFY = ['Revisar', 'Excluidas', 'Postergadas', 'Revisadas']
 
+	# ----------------------------------------- HIDDEN CHILDS
+	HIDDEN_CHILDS = ['clasificaciones']
+
 	#-------------------------------------------------------------  TABLA
 	TABLA_FIELDS = [
 		['carpeta', 'show'], 
@@ -13,7 +16,6 @@ class Carpeta < ApplicationRecord
 	]
 
 	# ------------------------------------------------------------- DESPLIEGUE
-	HIDDEN_CHILDS = ['clasificaciones']
 	SHOW_HMT_COLLECTIONS = ['publicaciones']
 
 	belongs_to :investigador, optional: true

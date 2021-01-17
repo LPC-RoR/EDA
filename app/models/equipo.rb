@@ -1,13 +1,20 @@
 class Equipo < ApplicationRecord
 
-	# TABS DEL TABLE
+	# ----------------------------------------- TABS TABLE
 	TABS = ['Administrados', 'Participaciones']
 
+	# ----------------------------------------- HIDDEN CHILDS
 	HIDDEN_CHILDS = ['integrantes']
 
 	# ------------------------------------------------- TABLA
-	TABLE_EXCEPTIONS = {
-		tabs:    {'self' => true}
+	T_EXCEPTIONS = {
+		tabs:    ['self']
+	}
+
+	T_NEW_EXCEPTIONS = {
+		#'controller' => 'tipo_new'
+		# '*' en todo controller_name
+		'*' => 'inline',
 	}
 
 	TABLA_FIELDS = [

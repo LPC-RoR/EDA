@@ -1,11 +1,15 @@
 class Carga < ApplicationRecord
+	# ----------------------------------------- ESTADOS
+	# SE define pero no se usa, el cambio se hace en código al procesar carga.
+	ESTADOS = ['ingreso', 'procesada']
+
 	# ----------------------------------------- CARGA
 	# CARGA HACIA CARPETA
 	# Carpeta destino
 	CARPETA_CARGA = 'Revisar'
 
-	# SE define pero no se usa, el cambio se hace en código al procesar carga.
-	ESTADOS = ['ingreso', 'procesada']
+	# ----------------------------------------- HIDDEN CHILDS
+	HIDDEN_CHILDS = ['procesos']
 
 	# ------------------------------------- TABLA ------------------------------------------
 	TABLA_FIELDS = [
@@ -20,9 +24,6 @@ class Carga < ApplicationRecord
 		['archivo',         'hidden']
 	]
 
-	# ----------------------------------------- DESPLIEGUE
-	# CHILDS QUE NO SE DEBEN DESPLEGAR
-	HIDDEN_CHILDS = ['procesos']
 
 	belongs_to :investigador
 

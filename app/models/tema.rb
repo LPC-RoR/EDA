@@ -1,4 +1,7 @@
 class Tema < ApplicationRecord
+	# ----------------------------------------- HIDDEN CHILDS
+	HIDDEN_CHILDS = ['clasificaciones']
+
 	# ------------------- TABLA -----------------------
 
 	# Campos qeu se despliegan en la tabla
@@ -13,7 +16,6 @@ class Tema < ApplicationRecord
 	]
 
 	# --------------------------------------- DESPLIEGUE
-	HIDDEN_CHILDS = ['clasificaciones']
 
 	belongs_to :investigador
 

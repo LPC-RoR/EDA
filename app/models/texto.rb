@@ -1,12 +1,15 @@
 class Texto < ApplicationRecord
+	# ----------------------------------------- HIDDEN CHILDS
+	HIDDEN_CHILDS = ['clasificaciones', 'citas']
+
 	# ------------------------------------------ TABLA
 	TABLA_FIELDS = [
 		['texto',   'show']
 	]
 
-	TABLE_EXCEPTIONS = {
-		nuevo:   {'self' => true}
-	 	}
+	T_EXCEPTIONS = {
+		nuevo:    ['self']
+	}
 
  	FORM_FIELDS = [
 		['texto',           'entry']
@@ -16,7 +19,6 @@ class Texto < ApplicationRecord
 	SHOW_EXCEPTIONS = [:inline_form, :tabla]
 
 	# ------------------------------------------ DESPLIEGUE
-	HIDDEN_CHILDS = ['clasificaciones', 'citas']
 
 	SHOW_HMT_COLLECTIONS = ['temas', 'publicaciones']
 

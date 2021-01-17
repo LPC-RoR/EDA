@@ -12,6 +12,10 @@ class Publicacion < ApplicationRecord
 	# ------------------- TABLA -----------------------
 	TABS = Carpeta.all.map {|c| c.carpeta}
 
+	# ----------------------------------------- HIDDEN CHILDS
+	HIDDEN_CHILDS = ['citas', 'autores', 'investigadores', 'procesos', 'cargas', 'clasificaciones', 'carpetas', 'evaluaciones']
+
+
 	## CORREGIDO
 	# Configura DESPLIEGUE de la TABLA
 	T_EXCEPTIONS = {
@@ -46,8 +50,6 @@ class Publicacion < ApplicationRecord
 	]
 
 	# --------------------- DESPLIEGUE -------------------------
-	# tablas child que NO deben ser deplegadas
-	HIDDEN_CHILDS = ['citas', 'autores', 'investigadores', 'procesos', 'cargas', 'clasificaciones', 'carpetas', 'evaluaciones']
 
 	SHOW_BT_OBJECTS = ['revista']
 	SHOW_HMT_COLLECTIONS = ['cargas', 'investigadores']
