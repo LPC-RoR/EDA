@@ -1,14 +1,15 @@
 class EquiposController < ApplicationController
-  before_action :set_equipo, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_usuario!
+  before_action :set_equipo, only: [:show, :edit, :update, :destroy, :elimina_equipo]
 
   # GET /equipos
   # GET /equipos.json
   def index
     @tab = params[:tab].blank? ? 'Administrados' : params[:tab]
 
-    @self = Investigador.find(session[:perfil]['id'])
+    @activo = Perfil.find(session[:perfil_activo]['id'])
 
-    @coleccion = (@tab == 'Administrados') ? @self.equipos : @self.participaciones
+    @coleccion = (@tab == 'Administrados') ? @activo.equipos : @activo.participaciones
 
     @options = {'tab' => @tab}
   end
@@ -31,18 +32,18 @@ class EquiposController < ApplicationController
 
   def nuevo
     unless params[:nuevo_equipo][:equipo].blank?
-      @self = Investigador.find(session[:perfil]['id'])
+      @activo = Perfil.find(session[:perfil_activo]['id'])
 
       case params[:tab]
       when 'Administrados'
-        @texto_sha1 = session[:perfil]['email']+params[:nuevo_equipo][:equipo]
+        @texto_sha1 = session[:perfil_activo]['email']+params[:nuevo_equipo][:equipo]
         @sha1 = Digest::SHA1.hexdigest(@texto_sha1)
-        @self.equipos.create(equipo: params[:nuevo_equipo][:equipo], sha1: @sha1)
+        @activo.equipos.create(equipo: params[:nuevo_equipo][:equipo], sha1: @sha1)
       when 'Participaciones'
         @sha1 = params[:nuevo_equipo][:equipo]
         @equipo = Equipo.find_by(sha1: @sha1)
         unless @equipo.blank?
-          @self.asociaciones << @equipo
+          @perfil.asociaciones << @equipo
         end
       end
     end
@@ -91,6 +92,12 @@ class EquiposController < ApplicationController
       format.html { redirect_to equipos_url, notice: 'Equipo was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def elimina_equipo
+    @activo = Perfil.find(session[:perfil_activo]['id'])
+    @objeto.delete
+    redirect_to @objeto
   end
 
   private

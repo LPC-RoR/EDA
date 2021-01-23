@@ -1,4 +1,5 @@
 class MetodologiasController < ApplicationController
+  before_action :authenticate_usuario!
   before_action :set_metodologia, only: [:show, :edit, :update, :destroy]
 
   # GET /metodologias

@@ -1,4 +1,5 @@
 class TextosController < ApplicationController
+  before_action :authenticate_usuario!
   before_action :set_texto, only: [:show, :edit, :update, :destroy]
 
   # GET /textos

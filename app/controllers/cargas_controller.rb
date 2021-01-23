@@ -1,16 +1,25 @@
 class CargasController < ApplicationController
+  before_action :authenticate_usuario!
   before_action :set_carga, only: [:show, :edit, :update, :destroy, :procesa_carga]
 
   # GET /cargas
   # GET /cargas.json
   def index
-    @investigador = Investigador.find(session[:perfil]['id'])
-    @coleccion = @investigador.cargas
+    @activo = Perfil.find(session[:perfil_activo]['id'])
+    @coleccion = @activo.cargas
+
+    user_dir = session[:es_administrador] == true ? 'admin' : archivo_usuario(current_usuario.email)
+    dir_path = "#{Rails.root}/archivos/#{user_dir}/#{controller_name}/"
+    @dir = File.dirname("#{dir_path}**")
+    FileUtils.mkdir_p(@dir) unless File.directory?(@dir)
+
+    @archivos = Dir.glob("#{@dir}/**") - @activo.cargas.map {|c| c.archivo}
+
   end
 
   def sel_archivo
-    @self = Investigador.find(session[:perfil]['id'])
-    @archivos = Dir.glob("#{Configuracion::RUTA_ARCHIVOS['cargas']}**/*") - @self.cargas.map {|c| c.archivo}
+    @activo = Perfil.find(session[:perfil_activo]['id'])
+    @archivos = Dir.glob("#{Configuracion::RUTA_ARCHIVOS['cargas']}**/*") - @activo.cargas.map {|c| c.archivo}
   end
 
   # GET /cargas/1
@@ -33,13 +42,14 @@ class CargasController < ApplicationController
 #      @objeto.save
     end
 
-    redirect_to @objeto
+    redirect_to cargas_path
   end # def
 
   # GET /cargas/new
   def new
-    @archivo = Configuracion::RUTA_ARCHIVOS['cargas']+params[:archivo]
-    @objeto = Carga.new(archivo: @archivo, estado: 'ingreso', investigador_id: session[:perfil]['id'])
+#    @archivo = Configuracion::RUTA_ARCHIVOS['cargas']+params[:archivo]
+    @archivo = nil
+    @objeto = Carga.new(archivo: @archivo, estado: 'ingreso', perfil_id: session[:perfil_activo]['id'].to_i)
   end
 
   # GET /cargas/1/edit
@@ -101,6 +111,6 @@ class CargasController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def carga_params
-      params.require(:carga).permit(:archivo, :nota, :estado, :investigador_id)
+      params.require(:carga).permit(:archivo, :nota, :estado, :perfil_id, :archivo_carga, :archivo_carga_cache)
     end
 end

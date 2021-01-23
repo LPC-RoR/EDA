@@ -1,4 +1,5 @@
 class IntegrantesController < ApplicationController
+  before_action :authenticate_usuario!
   before_action :set_integrante, only: [:show, :edit, :update, :destroy]
 
   # GET /integrantes
@@ -69,6 +70,6 @@ class IntegrantesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def integrante_params
-      params.require(:integrante).permit(:investigador_id, :equipo_id)
+      params.require(:integrante).permit(:perfil_id, :equipo_id)
     end
 end

@@ -1,11 +1,12 @@
 class TemasController < ApplicationController
+  before_action :authenticate_usuario!
   before_action :set_tema, only: [:show, :edit, :update, :destroy]
 
   # GET /temas
   # GET /temas.json
   def index
-    @investigador = Investigador.find(session[:perfil]['id'])
-    @coleccion = @investigador.temas
+    @activo = Perfil.find(session[:perfil_activo]['id'])
+    @coleccion = @activo.temas
   end
 
   # GET /temas/1
@@ -20,7 +21,7 @@ class TemasController < ApplicationController
 
   # GET /temas/new
   def new
-    @objeto = Tema.new(investigador_id: session[:perfil]['id'])
+    @objeto = Tema.new(perfil_id: session[:perfil_activo]['id'])
   end
 
   def nuevo
@@ -29,10 +30,10 @@ class TemasController < ApplicationController
     unless params[:nuevo_tema][:tema].strip.blank?
       @nuevo_tema = params[:nuevo_tema][:tema].strip
   
-      @self = Investigador.find(session[:perfil]['id'])
-      t = @self.temas.find_by(tema: @nuevo_tema)
+      @activo = Perfil.find(session[:perfil_activo]['id'])
+      t = @activo.temas.find_by(tema: @nuevo_tema)
       if t.blank?
-        @self.temas.create(tema: @nuevo_tema)
+        @activo.temas.create(tema: @nuevo_tema)
       end
     end
 
@@ -98,6 +99,6 @@ class TemasController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def tema_params
-      params.require(:tema).permit(:tema, :investigador_id)
+      params.require(:tema).permit(:tema, :perfil_id)
     end
 end

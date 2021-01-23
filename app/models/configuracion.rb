@@ -2,16 +2,6 @@ class Configuracion < ApplicationRecord
 	## *****************************************************************************************************
 	## ******************************* CONFIGURACION BASE **************************************************
 	## *****************************************************************************************************
-	## ----------------------------------------   RUTAS PARA ARCHIVOS DE CARGA
-	# Tenemos 2 opciones de Carga
-	# 1.- CARGA DE USUARIO ADMINISTRATIVO
-	# Estos archivos PUEDEN  estar DISPONIBLES para TODO el mundo (depende del control de acceso)
-	# Ruta completa = "/archivos/admin/controller/archivos.ext"
-	RUTA_ARCHIVOS_ADMIN   = "/archivos/admin/"
-
-	# 2.- CARGA DE USUARIO (EXTRENO)
-	# Ruta completa = "/archivos/<email usuario>/controller/archivo.ext"
-	RUTA_ARCHIVOS_USUARIO = "/archivos/"
 
 	## CONTROLADORES QUE TIENEN RUTINAS DE CARGA
 	# dado el controlador y usuario/tipo de usuario sabremos donde poner el archivo y donde irlo a buscar
@@ -146,7 +136,7 @@ class Configuracion < ApplicationRecord
 	# Buscar MODELO.btns_control, este método controla el despliegue 
 	T_E_LINE_BTNS_MODELS = [] 
 	# DEFINICION DE BOTONES ADICIONALES
-	T_E_ADDITIONAL_BTNS_MODEL = []
+	T_E_ADDITIONAL_BTNS_MODEL = ['Equipo', 'Carga']
 	# Byscar en MODELO::X_BTNS
 
 	## *****************************************************************************************************

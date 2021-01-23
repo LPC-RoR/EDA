@@ -9,118 +9,140 @@ class ApplicationController < ActionController::Base
 
 		if carga.estado == 'ingreso'
 
- 	    @file = File.open(carga.archivo)
-	    # Lee el archivo
-	    @file_data = @file.read
-	    # Obtiene un arreglo de 'articulos'
-	    @articles = @file_data.split('@article')
-	    @articles.shift # elimina el primer elemento vacio
-	    # los procesa
-	    @contador = 0
-	    @articles.each do |articulo|
-	    	@contador += 1
-	      # primero cargamos el Hash, para tener qeu comparar
-	      hash_articulo = articulo_bib(articulo)
-	      # Luego evaluamos la unicidad del árticulo {}
-	      unicidad = unicidad_publicacion_carga(hash_articulo)
+			## ABRE ARCHIVO
+	 	    @file = File.open("#{Rails.root}/public/#{carga.archivo_carga.url}")
+		    # Lee el archivo
+		    @file_data = @file.read
+		    # Obtiene un arreglo de 'articulos'
+		    @articles = @file_data.split('@article')
+		    @articles.shift # elimina el primer elemento vacio
+		    # los procesa
+		    n_procesados = 0 # TOTAL de artículos procesados
+		    n_nuevos     = 0 # Publicaciones NUEVAS que se integraron a la colección de publicaciones
+		    n_duplicados = 0 # Criterio DUPLICADOS ('titulo'), revisar con CVCH
+		    n_vinculados = 0 # Publicaciones de OTRO USUARIO que se VINCULO a la colección del USUARIO
+		    n_existentes = 0 # Publicaciones REPETIDAS. NO se consideraron
+		    @contador = 0
+		    @articles.each do |articulo|
+		    	n_procesados += 1
+		    	@contador += 1
 
-	      # p
-	      case unicidad
-	      when 'remplazar_carga'
-	      	pub = Publicacion.find_by(unique_id: hash_articulo['Unique-ID'])
-	      when 'remplazar_doi'
-	      	pub = Publicacion.find_by(doi: hash_articulo['DOI'])
-	      when 'nuevo'
-	      	pub = Publicacion.new
-	      when 'colision_titulo'
-	      	# se creará el duplicado para resolver la duplicidad en la aplicación
-	      	pub = Publicacion.new
-#	      	p = Publicacion.find_by(title: hash_articulo['Title'])
-		  when 'sin carpeta'
-		  	# Publicacion de otro usuario
-		      	pub = Publicacion.find_by(unique_id: hash_articulo['Unique-ID'])
-	      end
+		    	## PROCESA HASH PUBLICACION
+		    	# primero cargamos el Hash, para tener que comparar
+		    	hash_articulo = articulo_bib(articulo)
 
-	      # llenado desde hash
-	      if ['remplazar_carga', 'remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
-	        Publicacion::NOMBRES_BIB.each do |bib|
-	          pub.write_attribute(bib.downcase.split('-').join('_'), hash_articulo[bib])
-	        end
-	      end
+		    	## UNICIDAD
+		    	# Luego evaluamos la unicidad del árticulo {}
+		    	unicidad = unicidad_publicacion_carga(hash_articulo)
 
-	      # Borrar Estructura a Remplazar
-	      # Los ingresos manuales no llenan el IDIOMA
-	      # BORRAR REVISTA Y AUTORES
-	      if unicidad == 'remplazar_doi'
-	      	if pub.revista.publicaciones.count == 1
-	      		r = pub.revista
-	      		r.delete
-	      	end
-      		pub.revista_id = nil
+		    	case unicidad
+		    	when 'remplazar_carga'
+		    		# Se recupera la publicación INCOMPLETA de la colección para completar la información
+		      		pub = Publicacion.find_by(unique_id: hash_articulo['Unique-ID'])
+		    	when 'remplazar_doi'
+		    		# Se recupera la publicación con DOI para privilegiar el formato WOS
+		      		pub = Publicacion.find_by(doi: hash_articulo['DOI'])
+		    	when 'nuevo'
+		    		# Completamente nueva
+		      		pub = Publicacion.new
+		    	when 'colision_titulo'
+		      		# se creará el duplicado para resolver la duplicidad en la aplicación
+		      		pub = Publicacion.new
+				when 'sin carpeta'
+			  		# Publicacion de otro usuario
+			      	pub = Publicacion.find_by(unique_id: hash_articulo['Unique-ID'])
+		    	end
 
-	      	pub.investigadores.each do |i|
-	      		if i.publicaciones.count == 1
-	      			pub.investigadores.delete(i)
-	      		else
-	      			a = Autor.find_by(publicacion_id: pub.id, investigador_id: i.id)
-	      			a.delete
-	      		end
-	      	end
-	      end
+		    	# llenado desde hash para los registros vacíos o por corregir
+		    	if ['remplazar_carga', 'remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
+			        Publicacion::NOMBRES_BIB.each do |bib|
+			        	if bib == 'Type'
+				        	pub.write_attribute('doc_type', hash_articulo[bib])
+			        	else
+				        	pub.write_attribute(bib.downcase.split('-').join('_'), hash_articulo[bib])
+			        	end
+			        end
+			        pub.origen = 'WOS_bib'
+			        pub.t_sha1 = Digest::SHA1.hexdigest(pub.title)
+		    	end
 
-	      # LLENAR IDIOMA REVISTA
-	      if ['remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
-	        # Agrega IDIOMA -> REVISTA
-	        idio = Idioma.find_by(idioma: hash_articulo['Language'])
-	        if idio.blank?
-	          idio = Idioma.create(idioma: hash_articulo['Language'])
-	        end
+		    	# BORRAR REVISTA Y AUTORES
+		    	# Los ingresos manuales no llenan el IDIOMA
+		    	if unicidad == 'remplazar_doi'
+			      	if pub.revista.publicaciones.count == 1
+			      		r = pub.revista
+			      		r.publicaciones.delete(pub)
+			      		r.delete
+			      	end
 
-	        rev = Revista.find_by(revista: hash_articulo['Journal'])
-	        if rev.blank?
-	          rev = Revista.create(revista: hash_articulo['Journal'], idioma_id: idio.id)
-	        end
-	        pub.revista_id = rev.id
-	      end
+			      	pub.investigadores.each do |i|
+			      		if i.publicaciones.count == 1
+			      			pub.investigadores.delete(i)
+			      			i.delete
+			      		else
+			      			pub.investigadores.delete(i)
+			      		end
+			      	end
+		    	end
 
-	      # origen = 'carga'
-          pub.origen = 'carga' if ['remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
-          pub.save if ['remplazar_carga', 'remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
+		    	# LLENAR IDIOMA REVISTA
+		    	if ['remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
+			        # Agrega IDIOMA -> REVISTA
+			        idio = Idioma.find_by(idioma: hash_articulo['Language'])
+			        if idio.blank?
+			        	idio = Idioma.create(idioma: hash_articulo['Language'])
+			        end
 
-          # procesa AUTORES
-          if ['remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
-				p_autores = pub.author.split(' and ')
-				p_autores.each do |aut|
-					i = Investigador.find_by(investigador: aut.strip)
-					if i.blank?
-					  i = Investigador.create(investigador: aut.strip)
+			        rev = Revista.find_by(revista: hash_articulo['Journal'])
+			        if rev.blank?
+			        	rev = Revista.create(revista: hash_articulo['Journal'], idioma_id: idio.id)
+			        end
+			        rev.publicaciones << pub
+		    	end
+
+		    	# origen = 'carga'
+	        	pub.origen = 'carga' if ['remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
+	        	pub.save if ['remplazar_carga', 'remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
+
+	        	# procesa AUTORES
+	        	if ['remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
+					p_autores = pub.author.split(' and ')
+					p_autores.each do |aut|
+						i = Investigador.find_by(investigador: aut.strip)
+						if i.blank?
+						  i = Investigador.create(investigador: aut.strip)
+						end
+		  	         	pub.investigadores << i
 					end
-	  	         	pub.investigadores << i
+
 				end
 
-		  end
+				## CARPETAS {'Carga', 'Ingreso', 'Duplicados', 'Revisar', 'Excluidas', 'Postergadas', 'Revisadas'}
+				cpt = (unicidad == 'colision_titulo' ? Carpeta.find_by(carpeta: 'Duplicados') : Carpeta.find_by(carpeta: 'Carga'))
 
-          # Agrega a Carpeta
-          cpt = Carpeta.find_by(carpeta: Carga::CARPETA_CARGA, investigador_id: session[:perfil]['id'])
-          if cpt.blank? 
-          	cpt = Carpeta.create(carpeta: Carga::CARPETA_CARGA, investigador_id: session[:perfil]['id'])
-          end
-          # Uso la condicion que que no este en las carpetas del Investigador hay que cubrir
-          # 1. Publicacion ya revisada por mi puesta en una carpeta distinta a REVISA
-          # 2. Publicacion existente ingresada por otro usuario fuera de mis carpetas
-          my_self = Investigador.find(session[:perfil]['id'])
-		  unless pub.carpetas.ids.intersection(my_self.carpetas.ids).any?
-				pub.cargas << carga 
-				pub.carpetas << cpt
-		  end
+	        	# Uso la condicion que que no este en las carpetas del Investigador hay que cubrir
+	        	# 1. Publicacion ya revisada por mi puesta en una carpeta distinta a REVISA
+	        	# 2. Publicacion existente ingresada por otro usuario fuera de mis carpetas
+	        	activo = Perfil.find(session[:perfil_activo]['id'])
+				unless pub.carpetas.ids.intersection(activo.carpetas.ids).any?
+					pub.cargas << carga 
+					pub.carpetas << cpt
+				end
 
-		  carga.estado = 'procesada'
-		  carga.save
+				n_nuevos     += 1 if unicidad == 'nuevo'
+				n_duplicados += 1 if unicidad == 'colision_titulo'
+				n_vinculados += 1 if unicidad == 'remplazar_carga'
+				n_existentes += 1 if unicidad == 'saltar'
 
-	    end
-
+		    end
+		    carga.n_procesados = n_procesados
+		    carga.n_nuevos     = n_nuevos
+		    carga.n_duplicados = n_duplicados
+		    carga.n_vinculados = n_vinculados
+		    carga.n_existentes = n_existentes
+			carga.estado = 'procesada'
+			carga.save
 		end
-
 	end
 
 	# VERIFICA CARGA
@@ -132,15 +154,7 @@ class ApplicationController < ActionController::Base
 	def unicidad_publicacion_carga(hash_articulo)
 		# VERIFICA CARGA
 		c = Publicacion.find_by(unique_id: hash_articulo['Unique-ID']) 
-		unless c.blank?
-			# LO ENCONTRÖ HAY QUE VER SI ESTÁ EN ALGUNA DE MIS CARPETAS
-			my_self = Investigador.find(session[:paerfil]['id'])
-			if p.carpetas.ids.intersection(my_self.carpetas.ids).empty?
-				'sin carpeta'
-			else
-				c.year.blank? ? 'remplazar_carga' : 'saltar'
-			end
-		else
+		if c.blank?
 			# NO ENCONTRADO EN CARGA buscamos por DOI
 			i = Publicacion.find_by(doi: hash_articulo['DOI'])
 			if i.blank? or hash_articulo['DOI'].blank?
@@ -150,6 +164,14 @@ class ApplicationController < ActionController::Base
 			else
 				# LO ENCONTRO POR DOI
 				'remplazar_doi'
+			end
+		else
+			# LO ENCONTRÖ HAY QUE VER SI ESTÁ EN ALGUNA DE MIS CARPETAS
+			activo = Perfil.find(session[:perfil_activo]['id'])
+			if c.carpetas.ids.intersection(activo.carpetas.ids).empty?
+				'sin carpeta'
+			else
+				c.year.blank? ? 'remplazar_carga' : 'saltar'
 			end
 		end
 	end

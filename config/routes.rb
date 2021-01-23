@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :perfiles
+  resources :administradores
   resources :configuraciones
   resources :autores
   resources :cargas do
@@ -68,6 +70,6 @@ Rails.application.routes.draw do
   devise_for :usuarios
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
-  root 'recursos#inicia_sesion'
+  root 'perfiles#inicia_sesion'
 
 end

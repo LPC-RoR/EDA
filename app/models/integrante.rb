@@ -1,4 +1,4 @@
 class Integrante < ApplicationRecord
-	belongs_to :investigador
+	belongs_to :perfil
 	belongs_to :equipo
 end

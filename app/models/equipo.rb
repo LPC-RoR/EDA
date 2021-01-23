@@ -4,7 +4,7 @@ class Equipo < ApplicationRecord
 	TABS = ['Administrados', 'Participaciones']
 
 	# ----------------------------------------- HIDDEN CHILDS
-	HIDDEN_CHILDS = ['integrantes']
+	HIDDEN_CHILDS = ['publicaciones', 'integrantes']
 
 	# ------------------------------------------------- TABLA
 	T_EXCEPTIONS = {
@@ -21,24 +21,38 @@ class Equipo < ApplicationRecord
 		['equipo', 'show'], 
 	]
 
+	## BOTNES EXTRA REGISTRO
+	# [0] : Nombre del boton
+	# [1] : link base, a esta base se le agrega el instancia_id
+	# [2] : Si es true se agrega "objeto_id=#{@objeto.id}"
+	X_BTNS = [
+		['Eliminar', '/equipos/', '/elimina_equipo', true]
+	]
+
 	# ------------------------------------------------- SHOW
 	SHOW_FIELDS = [
 		['investigador', 'normal'],
 		['sha1',         'normal']
 	]
 
-	SHOW_EXCEPTIONS = [:detalle]
-	F_TABLA = 'administrador'
+	S_E = [:detalle]
+	F_TABLA = 'perfil'
 
+ 	FORM_FIELDS = [
+		['equipo',             'entry'],
+		['perfil_id',         'hidden'],
+	]
 	# -------------------------------------------------- DESPLIEGUE
 	MY_FIELDS = ['sha1']
 
-	belongs_to :administrador, class_name: 'Investigador'
+	belongs_to :administrador, class_name: 'Perfil'
+
+	has_one :perfil
 
 	has_many :publicaciones
 	has_many :carpetas
 
 	has_many :integrantes
-	has_many :investigadores, through: :integrantes
+	has_many :perfiles, through: :integrantes
 
 end

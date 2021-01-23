@@ -1,4 +1,5 @@
 class ConfiguracionesController < ApplicationController
+  before_action :authenticate_usuario!
   before_action :set_configuracion, only: [:show, :edit, :update, :destroy]
 
   # GET /configuraciones
