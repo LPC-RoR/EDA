@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :ingresos
   resources :perfiles
   resources :administradores
   resources :configuraciones
@@ -37,10 +38,10 @@ Rails.application.routes.draw do
   resources :origenes
   resources :procesos
   resources :publicaciones do
-    match :mask_new, via: :get, on: :collection
-    match :mask_nuevo, via: :post, on: :collection
     match :cambia_carpeta, via: :get, on: :collection
-    match :cambia_evaluacion, via: :get, on: :collection
+    match :cambia_evaluacion, via: :get, on: :member
+    match :cambia_tipo, via: :get, on: :collection
+    match :estado, via: :get, on: :collection
     resources :textos
   end
   resources :recursos do
@@ -65,6 +66,7 @@ Rails.application.routes.draw do
     match :nuevo, via: :post, on: :collection
     match :agregar_tema, via: :post, on: :collection
     match :eliminar_tema, via: :post, on: :collection
+    match :remueve_texto, via: :get, on: :member
   end
 
   devise_for :usuarios

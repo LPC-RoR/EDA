@@ -36,11 +36,11 @@ class Configuracion < ApplicationRecord
 	# -----------------------------------------   MENÚ PRINCIPAL
 	MENU = [
 		["Publicaciones", "/publicaciones",   'publicaciones', 'index'],
-		["Manual",        "/recursos/manual", 'recursos',      'manual'],
 		["Equipos",       "/equipos",         'equipos',       'index'],
-		["Textos",        "/textos",          'textos',        'index'],
 		["Carpetas",      "/carpetas",        'carpetas',      'index'],
 		["Temas",         "/temas",           'temas',         'index'],
+		["Textos",        "/textos",          'textos',        'index'],
+		["Ingresos",      "/ingresos",        'ingresos',      'index'],
 		["Cargas",        "/cargas",          'cargas',        'index'] 
 	]
 
@@ -48,7 +48,7 @@ class Configuracion < ApplicationRecord
 	M_E_CONTROLLERS = ['confirmations', 'mailer', 'passwords', 'registrations', 'sessions', 'unlocks']
 
 	# ITEMS de MENU que requieren USUARIO AUTENTICADO
-	M_I_SIGN_IN = ['Publicaciones', 'Manual', 'Equipos', 'Textos', 'Carpetas', 'Temas', 'Cargas']
+	M_I_SIGN_IN = ['Publicaciones', 'Ingresos', 'Equipos', 'Textos', 'Carpetas', 'Temas', 'Cargas']
 	# ITEMS de MENU que requieren USUARIO AUTENTICADO ADMINISTRATIVO
 	M_I_ADMIN = []
 	# ITEMS de MENU para TODO USUARIO (ANONIMO INCLUIDO)
@@ -61,20 +61,21 @@ class Configuracion < ApplicationRecord
 	# Cuando se aplica a un SHOW, las colecciones que se despliegan en él son PROPIAS
 	COLECCIONES_PROPIAS = [
 		'publicaciones#index',
-		'recursos#manual',
+		'ingresos#index',
 		'equipos#index',
 		'carpetas#index',
 		'temas#index',
 		'cargas#index',
 		'cargas#show',
 		'carpetas#show'
+#		'publicaciones#show' # evaluando funcionamiento de botones de 'textos'
 	]
 
 	# -----------------------------------------   COLECCIONES PROPIAS
 	# OBJETO_PROPIO = Objeto que se puede gestionar en libertad
 	OBJETOS_PROPIOS = [
 		'carpetas#show',
-		'temas#show',
+#		'temas#show',
 		'cargas#show'
 	]
 
@@ -113,7 +114,7 @@ class Configuracion < ApplicationRecord
 	# Estos son los CONTROLADORES que tienen EXCEPCIONES
 	# Buscar Modelo::T_EXCEPTIONS
 	# USADA SOLO POR in_t? para saber donde buscar Excepciones
-	T_E_CONTROLLERS = ['publicaciones', 'textos', 'recursos', 'equipos']
+	T_E_CONTROLLERS = ['publicaciones', 'textos', 'ingresos', 'equipos']
 	# Buscar Modelo::T_EXCEPTIONS
 	# T_EXCEPTIONS = {
 	#	tabs:    ['self'],
@@ -134,10 +135,13 @@ class Configuracion < ApplicationRecord
 	# -----------------------------------------   CONTROL DE DESPLIEGUE DE BOTONES
 	# Botones con despliegue condicional
 	# Buscar MODELO.btns_control, este método controla el despliegue 
-	T_E_LINE_BTNS_MODELS = [] 
+	T_E_LINE_BTNS_MODELS = ['Publicacion', 'Carpeta'] 
+
 	# DEFINICION DE BOTONES ADICIONALES
-	T_E_ADDITIONAL_BTNS_MODEL = ['Equipo', 'Carga']
-	# Byscar en MODELO::X_BTNS
+	T_E_ADDITIONAL_BTNS_MODEL = ['Equipo', 'Carga', 'Texto']
+	# Buscar en MODELO::X_BTNS
+	T_E_X_BTNS_CONDITIONALS_MODEL = ['Texto']
+	# Buscar en NODELO::X_BTNS_CONDITIONS
 
 	## *****************************************************************************************************
 	# -----------------------------------------   FORM
@@ -148,7 +152,7 @@ class Configuracion < ApplicationRecord
 	# -----------------------------------------   SHOW
 	# MODELOS que teiene EXCEPCIONES
 	# Buscar Modelo::S_E
-	S_E_MODELS = ['Publicacion', 'Texto', 'Equipo']
+	S_E_MODELS = ['Publicacion', 'Equipo']
 	# Excepción en el TITULO
 	S_E_TITLE_MODELS = ['Publicacion', 'Carga']
 	# Modelos que tienen STATUS para desplegar en el SHOW

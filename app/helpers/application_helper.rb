@@ -52,6 +52,8 @@ module ApplicationHelper
 			'publicaciones'
 		when 'hijos'
 			'conceptos'
+		when 'ingresos'
+			'publicaciones'
 		else
 			controller
 		end
@@ -183,7 +185,7 @@ module ApplicationHelper
 	# Método de apoyo usado en get_new_link (arriba)
 	def f_controller(controller)
 		case controller
-		when 'contribuciones'
+		when 'ingresos'
 			'publicaciones'
 		else
 			controller
@@ -295,7 +297,6 @@ module ApplicationHelper
 	def x_btns?(objeto)
 		Configuracion::T_E_ADDITIONAL_BTNS_MODEL.include?(objeto.class.name)
 	end
-
 
 	def text_with_badge(text, badge_value=nil)
 	    badge = content_tag :span, badge_value, class: 'badge badge-primary badge-pill'

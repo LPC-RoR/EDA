@@ -14,7 +14,7 @@ class Perfil < ApplicationRecord
 	has_many :temas	
 	has_many :carpetas
 	has_many :cargas
-	has_many :contribuciones, class_name: 'Publicacion'
+	has_many :ingresos, class_name: 'Publicacion'
 	has_many :evaluaciones
 
 	has_many :integrantes

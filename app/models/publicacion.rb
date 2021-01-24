@@ -34,7 +34,7 @@ class Publicacion < ApplicationRecord
 	T_EXCEPTIONS = {
 		titulo:    ['self'],
 		paginas: ['*'],
-		nuevo:   ['self', 'contribuciones', 'recursos', 'equipos']
+		nuevo:   ['self', 'ingresos', 'equipos']
 	}
 
 	# Campos qeu se despliegan en la tabla
@@ -99,7 +99,7 @@ class Publicacion < ApplicationRecord
 		['doi',             'normal']
 	]
 
-	S_E = [:clasifica, :detalle, :tabla, :inline_form]
+	S_E = [:clasifica, :detalle, :inline_form]
 
 	# LINKS !!
 	S_BT_LINKS_OBJECTS = ['Revista']
@@ -140,24 +140,23 @@ class Publicacion < ApplicationRecord
 		self.title
 	end
 
+	## 1.- Ingresos: Publicar, Corregir, Papelera, Eliminar, Editar
 	def show_links
 		[
 			['Editar',     [:edit, self], self.origen == 'ingreso'],
 			['Papelera',   "/publicaciones/estado?publicacion_id=#{self.id}&estado=papelera",     ['ingreso', 'duplicado', 'carga', 'formato', 'contribucion'].include?(self.estado)],
 			['Eliminar',   "/publicaciones/estado?publicacion_id=#{self.id}&estado=eliminado",    ['papelera'].include?(self.estado)],
-			['Contribuir', "/publicaciones/estado?publicacion_id=#{self.id}&estado=contribucion", ['ingreso'].include?(self.estado)],
-			['Publicar',   "/publicaciones/estado?publicacion_id=#{self.id}&estado=publicada",    (['contribucion', 'carga', 'duplicado', 'formato'].include?(self.estado) and not (self.doc_type.blank? or self.areas.empty?))],
+			['Publicar',   "/publicaciones/estado?publicacion_id=#{self.id}&estado=publicada",    (['ingreso'].include?(self.estado) and self.title.present? and self.author.present? and self.journal.present?)],	
 			['Carga',      "/publicaciones/estado?publicacion_id=#{self.id}&estado=carga",        (['publicado', 'papelera'].include?(self.estado) and self.origen == 'carga')],
 			['Ingreso',    "/publicaciones/estado?publicacion_id=#{self.id}&estado=ingreso",        (['publicado', 'papelera'].include?(self.estado) and self.origen == 'ingreso')],
 			['Múltiple',   "/publicaciones/estado?publicacion_id=#{self.id}&estado=multiple",     self.estado == 'duplicado'],
-			['Corrección', "/publicaciones/estado?publicacion_id=#{self.id}&estado=correccion",   self.estado == 'publicada']
+			['Corrección', "/publicaciones/estado?publicacion_id=#{self.id}&estado=correccion",   (self.estado == 'publicada' and self.origen == 'ingreso' and self.textos.empty?)]
 		]
 		
 	end
 
-	# REVISAR DEJAMOS EL ANTIGUO POR SI ACASO ES UTIL
 	def btns_control
-		['ingreso'].include?(self.origen) and ['ingreso'].include?(self.estado)
+		self.origen == 'ingreso'
 	end
 	# ANTIGUO
 #	def btns_control
@@ -267,9 +266,9 @@ class Publicacion < ApplicationRecord
 		['carga', 'ingreso', 'duplicado', 'formato'].include?(self.estado)
 	end
 	def c_ciudad_pais
-		self.origen == 'ingreso'
+		self.origen == 'ingreso' and self.estado == 'ingreso'
 	end
 	def c_journal
-		self.origen == 'ingreso'
+		self.origen == 'ingreso' and self.estado == 'ingreso'
 	end
 end

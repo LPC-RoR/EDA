@@ -1,6 +1,6 @@
 class TextosController < ApplicationController
   before_action :authenticate_usuario!
-  before_action :set_texto, only: [:show, :edit, :update, :destroy]
+  before_action :set_texto, only: [:show, :edit, :update, :destroy, :remueve_texto]
 
   # GET /textos
   # GET /textos.json
@@ -11,6 +11,16 @@ class TextosController < ApplicationController
   # GET /textos/1
   # GET /textos/1.json
   def show
+    if params[:html_options].blank?
+      @tab = 'publicaciones'
+    else
+      @tab = params[:html_options][:tab].blank? ? 'publicaciones' : params[:html_options][:tab]
+    end
+#    @estado = params[:estado].blank? ? @tab.classify.constantize::ESTADOS[0] : params[:estado]
+    # tenemos que cubrir todos los casos
+    # 1. has_many : }
+    @coleccion = @objeto.send(@tab).page(params[:page]) #.where(estado: @estado)
+    @options = {'tab' => @tab}
   end
 
   # GET /textos/new
@@ -27,7 +37,7 @@ class TextosController < ApplicationController
     @publicacion  = Publicacion.find(params[:publicacion_id])
 
     unless params[:texto_base][:texto].strip.blank? or params[:texto_base][:tema_id].blank?
-      @texto_limpio = params[:texto_base][:texto].strip
+      @texto_limpio = params[:texto_base][:texto].strip.downcase
       @sha1         = Digest::SHA1.hexdigest(@texto_limpio)
       @tema         = Tema.find(params[:texto_base][:tema_id])
 
@@ -102,6 +112,14 @@ class TextosController < ApplicationController
       format.html { redirect_to textos_url, notice: 'Texto was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def remueve_texto
+    @publicacion = Publicacion.find(params[:objeto_id])
+    @publicacion.textos.delete(@objeto)
+    @objeto.delete if @objeto.publicaciones.count == 0
+
+    redirect_to @publicacion
   end
 
   private

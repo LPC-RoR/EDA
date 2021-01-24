@@ -176,6 +176,85 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
+	## IDENTICO A UNO EN CVCH
+	# este método procesa Autores, Investigadores y Revistas de una publicación
+	def procesa_ingreso(objeto)
+
+		# Procesa Autores
+		authors = []
+		last_author = objeto.author.split('&').last
+		prev_authors = objeto.author.split('&')[0].split(',')
+		prev_authors.each_with_index  do |val, index|
+			# Encontramos un caso donde sólo se usa el apellido
+			if val.split(' ').length == 1
+				author_with_format = val.strip
+			else
+				author_with_format = (index == 0 ? (val.split(' ')[1]+' '+val.split(' ')[0]) : val.strip)
+			end
+			authors << author_with_format
+		end
+		authors << last_author unless last_author == objeto.author
+
+		authors.each do |aut|
+			inv = Investigador.find_by(investigador: aut)
+			if inv.blank?
+				inv = Investigador.create(investigador: aut)
+			end
+			objeto.investigadores << inv unless objeto.investigadores.ids.include?(inv.id)
+		end
+
+		# Procesa Revista
+		# Se usa 'd_journal' porque en Publicacion sólo se usa revista_id
+		rev = Revista.find_by(revista: objeto.journal)
+		if rev.blank?
+			rev = Revista.create(revista: objeto.journal)
+		end
+		rev.publicaciones << objeto
+	
+	end
+
+	## IDENTICO A UNO EN CVCH
+	# Limpia el autor de elementos que no deben estar en el campo
+	def limpia_autor_ingreso(autor)
+		# Limpia el autor sacando los catacteres que no están
+		autor_limpio = ''
+		autor.strip.split('').each do |c|
+			if !!c.match(/[a-zA-ZáéíóúàèìòùäëïöüñÁÉÍÓÚÀÈÌÒÙÄËÏÖÜÑ\.;\-,&\s]/)
+				autor_limpio += c
+			end
+		end
+		autor_limpio = autor_limpio.strip
+
+		autor_con_coma = autor_limpio.split(';').join(',').split(' and ').join(',').split('&').join(',')
+
+		elementos = autor_con_coma.split(',').map {|cc| cc.split('.').join('').strip}
+
+		autores = []
+		# SACA LOS ELEMENTOS QUE SON CARACTERES O VACIOS
+		elementos.each do |a|
+			unless a.strip.split(' ').length < 2
+				partes = a.strip.split(' ')
+				if partes.last.length == 1
+					partes.pop
+					autores << partes.join(' ')
+				else
+					autores << a
+				end
+			end
+		end
+
+		last = autores.last
+		autores.pop
+		case autores.length
+		when 0
+			last
+		when 1
+			autores[0]+' & '+last
+		else
+			autores.join(', ')+' & '+last
+		end
+	end
+
 	# PROCESA EDITORIAL (INGRESO)
 	def procesa_editorial(detalle_editorial)
 		if !!detalle_editorial.match(/^(?<journal>[a-zA-Z\s]*) \((?<year>\d{4})\) (?<volume>\d*), (?<pages>\d*–\d*)/)

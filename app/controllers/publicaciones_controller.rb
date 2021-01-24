@@ -1,6 +1,11 @@
 class PublicacionesController < ApplicationController
   before_action :authenticate_usuario!
-  before_action :set_publicacion, only: [:show, :edit, :update, :destroy]
+  before_action :set_publicacion, only: [:show, :edit, :update, :destroy, :cambia_evaluacion]
+
+  after_action :procesa_author, only: [:update, :create]
+  after_action :procesa_journal, only: [:update, :create]
+  after_action :procesa_estado, only: [:update, :create]
+  after_action :procesa_doi, only: [:update, :create]
 
   # GET /publicaciones
   # GET /publicaciones.json
@@ -83,74 +88,21 @@ class PublicacionesController < ApplicationController
       @carpetas_destino  = Carpeta.where(id: @ids_carpetas_tema - @ids_actual_tema)
     end
 
-#    @tab = 'instancias'
-#    @tl_coleccion = @objeto.instancias
-#    @options = {'tab' => @tab}
-      
-
-#    @tab = params[:tab].blank? ? 'textos' : params[:tab]
-#    @estado = params[:estado].blank? ? @tab.classify.constantize::ESTADOS[0] : params[:estado]
-    # tenemos que cubrir todos los casos
     # 1. has_many : }
-#    @coleccion = @objeto.send(@tab).page(params[:page]) #.where(estado: @estado)
+    if params[:html_options].blank?
+      @tab = 'textos'
+    else
+      @tab = params[:html_options][:tab].blank? ? 'textos' : params[:html_options][:tab]
+    end
+    @coleccion = @objeto.send(@tab)
+    @options = {'tab' => @tab}
 
   end
 
   # GET /publicaciones/new
   def new
-    @objeto = Publicacion.new
-  end
-
-  def mask_new
-    @origen = params[:origen]
-  end
-  def mask_nuevo
-    @origen = params[:origen] == 'equipos' ? 'Produccion' : 'Manual'
-
-    # TITULO
-    @title = params[:m_params][:title].strip
-    # AUTORES
-    @author = procesa_autores(params[:m_params][:author].strip)
-    # REVISTA
-    @revista = procesa_editorial(params[:m_params][:journal])[:journal].strip
-    @r = Revista.find_by(revista: @revista)
-    if @r.blank?
-      @r = Revista.create(revista: @revista)
-    end
-
-    @journal_id = @r.id
-    # VOLUMEN
-    @volume = procesa_editorial(params[:m_params][:journal])[:volume].strip
-    # YEAR
-    @year = procesa_editorial(params[:m_params][:journal])[:year].strip
-    # PAGES
-    @pages = procesa_editorial(params[:m_params][:journal])[:pages].strip
-    # DOI
-    @doi = params[:m_params][:doi].strip
-    # ABSTRACT
-    @abstract = params[:m_params][:abstract].strip
-    @objeto = Publicacion.create(origen: @origen, title: @title, author: @author, revista_id: @journal_id, volume: @volume, year: @year, pages: @pages, doi: @doi, abstract: @abstract)
-    # Procesa AUTORES
-    @investigadores = @author.split(' & ')
-    @investigadores.each do |i|
-      @i = Investigador.find_by(investigador: i)
-      if @a.blank?
-        @i = Investigador.create(investigador: i)
-      end
-      @objeto.investigadores << @i
-    end
-    # A Publicaciones del Equipo : equipo#show si origen == 'equipos'
-    # A recursos#tablas si origen == 'recursos'
-    if @origen == 'equipos'
-      @equipo = Equipo.find(session[:equipo_id])
-      @equipo.publicaciones << @objeto
-      redirect_to @equipo
-    elsif @origen == 'Manual'
-      @investigador = Investigador.find(params[:perfil]['id'])
-      @carpeta = @investigador.carpetas.find_by(carpeta: 'Revisar')
-      @carpeta.publicaciones << @objeto
-      redirect_to "/recursos/tablas"
-    end
+    @activo = Perfil.find(session[:perfil_activo]['id'])
+    @objeto = @activo.ingresos.new(origen: 'ingreso', estado: 'ingreso')
   end
 
   # GET /publicaciones/1/edit
@@ -164,7 +116,8 @@ class PublicacionesController < ApplicationController
 
     respond_to do |format|
       if @objeto.save
-        format.html { redirect_to @objeto, notice: 'Publicacion was successfully created.' }
+        set_redireccion
+        format.html { redirect_to @redireccion, notice: 'Publicacion was successfully created.' }
         format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
@@ -178,7 +131,8 @@ class PublicacionesController < ApplicationController
   def update
     respond_to do |format|
       if @objeto.update(publicacion_params)
-        format.html { redirect_to @objeto, notice: 'Publicacion was successfully updated.' }
+        set_redireccion
+        format.html { redirect_to @redireccion, notice: 'Publicacion was successfully updated.' }
         format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
@@ -205,7 +159,7 @@ class PublicacionesController < ApplicationController
     case params[:html_options][:origen]
     when 'actuales'
       # En este caso sólo tienen link las carpetas tema y lo único que hay que hacer es eliminarlas
-      @objeto.carpetas.delete(@carpeta)
+      @objeto.carpetas.delete(@carpeta) unless @objeto.carpetas.count == 1
     when 'destinos'
       if @ids_carpetas_base.include?(params[:html_options][:carpeta_id].to_i)
         @cars = Carpeta.where(id: @ids_actual_base)
@@ -220,38 +174,197 @@ class PublicacionesController < ApplicationController
 
   end
 
+  def cambia_tipo
+    @publicacion = Publicacion.find(params[:publicacion_id])
+    @publicacion.doc_type = params[:doc_type]
+    @publicacion.save
+
+    redirect_to @publicacion
+  end
+
   def cambia_evaluacion
     @activo = Perfil.find(session[:perfil_activo]['id'])
-    @publicacion = Publicacion.find(params[:publicacion_id])
-    @evaluacion = @publicacion.evaluaciones.find_by(aspecto: params[:item], perfil_id: @activo.id)
+#    @objeto = Publicacion.find(params[:publicacion_id])
+
+    @evaluacion = @objeto.evaluaciones.find_by(aspecto: params[:item], perfil_id: @activo.id)
     if @evaluacion.blank?
-      @publicacion.evaluaciones.create(aspecto: params[:item], evaluacion: params[:evaluacion], perfil_id: @activo.id)
+      @objeto.evaluaciones.create(aspecto: params[:item], evaluacion: params[:evaluacion], perfil_id: @activo.id)
     else
       @evaluacion.evaluacion = params[:evaluacion]
       @evaluacion.save
     end
-    redirect_to @publicacion
+    redirect_to @objeto
     
+  end
+
+  def estado
+    @activo = Perfil.find(session[:perfil_activo]['id'])
+    @publicacion = Publicacion.find(params[:publicacion_id])
+
+    if params[:estado] == 'eliminado'
+      # Tiene dos has_many Through
+      # 1.- cargas, through: procesos
+      # 2.- areas, through: asignaciones
+      @area = @publicacion.areas.first
+      @carga = @publicacion.cargas.first if @publicacion.origen == 'carga'
+      @area.papers.delete(@publicacion) unless @area.blank?
+      unless @carga.blank?
+        @carga.publicaciones.delete(@publicacion) if @publicacion.origen == 'carga'
+      end
+      @publicacion.delete
+    elsif params[:estado] == 'correccion'
+      if @publicacion.perfil.id == session[:perfil_activo]['id']
+        # Sólo se procesan publicaciones 'ingreso' propias
+        @publicacion.estado = 'ingreso'
+        @publicacion.unicidad = 'unico'
+        @publicacion.save
+        # Hay que asegurarse que sacamos la publicación Sólo de nuestras carpetas
+        carpetas_ids = @publicacion.carpetas.ids.intersection(@activo.carpetas.ids)
+        carpetas_ids.each do |car_id|
+          carpeta_a_limpiar = Carpeta.find(car_id)
+          @publicacion.carpetas.delete(carpeta_a_limpiar)
+        end
+
+        investigadores_ids = @publicacion.investigadores.ids
+        investigadores_ids.each do |inv_id|
+          inv = Investigador.find(inv_id)
+          @publicacion.investigadores.delete(inv)
+          unless inv.publicaciones.any?
+            inv.delete
+          end
+        end
+        revista = @publicacion.revista
+        revista.publicaciones.delete(@publicacion)
+        if revista.publicaciones.count == 0
+          revista.delete
+        end
+
+        @publicacion.evaluaciones.delete_all
+      end
+    elsif params[:estado] == 'multiple'
+      @publicacion.estado = 'publicada'
+      @publicacion.unicidad = 'multiple'
+      @publicacion.save
+    else
+      @publicacion.estado = params[:estado]
+      @publicacion.save
+    end
+
+    if @publicacion.estado == 'publicada'
+      # Publicamos las publicaciones INGRESO
+      procesa_ingreso(@publicacion)
+      @publicacion.estado = 'publicada'
+      @publicacion.save
+
+      carpeta_ingreso = @activo.carpetas.find_by(carpeta: 'Ingreso')
+      carpeta_ingreso.publicaciones << @publicacion
+    end
+
+    redirect_to (@publicacion.origen == 'ingreso' ? @publicacion : publicaciones_path)
   end
 
   # DELETE /publicaciones/1
   # DELETE /publicaciones/1.json
   def destroy
+    set_redireccion
     @objeto.destroy
     respond_to do |format|
-      format.html { redirect_to publicaciones_url, notice: 'Publicacion was successfully destroyed.' }
+      format.html { redirect_to @redireccion, notice: 'Publicacion was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    def procesa_author
+      if @objeto.d_author.present?
+        @objeto.author = limpia_autor_ingreso(@objeto.d_author)
+        @objeto.save
+      end
+    end
+
+    def procesa_sha1
+      unless @objeto.title.blank?
+        @t_sha1 = Digest::SHA1.hexdigest(@objeto.title.downcase)
+        unless @objeto.t_sha1 == @t_sha1
+          @objeto.t_sha1 = @t_sha1
+          @objeto.save
+        end
+      end
+    end
+
+    def procesa_journal
+      # Puede estar el volumen antes o despues del año
+      if @objeto.d_journal.present?
+        match_year = @objeto.d_journal.strip.match(/(?<anterior>[^\(]*) \((?<year>\d{4})\) (?<siguiente>.*)/)
+        anterior = match_year[:anterior].strip
+        siguiente = match_year[:siguiente].strip
+        if !!anterior.match(/\d+/)
+          # la revista tienen el volumen
+          match_journal_volume = anterior.strip.match(/(?<journal>\D*) (?<volume>\d*)/)
+          @objeto.journal = match_journal_volume[:journal].strip
+          @objeto.volume = match_journal_volume[:volume].strip
+          @objeto.pages = siguiente
+        else
+          @objeto.journal = anterior
+
+          if siguiente.split(':').length == 2
+            @objeto.volume = siguiente.split(':')[0].strip
+            @objeto.pages = siguiente.split(':')[1].strip
+          elsif siguiente.split(',').length == 2
+            @objeto.volume = siguiente.split(',')[0].strip
+            @objeto.pages = siguiente.split(',')[1].strip
+          else
+            @objeto.volume = ''
+            @objeto.pages = siguiente
+          end
+        end
+        @objeto.year = match_year[:year]
+
+        @objeto.save
+      end
+    end
+
+    def procesa_estado
+      procesa_sha1
+      @duplicados_doi_ids = @objeto.doi.present? ? (Publicacion.where(doi: @objeto.doi).ids - [@objeto.id]) : []
+      @duplicados_t_sha1_ids = @objeto.title.present? ? (Publicacion.where(t_sha1: @objeto.t_sha1).ids - [@objeto.id]) : []
+
+      @duplicados_ids = @duplicados_doi_ids.union(@duplicados_t_sha1_ids)
+
+      if @duplicados_ids.empty?
+        if @objeto.estado == 'duplicado'
+          @objeto.estado = @objeto.origen == 'carga' ? 'carga' : 'contribucion'
+          @objeto.save
+        end
+      else
+        if @objeto.unicidad == 'multiple'
+          @objeto.estado = @objeto.origen == 'carga' ? 'carga' : 'contribucion'
+        else
+          @objeto.estado = 'duplicado'
+        end
+        @objeto.save
+      end
+    end
+
+    def procesa_doi
+      if @objeto.d_doi.present?
+        primer_filtro_doi = @objeto.d_doi.strip.delete_prefix('DOI').delete_prefix('doi:').strip
+        @objeto.doi = !!primer_filtro_doi.match(/doi.org/) ? primer_filtro_doi.strip.split('doi.org/')[1] : primer_filtro_doi
+        @objeto.save
+      end
+    end
+
     def set_publicacion
       @objeto = Publicacion.find(params[:id])
     end
 
+    def set_redireccion
+      @redireccion = @objeto
+    end
+
     # Only allow a list of trusted parameters through.
     def publicacion_params
-      params.require(:publicacion).permit(:titulo, :detalle_autores, :detalle_revista, :keywords, :detalle_instituciones, :fechas, :doi, :annio, :paginas, :link, :abstract, :registro_id, :revista_id)
+      params.require(:publicacion).permit(:unique_id, :origen, :title, :author, :doi, :year, :volume, :pages, :month, :publisher, :abstract, :link, :author_email, :issn, :eissn, :address, :affiliation, :article_number, :keywords, :keywords_plus, :research_areas, :web_of_science_categories, :da, :d_journal, :d_author, :d_doi, :registro_id, :revista_id, :equipo_id, :investigador_id, :academic_degree, :estado, :book, :doc_type, :editor, :ciudad_pais, :journal, :perfil_id)
     end
 end
