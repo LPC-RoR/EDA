@@ -140,11 +140,12 @@ class Publicacion < ApplicationRecord
 		self.title
 	end
 
-	## 1.- Ingresos: Publicar, Corregir, Papelera, Eliminar, Editar
+	## 1.- Ingresos: Publicar, Correccion, Papelera, Eliminar, Editar, REVISAR Múltiple
+	## 2.- SIN USO: Carga, Ingreso
 	def show_links
 		[
 			['Editar',     [:edit, self], self.origen == 'ingreso'],
-			['Papelera',   "/publicaciones/estado?publicacion_id=#{self.id}&estado=papelera",     ['ingreso', 'duplicado', 'carga', 'formato', 'contribucion'].include?(self.estado)],
+			['Papelera',   "/publicaciones/estado?publicacion_id=#{self.id}&estado=papelera",     (['ingreso', 'duplicado'].include?(self.estado) and self.origen = 'ingreso')],
 			['Eliminar',   "/publicaciones/estado?publicacion_id=#{self.id}&estado=eliminado",    ['papelera'].include?(self.estado)],
 			['Publicar',   "/publicaciones/estado?publicacion_id=#{self.id}&estado=publicada",    (['ingreso'].include?(self.estado) and self.title.present? and self.author.present? and self.journal.present?)],	
 			['Carga',      "/publicaciones/estado?publicacion_id=#{self.id}&estado=carga",        (['publicado', 'papelera'].include?(self.estado) and self.origen == 'carga')],

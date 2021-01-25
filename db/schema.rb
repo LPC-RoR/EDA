@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_21_021653) do
+ActiveRecord::Schema.define(version: 2021_01_24_233041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,10 +78,21 @@ ActiveRecord::Schema.define(version: 2021_01_21_021653) do
     t.datetime "updated_at", null: false
     t.integer "publicacion_id"
     t.integer "tema_id"
+    t.string "clasificacion"
     t.index ["carpeta_id"], name: "index_clasificaciones_on_carpeta_id"
+    t.index ["clasificacion"], name: "index_clasificaciones_on_clasificacion"
     t.index ["publicacion_id"], name: "index_clasificaciones_on_publicacion_id"
     t.index ["tema_id"], name: "index_clasificaciones_on_tema_id"
     t.index ["texto_id"], name: "index_clasificaciones_on_texto_id"
+  end
+
+  create_table "coautores", force: :cascade do |t|
+    t.integer "proyecto_id"
+    t.integer "perfil_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["perfil_id"], name: "index_coautores_on_perfil_id"
+    t.index ["proyecto_id"], name: "index_coautores_on_proyecto_id"
   end
 
   create_table "departamentos", force: :cascade do |t|
@@ -113,6 +124,15 @@ ActiveRecord::Schema.define(version: 2021_01_21_021653) do
     t.index ["aspecto"], name: "index_evaluaciones_on_aspecto"
     t.index ["perfil_id"], name: "index_evaluaciones_on_perfil_id"
     t.index ["publicacion_id"], name: "index_evaluaciones_on_publicacion_id"
+  end
+
+  create_table "herencias", force: :cascade do |t|
+    t.integer "tema_id"
+    t.integer "proyecto_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["proyecto_id"], name: "index_herencias_on_proyecto_id"
+    t.index ["tema_id"], name: "index_herencias_on_tema_id"
   end
 
   create_table "idiomas", force: :cascade do |t|
@@ -180,6 +200,17 @@ ActiveRecord::Schema.define(version: 2021_01_21_021653) do
     t.datetime "updated_at", null: false
     t.index ["carga_id"], name: "index_procesos_on_carga_id"
     t.index ["publicacion_id"], name: "index_procesos_on_publicacion_id"
+  end
+
+  create_table "proyectos", force: :cascade do |t|
+    t.string "proyecto"
+    t.string "sha1"
+    t.integer "administrador_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["administrador_id"], name: "index_proyectos_on_administrador_id"
+    t.index ["proyecto"], name: "index_proyectos_on_proyecto"
+    t.index ["sha1"], name: "index_proyectos_on_sha1"
   end
 
   create_table "publicaciones", force: :cascade do |t|

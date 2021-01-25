@@ -162,6 +162,9 @@ GEM
     nokogiri (1.10.10-x86-mingw32)
       mini_portile2 (~> 2.4.0)
     orm_adapter (0.5.0)
+    passenger (6.0.7)
+      rack
+      rake (>= 0.8.1)
     pg (1.2.3)
     pg (1.2.3-x64-mingw32)
     pg (1.2.3-x86-mingw32)
@@ -293,6 +296,7 @@ DEPENDENCIES
   kaminari
   listen (>= 3.0.5, < 3.2)
   mini_racer
+  passenger (>= 5.0.25)
   pg
   puma (~> 3.11)
   rails (~> 5.2.4, >= 5.2.4.4)

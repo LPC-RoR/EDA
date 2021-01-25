@@ -1,0 +1,8 @@
+</br>
+<%= form_for :nuevo_proyecto, url: "/proyectos/nuevo?tab=#{@tab}" do |form| %>
+	<div class='form-inline'>
+		<%= form.text_field(:proyecto, size: 129, class: 'form-control' ) %>
+		<%= form.submit '+ Proyecto'  %>
+	</div>
+<% end  %>
+</br>

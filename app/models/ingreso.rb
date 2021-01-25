@@ -4,6 +4,10 @@ class Ingreso < ApplicationRecord
 		'index'      => 'Ingresos'
 	}
 
+	FRAME_TABS = {
+		'index' => ['ingreso', 'duplicado', 'papelera']
+	}
+
 	FRAME_ACTIONS_TYPE = {
 		'index'     => 'tabla'
 #		'parametros' => 'valor'

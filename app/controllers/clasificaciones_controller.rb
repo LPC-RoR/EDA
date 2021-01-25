@@ -1,6 +1,6 @@
 class ClasificacionesController < ApplicationController
   before_action :authenticate_usuario!
-  before_action :set_clasificacion, only: [:show, :edit, :update, :destroy]
+  before_action :set_clasificacion, only: [:show, :edit, :update, :destroy, :clasifica]
 
   # GET /clasificaciones
   # GET /clasificaciones.json
@@ -50,6 +50,14 @@ class ClasificacionesController < ApplicationController
         format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def clasifica
+    @tema = Tema.find(params[:objeto_id])
+    @objeto.clasificacion = params[:clasificacion]
+    @objeto.save
+
+    redirect_to @tema
   end
 
   # DELETE /clasificaciones/1

@@ -202,15 +202,6 @@ class PublicacionesController < ApplicationController
     @publicacion = Publicacion.find(params[:publicacion_id])
 
     if params[:estado] == 'eliminado'
-      # Tiene dos has_many Through
-      # 1.- cargas, through: procesos
-      # 2.- areas, through: asignaciones
-      @area = @publicacion.areas.first
-      @carga = @publicacion.cargas.first if @publicacion.origen == 'carga'
-      @area.papers.delete(@publicacion) unless @area.blank?
-      unless @carga.blank?
-        @carga.publicaciones.delete(@publicacion) if @publicacion.origen == 'carga'
-      end
       @publicacion.delete
     elsif params[:estado] == 'correccion'
       if @publicacion.perfil.id == session[:perfil_activo]['id']
@@ -334,12 +325,12 @@ class PublicacionesController < ApplicationController
 
       if @duplicados_ids.empty?
         if @objeto.estado == 'duplicado'
-          @objeto.estado = @objeto.origen == 'carga' ? 'carga' : 'contribucion'
+          @objeto.estado = @objeto.origen == 'carga' ? 'carga' : 'ingreso'
           @objeto.save
         end
       else
         if @objeto.unicidad == 'multiple'
-          @objeto.estado = @objeto.origen == 'carga' ? 'carga' : 'contribucion'
+          @objeto.estado = @objeto.origen == 'carga' ? 'carga' : 'ingreso'
         else
           @objeto.estado = 'duplicado'
         end

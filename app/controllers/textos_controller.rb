@@ -36,7 +36,7 @@ class TextosController < ApplicationController
     # se pone fuera para saber donde redireccionar
     @publicacion  = Publicacion.find(params[:publicacion_id])
 
-    unless params[:texto_base][:texto].strip.blank? or params[:texto_base][:tema_id].blank?
+    unless params[:texto_base][:texto].strip.blank? or params[:texto_base][:tema_id].blank? or params[:texto_base][:clasificacion].blank?
       @texto_limpio = params[:texto_base][:texto].strip.downcase
       @sha1         = Digest::SHA1.hexdigest(@texto_limpio)
       @tema         = Tema.find(params[:texto_base][:tema_id])
@@ -45,7 +45,15 @@ class TextosController < ApplicationController
       if @texto.blank?
         @texto = Texto.create(texto: @texto_limpio, sha1: @sha1)
       end
-      @tema.textos << @texto
+      # los téxtos son únicos, por lo que NO tiene sentido permitir duplicados
+      unless @tema.textos.ids.include?(@texto.id)
+        @tema.textos << @texto
+      end
+      # Si YA EXISTÍA la relación, actualiza la clasificación, privilegia el útlimo criterio
+      @clasificacion = @tema.clasificaciones.find_by(texto_id: @texto.id)
+      @clasificacion.clasificacion = params[:texto_base][:clasificacion]
+      @clasificacion.save
+
       # Evita duplicados
       unless @texto.publicaciones.ids.include?(@publicacion.id)
         @publicacion.textos << @texto

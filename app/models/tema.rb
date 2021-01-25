@@ -1,6 +1,6 @@
 class Tema < ApplicationRecord
 	# ----------------------------------------- HIDDEN CHILDS
-	HIDDEN_CHILDS = ['clasificaciones']
+	HIDDEN_CHILDS = ['textos', 'herencias']
 
 	# ------------------- TABLA -----------------------
 
@@ -15,11 +15,12 @@ class Tema < ApplicationRecord
 		['perfil_id',       'hidden']
 	]
 
-	# --------------------------------------- DESPLIEGUE
-
 	belongs_to :perfil
 
 	has_many :clasificaciones
 	has_many :textos, through: :clasificaciones
+
+	has_many :herencias
+	has_many :proyectos, through: :herencias
 
 end

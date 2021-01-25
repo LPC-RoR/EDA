@@ -8,8 +8,8 @@
 	<% end %>
 	<% if x_btns?(objeto) %>
 		<% objeto.class::X_BTNS.each do |btn| %>
-			<% unless Configuracion::T_E_X_BTNS_CONDITIONALS_MODEL.include?(objeto.class.name) and not objeto.x_btns_conditions(btn[0], controller_name, action_name) %>
-				<%= render partial: '0p/general/btn_w_html_options', locals: {texto: btn[0], link: "#{btn[1]}#{objeto.id}#{btn[2]}?#{"&objeto_id=#{@objeto.id if @objeto.present?}" if btn[3]}", delete: false} %>
+			<% if ((not Configuracion::T_E_X_BTNS_CONDITIONALS_MODEL.include?(objeto.class.name)) or objeto.x_btns_conditions(btn[0],controller_name, action_name)) %>
+				<%= render partial: '0p/general/btn_w_html_options', locals: {texto: btn[0], link: "#{btn[1]}#{objeto.id}#{btn[2]}#{!!btn[2].match(/\?+/) ? '&' : '?'}#{"objeto_id=#{@objeto.id if @objeto.present?}" if btn[3]}", delete: false} %>
 			<% end %>
 		<% end %>
 	<% end %>

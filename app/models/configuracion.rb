@@ -37,6 +37,7 @@ class Configuracion < ApplicationRecord
 	MENU = [
 		["Publicaciones", "/publicaciones",   'publicaciones', 'index'],
 		["Equipos",       "/equipos",         'equipos',       'index'],
+		["Proyectos",     "/proyectos",       'proyectos',     'index'],
 		["Carpetas",      "/carpetas",        'carpetas',      'index'],
 		["Temas",         "/temas",           'temas',         'index'],
 		["Textos",        "/textos",          'textos',        'index'],
@@ -48,7 +49,7 @@ class Configuracion < ApplicationRecord
 	M_E_CONTROLLERS = ['confirmations', 'mailer', 'passwords', 'registrations', 'sessions', 'unlocks']
 
 	# ITEMS de MENU que requieren USUARIO AUTENTICADO
-	M_I_SIGN_IN = ['Publicaciones', 'Ingresos', 'Equipos', 'Textos', 'Carpetas', 'Temas', 'Cargas']
+	M_I_SIGN_IN = ['Publicaciones', 'Ingresos', 'Proyectos', 'Textos', 'Carpetas', 'Temas', 'Cargas']
 	# ITEMS de MENU que requieren USUARIO AUTENTICADO ADMINISTRATIVO
 	M_I_ADMIN = []
 	# ITEMS de MENU para TODO USUARIO (ANONIMO INCLUIDO)
@@ -63,6 +64,7 @@ class Configuracion < ApplicationRecord
 		'publicaciones#index',
 		'ingresos#index',
 		'equipos#index',
+		'proyectos#index',
 		'carpetas#index',
 		'temas#index',
 		'cargas#index',
@@ -90,7 +92,7 @@ class Configuracion < ApplicationRecord
 	#	'escritorio' => 'Escritorio'
 	#}
 	# CONTROLADORES FRAME con TABS
-	FRAME_WITH_TABS_CONTROLLERS = []
+	FRAME_WITH_TABS_CONTROLLERS = ['ingresos']
 	# En el Modelo buscar Modelo::FRAME_TABS
 	# FRAME_TABS = {
 	#	'index' => ['Completa', 'Pendiente']
@@ -114,7 +116,7 @@ class Configuracion < ApplicationRecord
 	# Estos son los CONTROLADORES que tienen EXCEPCIONES
 	# Buscar Modelo::T_EXCEPTIONS
 	# USADA SOLO POR in_t? para saber donde buscar Excepciones
-	T_E_CONTROLLERS = ['publicaciones', 'textos', 'ingresos', 'equipos']
+	T_E_CONTROLLERS = ['publicaciones', 'textos', 'ingresos', 'equipos', 'proyectos']
 	# Buscar Modelo::T_EXCEPTIONS
 	# T_EXCEPTIONS = {
 	#	tabs:    ['self'],
@@ -123,7 +125,7 @@ class Configuracion < ApplicationRecord
 	#}
 
 	# -----------------------------------------   NEW
-	T_E_NEW_CONTROLLERS = ['equipos']
+	T_E_NEW_CONTROLLERS = ['equipos', 'proyectos']
 	# Model::T_NEW_EXCEPTIONS
 	# T_NEW_EXCEPTIONS = {
 	#	#'controller' => 'tipo_new'
@@ -138,9 +140,9 @@ class Configuracion < ApplicationRecord
 	T_E_LINE_BTNS_MODELS = ['Publicacion', 'Carpeta'] 
 
 	# DEFINICION DE BOTONES ADICIONALES
-	T_E_ADDITIONAL_BTNS_MODEL = ['Equipo', 'Carga', 'Texto']
+	T_E_ADDITIONAL_BTNS_MODEL = ['Equipo', 'Carga', 'Texto', 'Clasificacion']
 	# Buscar en MODELO::X_BTNS
-	T_E_X_BTNS_CONDITIONALS_MODEL = ['Texto']
+	T_E_X_BTNS_CONDITIONALS_MODEL = ['Texto', 'Clasificacion']
 	# Buscar en NODELO::X_BTNS_CONDITIONS
 
 	## *****************************************************************************************************
@@ -152,7 +154,7 @@ class Configuracion < ApplicationRecord
 	# -----------------------------------------   SHOW
 	# MODELOS que teiene EXCEPCIONES
 	# Buscar Modelo::S_E
-	S_E_MODELS = ['Publicacion', 'Equipo']
+	S_E_MODELS = ['Publicacion', 'Equipo', 'Proyecto']
 	# Excepción en el TITULO
 	S_E_TITLE_MODELS = ['Publicacion', 'Carga']
 	# Modelos que tienen STATUS para desplegar en el SHOW
@@ -177,6 +179,6 @@ class Configuracion < ApplicationRecord
 
 	# Controladores que tienen HIDDEN CHILDS
 	# Buscar Modelo::HIDDEN_CHILDS
-	HIDDEN_CHILDS_CONTROLLERS = ['cargas', 'publicaciones', 'textos', 'carpetas', 'investigadores', 'temas', 'equipos']
+	HIDDEN_CHILDS_CONTROLLERS = ['cargas', 'publicaciones', 'textos', 'carpetas', 'investigadores', 'temas', 'equipos', 'proyectos']
 
 end

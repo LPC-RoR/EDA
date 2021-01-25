@@ -4,9 +4,16 @@ class IngresosController < ApplicationController
   # GET /ingresos
   # GET /ingresos.json
   def index
+    if params[:html_options].blank?
+      @ftab = 'ingreso'
+    else
+      @ftab = (params[:html_options][:ftab].blank? ? 'ingreso' : params[:html_options][:ftab])
+    end
+
     @activo = Perfil.find(session[:perfil_activo]['id'])
     @table_controller = 'publicaciones'
-    @coleccion = @activo.ingresos.where(origen: 'ingreso').page(params[:page])
+    @coleccion = @activo.ingresos.where(origen: 'ingreso').where(estado: @ftab).page(params[:page])
+    @options = { 'ftab' => @ftab }
   end
 
   # GET /ingresos/1

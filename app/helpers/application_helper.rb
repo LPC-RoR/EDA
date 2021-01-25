@@ -205,7 +205,7 @@ module ApplicationHelper
 
 	# manejo de f_tabla para manejar tablas asociadas
 	def f_tabla(objeto)
-		objeto.send(objeto.class::F_TABLA.singularize)
+		objeto.send(objeto.class::F_TABLA)
 	end
 
 	# Obtiene el campo para despleagar en una TABLA
@@ -215,7 +215,11 @@ module ApplicationHelper
 			objeto.send(name)
 		elsif objeto.class::BT_FIELDS.include?(name)
 			o_bt = objeto.send(objeto.class::BT_MODEL)
-			o_bt.send(name)
+			unless o_bt.blank?
+				o_bt.send(name)
+			else
+				'[sin recurso]'
+			end
 		else
 			'FieldNotFound'
 		end

@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 
-  resources :ingresos
-  resources :perfiles
+  resources :herencias
+  resources :coautores
   resources :administradores
   resources :configuraciones
   resources :autores
@@ -13,7 +13,9 @@ Rails.application.routes.draw do
     match :seleccion, via: :get, on: :collection
   end
   resources :citas
-  resources :clasificaciones
+  resources :clasificaciones do
+    match :clasifica, via: :get, on: :member
+  end
   resources :departamentos do
     resources :investigadores
   end
@@ -24,6 +26,7 @@ Rails.application.routes.draw do
   resources :idiomas do 
     resources :revistas
   end
+  resources :ingresos
   resources :integrantes
   resources :instituciones do
     resources :departamentos
@@ -36,7 +39,12 @@ Rails.application.routes.draw do
     match :nuevo, via: :post, on: :collection
   end
   resources :origenes
+  resources :perfiles
   resources :procesos
+  resources :proyectos do
+    match :nuevo, via: :post, on: :collection
+    match :nuevo_tema_proyecto, via: :post, on: :collection
+  end
   resources :publicaciones do
     match :cambia_carpeta, via: :get, on: :collection
     match :cambia_evaluacion, via: :get, on: :member
