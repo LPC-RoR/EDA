@@ -47,9 +47,7 @@ class CargasController < ApplicationController
 
   # GET /cargas/new
   def new
-#    @archivo = Configuracion::RUTA_ARCHIVOS['cargas']+params[:archivo]
-    @archivo = nil
-    @objeto = Carga.new(archivo: @archivo, estado: 'ingreso', perfil_id: session[:perfil_activo]['id'].to_i)
+    @objeto = Carga.new(estado: 'ingreso', perfil_id: session[:perfil_activo]['id'])
   end
 
   # GET /cargas/1/edit

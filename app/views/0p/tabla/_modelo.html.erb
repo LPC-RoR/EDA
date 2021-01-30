@@ -7,8 +7,6 @@
 		<% case f[1] %>
 		<% when 'show' %>
 			<td><small><%= (a == 'seleccion' ? get_field(f[0], objeto) : link_to( "[ #{get_field(f[0], objeto)} ]", objeto)) %></small></td>
-		<% when 'bt_show' %>
-			<td><small><%= (a == 'seleccion' ? get_field(f[0], objeto) : link_to( "[ #{get_field(f[0], objeto)} ]", objeto.send(objeto.class::BT_MODEL))) %></small></td>
 		<% when 'normal' %>
 			<td><small> <%= get_field(f[0], objeto) %> </small></td>
 		<% when 'diahora' %>

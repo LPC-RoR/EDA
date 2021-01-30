@@ -100,6 +100,9 @@ class ApplicationController < ActionController::Base
 			        rev.publicaciones << pub
 		    	end
 
+		    	# saca las comas de los autores
+		    	pub.author = pub.author.split(' and ').map {|aut| aut.split(',').join('')}.join(' and ')
+
 		    	# origen = 'carga'
 	        	pub.origen = 'carga' if ['remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
 	        	pub.save if ['remplazar_carga', 'remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)

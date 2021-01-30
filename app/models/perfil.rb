@@ -1,4 +1,5 @@
 class Perfil < ApplicationRecord
+
 	TABLA_FIELDS = [
 		['m_padre', 'show'], 
 	]

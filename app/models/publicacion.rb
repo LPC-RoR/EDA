@@ -11,50 +11,12 @@ class Publicacion < ApplicationRecord
 		'Conclusiones' =>    ['aceptadas', 'controversiales']
 	}
 
-	# ------------------- TABLA -----------------------
-	TABS = Carpeta.all.map {|c| c.carpeta}
-
-	# ----------------------------------------- HIDDEN CHILDS
-	HIDDEN_CHILDS = ['citas', 'autores', 'investigadores', 'procesos', 'cargas', 'clasificaciones', 'carpetas', 'evaluaciones']
-
-	FRAME_TITULO = {
-		'index'      => 'Publicaciones'
-	}
-
-	FRAME_SELECTOR = {
-		'index'      => 'Carpetas'
-	}
-
-	FRAME_ACTIONS_TYPE = {
-		'index'      => 'tabla'
-#		'parametros' => 'valor'
-	}
-
-	# Configura DESPLIEGUE de la TABLA
-	T_EXCEPTIONS = {
-		titulo:    ['self'],
-		paginas: ['*'],
-		nuevo:   ['self', 'ingresos', 'equipos']
-	}
-
 	# Campos qeu se despliegan en la tabla
 	TABLA_FIELDS = [
 		['title',         'show'], 
 		['doc_type',    'normal'], 
 		['year',        'normal']
 	]
-
-	# -------------------- FORM  -----------------------
-	SHOW_EXCEPTIONS = [:clasifica, :detalle, :inline_form]
-
-	## AL PARECER ESTO YA HO SE USARÁ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! VERIFICAR !!
-	T_NEW_EXCEPTIONS = {
-		#'controller' => 'tipo_new'
-		# '*' en todo controller_name
-		'*' => 'mask',
-	}
-
-	# -------------------- FORM  -----------------------
 
  	FORM_FIELDS = [
 		['d_quote',          'show'], 
@@ -78,8 +40,6 @@ class Publicacion < ApplicationRecord
 		['estado',         'hidden']
 	]
 
-	FORM_CONDITIONAL_FIELDS = ['d_quote', 'm_quote', 'doi', 'd_author', 'd_doi', 'abstract', 'academic_degree', 'volume', 'book', 'pages', 'd_journal', 'title', 'year', 'author', 'editor', 'ciudad_pais', 'journal']
-
 	# -------------------- SHOW -------------------------
 	SHOW_FIELDS = [
 		['m_quote',         'metodo'], 
@@ -98,12 +58,6 @@ class Publicacion < ApplicationRecord
 		['d_doi',           'normal'],
 		['doi',             'normal']
 	]
-
-	S_E = [:clasifica, :detalle, :inline_form]
-
-	# LINKS !!
-	S_BT_LINKS_OBJECTS = ['Revista']
-	S_HMT_LINKS_COLLECTIONS = ['investigadores']
 
 	belongs_to :registro, optional: true
 	belongs_to :revista, optional: true
@@ -135,34 +89,6 @@ class Publicacion < ApplicationRecord
 	# PENDIENTE DE EVALUAR: Enrutamiento Conceptual
 #	has_many :rutas
 #	has_many :instancias, through: :rutas
-
-	def show_title
-		self.title
-	end
-
-	## 1.- Ingresos: Publicar, Correccion, Papelera, Eliminar, Editar, REVISAR Múltiple
-	## 2.- SIN USO: Carga, Ingreso
-	def show_links
-		[
-			['Editar',     [:edit, self], self.origen == 'ingreso'],
-			['Papelera',   "/publicaciones/estado?publicacion_id=#{self.id}&estado=papelera",     (['ingreso', 'duplicado'].include?(self.estado) and self.origen = 'ingreso')],
-			['Eliminar',   "/publicaciones/estado?publicacion_id=#{self.id}&estado=eliminado",    ['papelera'].include?(self.estado)],
-			['Publicar',   "/publicaciones/estado?publicacion_id=#{self.id}&estado=publicada",    (['ingreso'].include?(self.estado) and self.title.present? and self.author.present? and self.journal.present?)],	
-			['Carga',      "/publicaciones/estado?publicacion_id=#{self.id}&estado=carga",        (['publicado', 'papelera'].include?(self.estado) and self.origen == 'carga')],
-			['Ingreso',    "/publicaciones/estado?publicacion_id=#{self.id}&estado=ingreso",        (['publicado', 'papelera'].include?(self.estado) and self.origen == 'ingreso')],
-			['Múltiple',   "/publicaciones/estado?publicacion_id=#{self.id}&estado=multiple",     self.estado == 'duplicado'],
-			['Corrección', "/publicaciones/estado?publicacion_id=#{self.id}&estado=correccion",   (self.estado == 'publicada' and self.origen == 'ingreso' and self.textos.empty?)]
-		]
-		
-	end
-
-	def btns_control
-		self.origen == 'ingreso'
-	end
-	# ANTIGUO
-#	def btns_control
-#		['ingreso', 'produccion'].include?(self.origen)
-#	end
 
 	# REVISAR SI SE USARÁ
 	def procesa_autor(author, ind)
@@ -220,56 +146,4 @@ class Publicacion < ApplicationRecord
 		end
 	end
 
-	def c_d_quote
-		# Sólo duplicados de origen carga, las publicaciones de 'ingreso' no tienen cita
-		self.origen == 'ingreso'
-	end
-	def c_m_quote
-		['carga', 'ingreso', 'duplicado', 'formato'].include?(self.estado)
-	end
-	def c_doi
-		['carga', 'ingreso', 'duplicado', 'formato'].include?(self.estado)
-	end
-	def c_d_author
-		['carga', 'ingreso', 'duplicado', 'formato', 'contribucion'].include?(self.estado)
-	end
-	def c_d_doi
-		self.estado == 'ingreso'
-	end
-	def c_abstract
-		self.estado == 'ingreso'
-	end
-	def c_academic_degree
-		['carga', 'ingreso', 'duplicado', 'formato'].include?(self.estado)
-	end
-	def c_volume
-		['carga', 'ingreso', 'duplicado', 'formato'].include?(self.estado)
-	end
-	def c_book
-		['carga', 'ingreso', 'duplicado', 'formato'].include?(self.estado)
-	end
-	def c_editor
-		['carga', 'ingreso', 'duplicado', 'formato'].include?(self.estado)
-	end
-	def c_pages
-		['carga', 'ingreso', 'duplicado', 'formato'].include?(self.estado)
-	end
-	def c_d_journal
-		['carga', 'ingreso', 'duplicado', 'formato'].include?(self.estado)
-	end
-	def c_title
-		['carga', 'ingreso', 'duplicado', 'formato'].include?(self.estado)
-	end
-	def c_year
-		['carga', 'ingreso', 'duplicado', 'formato'].include?(self.estado)
-	end
-	def c_author
-		['carga', 'ingreso', 'duplicado', 'formato'].include?(self.estado)
-	end
-	def c_ciudad_pais
-		self.origen == 'ingreso' and self.estado == 'ingreso'
-	end
-	def c_journal
-		self.origen == 'ingreso' and self.estado == 'ingreso'
-	end
 end

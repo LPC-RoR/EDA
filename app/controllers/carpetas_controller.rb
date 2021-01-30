@@ -83,7 +83,7 @@ class CarpetasController < ApplicationController
     end
 
     def set_redireccion
-      @redireccion = "/recursos/tablas?ftab=carpetas"
+      @redireccion = "/carpetas"
     end
 
     # Only allow a list of trusted parameters through.

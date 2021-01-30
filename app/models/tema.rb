@@ -1,10 +1,5 @@
 class Tema < ApplicationRecord
-	# ----------------------------------------- HIDDEN CHILDS
-	HIDDEN_CHILDS = ['textos', 'herencias']
 
-	# ------------------- TABLA -----------------------
-
-	# Campos qeu se despliegan en la tabla
 	TABLA_FIELDS = [
 		['tema',         'show']
 	]
