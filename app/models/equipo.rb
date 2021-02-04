@@ -2,8 +2,6 @@ class Equipo < ApplicationRecord
 
 	belongs_to :administrador, class_name: 'Perfil'
 
-	has_one :perfil
-
 	has_many :publicaciones
 	has_many :carpetas
 

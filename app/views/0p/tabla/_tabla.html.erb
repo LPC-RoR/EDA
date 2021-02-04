@@ -14,13 +14,13 @@
 	<% if inline_form?(c) %>
 		<%= render partial: "#{c}/inline_nuevo", locals: {c: c, a: a} %>
 		<%#= render partial: '/textos/nuevo_texto' %>
-	<% elsif @coleccion.count > 15 %>
+	<% elsif @coleccion[c].count > 15 %>
 		<%= render partial: '0p/tabla/btn_nuevo', locals: {c: c} %>
 	<% end %>
 <% end %>
 
 <!-- PAGINAS -->
-<%= paginate @coleccion if in_t?(c, :paginas) %>
+<%= paginate @coleccion[c] if in_t?(c, :paginas) %>
 
 <!-- CUERPO TABLA -->
 <table class="table table-striped table-sm  thead-dark">
@@ -31,7 +31,7 @@
   <tbody>
   	<!-- Opción para evitar escribir el parcial _modelo.html.erb en cada controlador-->
   	<% unless @coleccion.blank? %>
-	  	<% @coleccion.each do |objeto| %>
+	  	<% @coleccion[c].each do |objeto| %>
 		  	<%= render partial: "/0p/tabla/modelo", locals: {a: a, objeto: objeto} %>
 		<% end  %>
   	<% end %>

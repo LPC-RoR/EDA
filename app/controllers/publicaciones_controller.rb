@@ -1,5 +1,6 @@
 class PublicacionesController < ApplicationController
   before_action :authenticate_usuario!
+  before_action :inicia_sesion
   before_action :set_publicacion, only: [:show, :edit, :update, :destroy, :cambia_evaluacion]
 
   after_action :procesa_author, only: [:update, :create]
@@ -10,26 +11,23 @@ class PublicacionesController < ApplicationController
   # GET /publicaciones
   # GET /publicaciones.json
   def index
-    # BI FRAME
-    # Lista de 'selectors'
     @activo = Perfil.find(session[:perfil_activo]['id'])
-    @frame_selector = @activo.carpetas.all.map {|c| [c.carpeta, c.publicaciones.count]}
-    # CONTROLADOR de la tabla a desplegar
-    @table_controller = 'publicaciones'
 
+    # BI FRAME
+    @frame_selector = @activo.carpetas.all.map {|c| [c.carpeta, c.publicaciones.count]}
     # carpeta
     if params[:html_options].blank?
       @carpeta = @activo.carpetas.first
     else
       @carpeta = params[:html_options]['sel'].blank? ? @activo.carpetas.first : @activo.carpetas.find_by(carpeta: params[:html_options]['sel'])
     end
-
-    # selector activo
     @sel = @carpeta.carpeta
     # opciones para los links
     @options = {'sel' => @sel}
 
-    @coleccion = @carpeta.publicaciones.page(params[:page])
+    @coleccion = {}
+    @coleccion[controller_name] = @carpeta.publicaciones.page(params[:page])
+
   end
 
   # GET /publicaciones/1
@@ -46,56 +44,51 @@ class PublicacionesController < ApplicationController
       @duplicados = Publicacion.where(id: @duplicados_ids)
     end
 
-    # ********************** DUPLICADOS *****************************
+    # *********************** CARPETAS ******************************
     @activo = Perfil.find(session[:perfil_activo]['id'])
-    # Aqui me gano los porotos. El manejo de carpetas
-    # Voy a hacer dos columnas
-    # IZQ las carpetas en las cuales la Publicacion está
-    # DER las carpetas en las que se puede agregar
-    # CARPETAS EN LAS QUE ESTÁ (Propias + Equipo)
-    # 1.- los ids de las carpetas de @activo se dividen en @carpetas_base @carpetas_tema
+
+    ## AMBOS
     @ids_carpetas_base = @activo.carpetas.map {|c| c.id if Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
     @ids_carpetas_tema = @activo.carpetas.map {|c| c.id unless Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
 
-    @id_carpeta_revisadas = @activo.carpetas.find_by(carpeta: 'Revisadas').id
-    # QUE GACEMOS CON LAS CARPETAS DE LOS EQUIPOS A LOS QUE PERTENECEMOS ??
-    # HAREMOS EL PERFIL DEL USUARIO E IMPLEMENTAREMOS BOTONES PARA CAMBIAR DE PERFIL
+    # ids de las carpetas del @activo
+    ids_activo = @ids_carpetas_base | @ids_carpetas_tema
 
-    # Tomamos de las carpetas de la publicacion SOLO las que pertenecen a SELF
-    @ids_carpetas_publicacion = @objeto.carpetas.ids.intersection(@activo.carpetas.ids) 
+    # ids de la publicación que son del perfil
+    ids_publicacion = @objeto.carpetas.ids & ids_activo
 
-    @ids_actual_base = @ids_carpetas_base.intersection(@ids_carpetas_publicacion)
-    @ids_actual_tema = @ids_carpetas_tema.intersection(@ids_carpetas_publicacion)
+    id_carpeta_carga      = @activo.carpetas.find_by(carpeta: 'Carga').id
+    id_carpeta_ingreso    = @activo.carpetas.find_by(carpeta: 'Ingreso').id
+    id_carpeta_duplicados = @activo.carpetas.find_by(carpeta: 'Duplicados').id
 
-    # El primer caso es cuando NO esta en NINGUNA CARPETA
-    if @ids_carpetas_publicacion.empty?
-      @carpetas_actuales  = nil
-      @carpetas_destino = Carpeta.where(id: @ids_carpetas_base)
-    elsif @ids_actual_tema.empty?
-      # En este caso tenemos dos casos distintos 
-      # 1.- El tema es "Revisada" ? Se pueden agregar carpetas Personalizadas
-      # 2.- Otro tema : Solo se puede cambiar de Carpeta base
-      if @ids_actual_base.include?(@id_carpeta_revisadas)
-        @carpetas_actuales = Carpeta.where(id: @ids_actual_base)
-        @carpetas_destino  = Carpeta.where(id: @ids_carpetas_base.union(@ids_carpetas_tema) - @ids_actual_base)
-      else
-        @carpetas_actuales = Carpeta.where(id: @ids_actual_base)
-        @carpetas_destino  = Carpeta.where(id: @ids_carpetas_base - @ids_actual_base)
-      end
+    @id_carpeta_revisadas  = @activo.carpetas.find_by(carpeta: 'Revisadas').id
+
+    ids_tres   = @activo.carpetas.where(carpeta: ['Carga', 'Ingreso', 'Duplicados']).ids
+    ids_cuatro = @activo.carpetas.where(carpeta: ['Carga', 'Ingreso', 'Duplicados', 'Revisadas']).ids
+
+    ids_todas = @ids_carpetas_base | @ids_carpetas_tema
+
+    if ids_publicacion.empty?
+      ids_seleccion = (@ids_carpetas_base - ids_tres)
+    elsif ids_publicacion.include?(id_carpeta_duplicados)
+      ids_seleccion = @objeto.origen == 'ingreso' ? ['Ingreso'] : ['Carga']
+    elsif (ids_publicacion.include?(id_carpeta_ingreso) or ids_publicacion.include?(id_carpeta_carga))
+      ids_seleccion = (@ids_carpetas_base - ids_tres)
+    elsif (ids_publicacion.include?(@id_carpeta_revisadas) and ((ids_publicacion & @ids_carpetas_tema).empty?))
+      ids_seleccion = ids_todas - ids_cuatro
+    elsif (@ids_carpetas_tema & ids_publicacion).any?
+      ids_seleccion = @ids_carpetas_tema - ids_publicacion
     else
-      # En este caso SOLO se pueden AGREGAR o QUITAR Carpetas TEMA
-      @carpetas_actuales = Carpeta.where(id: @ids_actual_base.union(@ids_actual_tema))
-      @carpetas_destino  = Carpeta.where(id: @ids_carpetas_tema - @ids_actual_tema)
+      ids_seleccion = @ids_carpetas_base - (ids_tres | (@ids_carpetas_base & ids_publicacion))
     end
 
-    # 1. has_many : }
-    if params[:html_options].blank?
-      @tab = 'textos'
-    else
-      @tab = params[:html_options][:tab].blank? ? 'textos' : params[:html_options][:tab]
-    end
-    @coleccion = @objeto.send(@tab)
-    @options = {'tab' => @tab}
+    @carpetas_seleccion = Carpeta.find(ids_seleccion)
+
+    # ***************************************** @show_colection[Modelo]
+    @coleccion = {}
+    @coleccion['textos']   = @objeto.textos
+    @coleccion['temas']    = @perfil.temas
+    @coleccion['carpetas'] = @objeto.carpetas
 
   end
 
@@ -139,39 +132,6 @@ class PublicacionesController < ApplicationController
         format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
-  end
-
-  def cambia_carpeta
-    @activo = Perfil.find(session[:perfil_activo]['id'])
-    @objeto = Publicacion.find(params[:html_options][:publicacion_id])
-    @carpeta = Carpeta.find(params[:html_options][:carpeta_id])
-
-    @ids_carpetas_base = @activo.carpetas.map {|c| c.id if Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
-    @ids_carpetas_tema = @activo.carpetas.map {|c| c.id unless Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
-
-    @id_carpeta_revisadas = @activo.carpetas.find_by(carpeta: 'Revisadas').id
-
-    @ids_carpetas_publicacion = @objeto.carpetas.ids.intersection(@activo.carpetas.ids) 
-
-    @ids_actual_base = @ids_carpetas_base.intersection(@ids_carpetas_publicacion)
-    @ids_actual_tema = @ids_carpetas_tema.intersection(@ids_carpetas_publicacion)
-
-    case params[:html_options][:origen]
-    when 'actuales'
-      # En este caso sólo tienen link las carpetas tema y lo único que hay que hacer es eliminarlas
-      @objeto.carpetas.delete(@carpeta) unless @objeto.carpetas.count == 1
-    when 'destinos'
-      if @ids_carpetas_base.include?(params[:html_options][:carpeta_id].to_i)
-        @cars = Carpeta.where(id: @ids_actual_base)
-        @cars.each do |cc|
-          @objeto.carpetas.delete(cc)
-        end
-      end
-      @objeto.carpetas << @carpeta
-    end
-
-    redirect_to @objeto
-
   end
 
   def cambia_tipo

@@ -1,19 +1,22 @@
 class IngresosController < ApplicationController
+  before_action :authenticate_usuario!
+  before_action :inicia_sesion
   before_action :set_ingreso, only: [:show, :edit, :update, :destroy]
 
   # GET /ingresos
   # GET /ingresos.json
   def index
+    @activo = Perfil.find(session[:perfil_activo]['id'])
+
     if params[:html_options].blank?
       @ftab = 'ingreso'
     else
       @ftab = (params[:html_options][:ftab].blank? ? 'ingreso' : params[:html_options][:ftab])
     end
-
-    @activo = Perfil.find(session[:perfil_activo]['id'])
-    @table_controller = 'publicaciones'
-    @coleccion = @activo.ingresos.where(origen: 'ingreso').where(estado: @ftab).page(params[:page])
     @options = { 'ftab' => @ftab }
+
+    @coleccion = {}
+    @coleccion['publicaciones'] = @activo.ingresos.where(origen: 'ingreso').where(estado: @ftab).page(params[:page])
   end
 
   # GET /ingresos/1

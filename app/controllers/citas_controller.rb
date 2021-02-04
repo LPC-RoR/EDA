@@ -1,5 +1,6 @@
 class CitasController < ApplicationController
   before_action :authenticate_usuario!
+  before_action :inicia_sesion
   before_action :set_cita, only: [:show, :edit, :update, :destroy]
 
   # GET /citas

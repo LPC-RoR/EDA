@@ -1,11 +1,13 @@
 class TextosController < ApplicationController
   before_action :authenticate_usuario!
+  before_action :inicia_sesion
   before_action :set_texto, only: [:show, :edit, :update, :destroy, :remueve_texto]
 
   # GET /textos
   # GET /textos.json
   def index
-    @coleccion = Texto.all
+    @coleccion = {}
+    @coleccion[controller_name] = Texto.all
   end
 
   # GET /textos/1
@@ -16,11 +18,12 @@ class TextosController < ApplicationController
     else
       @tab = params[:html_options][:tab].blank? ? 'publicaciones' : params[:html_options][:tab]
     end
+    @options = {'tab' => @tab}
 #    @estado = params[:estado].blank? ? @tab.classify.constantize::ESTADOS[0] : params[:estado]
     # tenemos que cubrir todos los casos
     # 1. has_many : }
-    @coleccion = @objeto.send(@tab).page(params[:page]) #.where(estado: @estado)
-    @options = {'tab' => @tab}
+    @coleccion = {}
+    @coleccion[@tab] = @objeto.send(@tab).page(params[:page]) #.where(estado: @estado)
   end
 
   # GET /textos/new

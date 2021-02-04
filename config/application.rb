@@ -79,7 +79,7 @@ module Eda
             'index' => {
                 titulo: 'Ingresos',
                 action_type: 'tabla',
-                tabs: ['ingreso', 'duplicado', 'papelera']
+                tabs: ['ingreso', 'duplicado', 'papelera', 'publicada']
             }
         }
     }
@@ -134,28 +134,40 @@ module Eda
             conditions: ['crud']
         },
         'Carpeta'       => {
-            conditions: ['crud']
+            conditions: ['crud', 'x'],
+            x_btns: [
+                ['Eliminar', '/remueve_carpeta', true]
+            ]
         },
         'Carga'         => {
             conditions: ['x', 'crud'],
             x_btns: [   
-                ['Proceso', '/cargas/', '/procesa_carga', false]
+                ['Proceso', '/procesa_carga', false]
             ]
         },
         'Texto'         => {
             conditions: ['x', 'crud'],
             x_btns: [
-                ['Eliminar', '/textos/', '/remueve_texto', true]
+                ['Eliminar', '/remueve_texto', true]
             ],
         },
         'Clasificacion' => {
             conditions: ['x', 'crud'],
             x_btns: [
-                ['referencia',     '/clasificaciones/', '/clasifica?clasificacion=referencia'    , true],
-                ['complementario', '/clasificaciones/', '/clasifica?clasificacion=complementario', true],
-                ['controversial',  '/clasificaciones/', '/clasifica?clasificacion=controversial' , true],
-                ['revisar',        '/clasificaciones/', '/clasifica?clasificacion=revisar'       , true]
+                ['referencia',     '/clasifica?clasificacion=referencia'    , true],
+                ['complementario', '/clasifica?clasificacion=complementario', true],
+                ['controversial',  '/clasifica?clasificacion=controversial' , true],
+                ['revisar',        '/clasifica?clasificacion=revisar'       , true]
             ]
+        },
+        'Tema'          =>{
+            conditions: ['crud', 'x'],
+            x_btns: [
+                ['Eliminar', '/remueve_tema', true]
+            ]
+        },
+        'Proyecto'      => {
+            conditions: ['crud']
         }
     }
 
@@ -189,9 +201,11 @@ module Eda
 
     ## ------------------------------------------------- SHOW
 
+    # show_colecctions : tablas dentro del SHOW
+    # [ [controlador, tipo de vinculo {has_many, perfil, base}, paginacion?] ]
     config.x.show.exceptions = {
         'Publicacion' => {
-            elementos: [:clasifica, :detalle, :inline_form, 'show_title'],
+            elementos: [:clasifica, :detalle, :inline_form, 'show_title', :tabla]
         },
         'Proyecto'     => {
             elementos: [:detalle, :inline_form]

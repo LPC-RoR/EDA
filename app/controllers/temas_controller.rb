@@ -1,12 +1,15 @@
 class TemasController < ApplicationController
   before_action :authenticate_usuario!
-  before_action :set_tema, only: [:show, :edit, :update, :destroy]
+  before_action :inicia_sesion
+  before_action :set_tema, only: [:show, :edit, :update, :destroy, :remueve_tema]
 
   # GET /temas
   # GET /temas.json
   def index
     @activo = Perfil.find(session[:perfil_activo]['id'])
-    @coleccion = @activo.temas
+
+    @coleccion = {}
+    @coleccion[controller_name] = @activo.temas
   end
 
   # GET /temas/1
@@ -17,15 +20,16 @@ class TemasController < ApplicationController
     else
       @tab = params[:html_options][:tab].blank? ? 'clasificaciones' : params[:html_options][:tab]
     end
+    @options = { 'tab' => @tab }
 #    @estado = params[:estado].blank? ? @tab.classify.constantize::ESTADOS[0] : params[:estado]
     # tenemos que cubrir todos los casos
     # 1. has_many : }
+    @coleccion = {}
     if @tab == 'clasificaciones'
-      @coleccion = @objeto.send(@tab).order(:clasificacion) #.where(estado: @estado)
+      @coleccion[@tab] = @objeto.send(@tab).order(:clasificacion) #.where(estado: @estado)
     else
-      @coleccion = @objeto.send(@tab) #.where(estado: @estado)
+      @coleccion[@tab] = @objeto.send(@tab) #.where(estado: @estado)
     end
-    @options = { 'tab' => @tab }
   end
 
   # GET /temas/new
@@ -34,10 +38,11 @@ class TemasController < ApplicationController
   end
 
   def nuevo
-    @publicacion   = Publicacion.find(params[:publicacion_id])
+    @objeto = params[:class_name].constantize.find(params[:objeto_id])
+#    @publicacion   = Publicacion.find(params[:publicacion_id])
 
-    unless params[:nuevo_tema][:tema].strip.blank?
-      @nuevo_tema = params[:nuevo_tema][:tema].strip
+    unless params[:nuevo_modelo][:modelo].strip.blank?
+      @nuevo_tema = params[:nuevo_modelo][:modelo].strip
   
       @activo = Perfil.find(session[:perfil_activo]['id'])
       t = @activo.temas.find_by(tema: @nuevo_tema)
@@ -46,7 +51,7 @@ class TemasController < ApplicationController
       end
     end
 
-    redirect_to @publicacion
+    redirect_to @objeto
   end
 
   # GET /temas/1/edit
@@ -94,6 +99,13 @@ class TemasController < ApplicationController
       format.html { redirect_to @redireccion, notice: 'Tema was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def remueve_tema
+    proyecto = Proyecto.find(params[:objeto_id])
+    @objeto.proyectos.delete(proyecto)
+
+    redirect_to proyecto
   end
 
   private

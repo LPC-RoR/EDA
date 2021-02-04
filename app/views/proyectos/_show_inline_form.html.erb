@@ -3,7 +3,6 @@
 		<div class='form-inline'>
 			<%= form.select :tema_id, @activo.temas.collect { |p| [p.tema, p.id] }, include_blank: false, prompt: "Seleccione Tema" %>
 			<%= form.submit '+ Tema'  %>
-			<%= form.submit '- Tema'  %>
 		</div>
 	<% end  %>
 	</br>

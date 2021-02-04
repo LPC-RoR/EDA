@@ -1,20 +1,23 @@
 class ProyectosController < ApplicationController
+  before_action :authenticate_usuario!
+  before_action :inicia_sesion
   before_action :set_proyecto, only: [:show, :edit, :update, :destroy]
 
   # GET /proyectos
   # GET /proyectos.json
   def index
+    @activo = Perfil.find(session[:perfil_activo]['id'])
+
     if params[:html_options].blank?
       @tab = 'Administrados'
     else
       @tab = params[:html_options][:tab].blank? ? 'Administrados' : params[:html_options][:tab]
     end
-
-    @activo = Perfil.find(session[:perfil_activo]['id'])
-
-    @coleccion = (@tab == 'Administrados') ? @activo.proyectos : @activo.colaboraciones
-
     @options = {'tab' => @tab}
+
+    @coleccion = {}
+    @coleccion[controller_name] = (@tab == 'Administrados') ? @activo.proyectos : @activo.colaboraciones
+
   end
 
   # GET /proyectos/1
@@ -26,11 +29,12 @@ class ProyectosController < ApplicationController
     else
       @tab = params[:html_options][:tab].blank? ? 'temas' : params[:html_options][:tab]
     end
+    @options = { 'tab' => @tab }
 #    @estado = params[:estado].blank? ? @tab.classify.constantize::ESTADOS[0] : params[:estado]
     # tenemos que cubrir todos los casos
     # 1. has_many : }
-    @coleccion = @objeto.send(@tab) #.where(estado: @estado)
-    @options = { 'tab' => @tab }
+    @coleccion = {}
+    @coleccion[@tab] = @objeto.send(@tab) #.where(estado: @estado)
   end
 
   # GET /proyectos/new
@@ -61,11 +65,7 @@ class ProyectosController < ApplicationController
   def nuevo_tema_proyecto
     @proyecto = Proyecto.find(params[:proyecto_id])
     @tema     = Tema.find(params[:tema_base][:tema_id])
-    if params[:commit] == '+ Tema'
-      @proyecto.temas << @tema unless @proyecto.temas.ids.include?(@tema.id)
-    elsif params[:commit] == '- Tema'
-      @proyecto.temas.delete(@tema) if @proyecto.temas.ids.include?(@tema.id)
-    end
+    @proyecto.temas << @tema unless @proyecto.temas.ids.include?(@tema.id)
 
     redirect_to @proyecto
   end

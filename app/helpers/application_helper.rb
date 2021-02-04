@@ -210,11 +210,15 @@ module ApplicationHelper
 		when 'Publicacion'
 			objeto.origen == 'ingreso'
 		when 'Carpeta'
-			not Carpeta::NOT_MODIFY.include?(objeto.carpeta)
+			not Carpeta::NOT_MODIFY.include?(objeto.carpeta) and controller_name == 'carpetas'
 		when 'Texto'
 			false
 		when 'Clasificacion'
 			false
+		when 'Tema'
+			controller_name == 'temas'
+		when Proyecto
+			controller_name == 'proyectos'
 		end
 	end
 
@@ -224,18 +228,26 @@ module ApplicationHelper
 			objeto.estado == 'ingreso'
 		when 'Texto'
 			controller_name == 'publicaciones'
+		when 'Carpeta'
+			controller_name == 'publicaciones' and (not Carpeta::NOT_MODIFY.include?(objeto.carpeta))
 		when 'Clasificacion'
 			objeto.clasificacion != btn
+		when 'Tema'
+			controller_name == 'proyectos' and objeto.perfil.id == session[:perfil_activo]['id'].to_i
 		end
 	end
 
 	def btns?(objeto, tipo)
 		if Rails.configuration.x.btns.exceptions[objeto.class.name].present?
-			case tipo
-			when 'crud'
-				Rails.configuration.x.btns.exceptions[objeto.class.name][:conditions].include?('crud') ? crud_conditions(objeto) : true
-			when 'x'
-				Rails.configuration.x.btns.exceptions[objeto.class.name][:conditions].include?('x')
+			if Rails.configuration.x.btns.exceptions[objeto.class.name][:conditions].present?
+				case tipo
+				when 'crud'
+					Rails.configuration.x.btns.exceptions[objeto.class.name][:conditions].include?('crud') ? crud_conditions(objeto) : true
+				when 'x'
+					Rails.configuration.x.btns.exceptions[objeto.class.name][:conditions].include?('x')
+				end
+			else
+				tipo == 'crud' ? true : false
 			end
 		else
 			# por defecto 'crud' es true y 'x' es false
@@ -347,8 +359,20 @@ module ApplicationHelper
 
 	# manejo de f_tabla para manejar tablas asociadas
 	# /show/_detalle.html.erb
-	def f_tabla(objeto)
-		objeto.send(objeto.class::F_TABLA)
+	def f_tabla_field(objeto, label)
+		if Rails.configuration.x.tables.bt_fields[objeto.class.name].present?
+			if Rails.configuration.x.tables.bt_fields[objeto.class.name][label].present?
+				if Rails.configuration.x.tables.bt_fields[objeto.class.name][label][0] == 'bt_field'
+					objeto.send(Rails.configuration.x.tables.bt_fields[objeto.class.name][label][1]).send(label)
+				else
+					'Objeto NO encontrado'
+				end
+			else
+				'Objeto NO encontrado'
+			end
+		else
+			'Objeto NO encontrado'
+		end
 	end
 
 	## ------------------------------------------------------- GENERAL

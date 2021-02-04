@@ -1,12 +1,15 @@
 class CargasController < ApplicationController
   before_action :authenticate_usuario!
+  before_action :inicia_sesion
   before_action :set_carga, only: [:show, :edit, :update, :destroy, :procesa_carga]
 
   # GET /cargas
   # GET /cargas.json
   def index
     @activo = Perfil.find(session[:perfil_activo]['id'])
-    @coleccion = @activo.cargas
+
+    @coleccion = {}
+    @coleccion[controller_name] = @activo.cargas
 
     user_dir = session[:es_administrador] == true ? 'admin' : archivo_usuario(current_usuario.email)
     dir_path = "#{Rails.root}/archivos/#{user_dir}/#{controller_name}/"

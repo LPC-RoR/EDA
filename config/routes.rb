@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   end
   resources :carpetas do
     match :seleccion, via: :get, on: :collection
+    match :asigna, via: :post, on: :collection
+    match :remueve_carpeta, via: :get, on: :member
   end
   resources :citas
   resources :clasificaciones do
@@ -46,7 +48,6 @@ Rails.application.routes.draw do
     match :nuevo_tema_proyecto, via: :post, on: :collection
   end
   resources :publicaciones do
-    match :cambia_carpeta, via: :get, on: :collection
     match :cambia_evaluacion, via: :get, on: :member
     match :cambia_tipo, via: :get, on: :collection
     match :estado, via: :get, on: :collection
@@ -69,6 +70,7 @@ Rails.application.routes.draw do
   end
   resources :temas do
     match :nuevo, via: :post, on: :collection
+    match :remueve_tema, via: :get, on: :member
   end
   resources :textos do
     match :nuevo, via: :post, on: :collection
@@ -80,6 +82,6 @@ Rails.application.routes.draw do
   devise_for :usuarios
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
-  root 'perfiles#inicia_sesion'
+  root 'publicaciones#index'
 
 end
