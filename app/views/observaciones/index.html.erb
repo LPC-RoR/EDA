@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Observaciones</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Orden</th>
+      <th>Observacion</th>
+      <th>Columna</th>
+      <th>Linea</th>
+      <th>Tabla</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @observaciones.each do |observacion| %>
+      <tr>
+        <td><%= observacion.orden %></td>
+        <td><%= observacion.observacion %></td>
+        <td><%= observacion.columna_id %></td>
+        <td><%= observacion.linea_id %></td>
+        <td><%= observacion.tabla_id %></td>
+        <td><%= link_to 'Show', observacion %></td>
+        <td><%= link_to 'Edit', edit_observacion_path(observacion) %></td>
+        <td><%= link_to 'Destroy', observacion, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Observacion', new_observacion_path %>

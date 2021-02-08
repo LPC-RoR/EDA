@@ -21,4 +21,7 @@ class Proyecto < ApplicationRecord
 
 	has_many :herencias
 	has_many :temas, through: :herencias
+
+	has_many :versiones
+	has_many :etapas
 end

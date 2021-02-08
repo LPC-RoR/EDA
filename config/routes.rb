@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  resources :encabezados
+  resources :observaciones
+  resources :archivos
+  resources :valores
+  resources :columnas
+  resources :lineas
   resources :herencias
   resources :coautores
   resources :administradores
@@ -24,12 +30,16 @@ Rails.application.routes.draw do
   resources :equipos do
     match :nuevo, via: :post, on: :collection
   end
+  resources :especificaciones
+  resources :etapas do
+    resources :tablas
+    resources :especificaciones
+  end
   resources :evaluaciones
   resources :idiomas do 
     resources :revistas
   end
   resources :ingresos
-  resources :integrantes
   resources :instituciones do
     resources :departamentos
     resources :registros
@@ -46,6 +56,8 @@ Rails.application.routes.draw do
   resources :proyectos do
     match :nuevo, via: :post, on: :collection
     match :nuevo_tema_proyecto, via: :post, on: :collection
+    resources :versiones
+    resources :etapas
   end
   resources :publicaciones do
     match :cambia_evaluacion, via: :get, on: :member
@@ -68,6 +80,7 @@ Rails.application.routes.draw do
   resources :revistas do
     resources :publicaciones
   end
+  resources :tablas
   resources :temas do
     match :nuevo, via: :post, on: :collection
     match :remueve_tema, via: :get, on: :member
@@ -78,6 +91,7 @@ Rails.application.routes.draw do
     match :eliminar_tema, via: :post, on: :collection
     match :remueve_texto, via: :get, on: :member
   end
+  resources :versiones
 
   devise_for :usuarios
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

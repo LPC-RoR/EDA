@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Especificaciones</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Orden</th>
+      <th>Especificacion</th>
+      <th>Detalle</th>
+      <th>Tabla</th>
+      <th>Etapa</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @especificaciones.each do |especificacion| %>
+      <tr>
+        <td><%= especificacion.orden %></td>
+        <td><%= especificacion.especificacion %></td>
+        <td><%= especificacion.detalle %></td>
+        <td><%= especificacion.tabla_id %></td>
+        <td><%= especificacion.etapa_id %></td>
+        <td><%= link_to 'Show', especificacion %></td>
+        <td><%= link_to 'Edit', edit_especificacion_path(especificacion) %></td>
+        <td><%= link_to 'Destroy', especificacion, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Especificacion', new_especificacion_path %>

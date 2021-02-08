@@ -1,0 +1,32 @@
+<%= form_with(model: archivo, local: true) do |form| %>
+  <% if archivo.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(archivo.errors.count, "error") %> prohibited this archivo from being saved:</h2>
+
+      <ul>
+      <% archivo.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :orden %>
+    <%= form.number_field :orden %>
+  </div>
+
+  <div class="field">
+    <%= form.label :archivo %>
+    <%= form.text_field :archivo %>
+  </div>
+
+  <div class="field">
+    <%= form.label :nota %>
+    <%= form.text_field :nota %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

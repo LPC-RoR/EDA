@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_03_152600) do
+ActiveRecord::Schema.define(version: 2021_02_08_011402) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,15 @@ ActiveRecord::Schema.define(version: 2021_02_03_152600) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_administradores_on_email"
     t.index ["usuario_id"], name: "index_administradores_on_usuario_id"
+  end
+
+  create_table "archivos", force: :cascade do |t|
+    t.integer "orden"
+    t.string "archivo"
+    t.string "nota"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["orden"], name: "index_archivos_on_orden"
   end
 
   create_table "autores", force: :cascade do |t|
@@ -55,10 +64,8 @@ ActiveRecord::Schema.define(version: 2021_02_03_152600) do
     t.string "carpeta"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "equipo_id"
     t.integer "perfil_id"
     t.index ["carpeta"], name: "index_carpetas_on_carpeta"
-    t.index ["equipo_id"], name: "index_carpetas_on_equipo_id"
     t.index ["perfil_id"], name: "index_carpetas_on_perfil_id"
   end
 
@@ -95,12 +102,30 @@ ActiveRecord::Schema.define(version: 2021_02_03_152600) do
     t.index ["proyecto_id"], name: "index_coautores_on_proyecto_id"
   end
 
+  create_table "columnas", force: :cascade do |t|
+    t.integer "orden"
+    t.integer "linea_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["linea_id"], name: "index_columnas_on_linea_id"
+    t.index ["orden"], name: "index_columnas_on_orden"
+  end
+
   create_table "departamentos", force: :cascade do |t|
     t.string "departamento"
     t.integer "institucion_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["institucion_id"], name: "index_departamentos_on_institucion_id"
+  end
+
+  create_table "encabezados", force: :cascade do |t|
+    t.integer "orden"
+    t.string "encabezado"
+    t.string "tipo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["orden"], name: "index_encabezados_on_orden"
   end
 
   create_table "equipos", force: :cascade do |t|
@@ -112,6 +137,29 @@ ActiveRecord::Schema.define(version: 2021_02_03_152600) do
     t.index ["administrador_id"], name: "index_equipos_on_administrador_id"
     t.index ["equipo"], name: "index_equipos_on_equipo"
     t.index ["sha1"], name: "index_equipos_on_sha1"
+  end
+
+  create_table "especificaciones", force: :cascade do |t|
+    t.integer "orden"
+    t.string "especificacion"
+    t.text "detalle"
+    t.integer "tabla_id"
+    t.integer "etapa_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["etapa_id"], name: "index_especificaciones_on_etapa_id"
+    t.index ["orden"], name: "index_especificaciones_on_orden"
+    t.index ["tabla_id"], name: "index_especificaciones_on_tabla_id"
+  end
+
+  create_table "etapas", force: :cascade do |t|
+    t.integer "orden"
+    t.string "etapa"
+    t.integer "proyecto_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["orden"], name: "index_etapas_on_orden"
+    t.index ["proyecto_id"], name: "index_etapas_on_proyecto_id"
   end
 
   create_table "evaluaciones", force: :cascade do |t|
@@ -168,6 +216,16 @@ ActiveRecord::Schema.define(version: 2021_02_03_152600) do
     t.index ["investigador"], name: "index_investigadores_on_investigador"
   end
 
+  create_table "lineas", force: :cascade do |t|
+    t.integer "orden"
+    t.integer "tabla_id"
+    t.string "linea"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["orden"], name: "index_lineas_on_orden"
+    t.index ["tabla_id"], name: "index_lineas_on_tabla_id"
+  end
+
   create_table "metodologias", force: :cascade do |t|
     t.string "metodologia"
     t.integer "orden"
@@ -176,6 +234,20 @@ ActiveRecord::Schema.define(version: 2021_02_03_152600) do
     t.datetime "updated_at", null: false
     t.index ["orden"], name: "index_metodologias_on_orden"
     t.index ["publicacion_id"], name: "index_metodologias_on_publicacion_id"
+  end
+
+  create_table "observaciones", force: :cascade do |t|
+    t.integer "orden"
+    t.string "observacion"
+    t.integer "columna_id"
+    t.integer "linea_id"
+    t.integer "tabla_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["columna_id"], name: "index_observaciones_on_columna_id"
+    t.index ["linea_id"], name: "index_observaciones_on_linea_id"
+    t.index ["orden"], name: "index_observaciones_on_orden"
+    t.index ["tabla_id"], name: "index_observaciones_on_tabla_id"
   end
 
   create_table "perfiles", force: :cascade do |t|
@@ -242,7 +314,6 @@ ActiveRecord::Schema.define(version: 2021_02_03_152600) do
     t.string "d_doi"
     t.string "origen"
     t.string "pages"
-    t.integer "equipo_id"
     t.string "d_quote"
     t.string "estado"
     t.string "academic_degree"
@@ -255,7 +326,6 @@ ActiveRecord::Schema.define(version: 2021_02_03_152600) do
     t.string "doc_type"
     t.integer "perfil_id"
     t.index ["doc_type"], name: "index_publicaciones_on_doc_type"
-    t.index ["equipo_id"], name: "index_publicaciones_on_equipo_id"
     t.index ["estado"], name: "index_publicaciones_on_estado"
     t.index ["origen"], name: "index_publicaciones_on_origen"
     t.index ["perfil_id"], name: "index_publicaciones_on_perfil_id"
@@ -282,6 +352,17 @@ ActiveRecord::Schema.define(version: 2021_02_03_152600) do
     t.datetime "updated_at", null: false
     t.index ["idioma_id"], name: "index_revistas_on_idioma_id"
     t.index ["revista"], name: "index_revistas_on_revista"
+  end
+
+  create_table "tablas", force: :cascade do |t|
+    t.integer "orden"
+    t.string "tabla"
+    t.integer "padre_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "archivo"
+    t.index ["orden"], name: "index_tablas_on_orden"
+    t.index ["padre_id"], name: "index_tablas_on_padre_id"
   end
 
   create_table "temas", force: :cascade do |t|
@@ -312,6 +393,25 @@ ActiveRecord::Schema.define(version: 2021_02_03_152600) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_usuarios_on_email", unique: true
     t.index ["reset_password_token"], name: "index_usuarios_on_reset_password_token", unique: true
+  end
+
+  create_table "valores", force: :cascade do |t|
+    t.string "tipo"
+    t.string "valor"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tipo"], name: "index_valores_on_tipo"
+  end
+
+  create_table "versiones", force: :cascade do |t|
+    t.string "version"
+    t.string "estado"
+    t.string "nota"
+    t.integer "proyecto_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["estado"], name: "index_versiones_on_estado"
+    t.index ["proyecto_id"], name: "index_versiones_on_proyecto_id"
   end
 
 end

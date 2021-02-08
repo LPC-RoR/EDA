@@ -30,7 +30,7 @@
 
   <tbody>
   	<!-- Opción para evitar escribir el parcial _modelo.html.erb en cada controlador-->
-  	<% unless @coleccion.blank? %>
+  	<% unless @coleccion[c].blank? %>
 	  	<% @coleccion[c].each do |objeto| %>
 		  	<%= render partial: "/0p/tabla/modelo", locals: {a: a, objeto: objeto} %>
 		<% end  %>
@@ -43,5 +43,3 @@
 	<!-- No se activa si la acción es 'seleccion' -->
 	<%= render partial: '0p/tabla/btn_nuevo', locals: {c: c} if in_t?(c, :nuevo) and a != 'seleccion' %>
 <% end %>
-
-</br></br>

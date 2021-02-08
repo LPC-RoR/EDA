@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  orden: 1
+  tabla_id: 1
+  linea: MyString
+
+two:
+  orden: 1
+  tabla_id: 1
+  linea: MyString

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  version: MyString
+  estado: MyString
+  nota: MyString
+  proyecto_id: 1
+
+two:
+  version: MyString
+  estado: MyString
+  nota: MyString
+  proyecto_id: 1

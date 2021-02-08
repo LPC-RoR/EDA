@@ -360,8 +360,12 @@ module ApplicationHelper
 	# manejo de f_tabla para manejar tablas asociadas
 	# /show/_detalle.html.erb
 	def f_tabla_field(objeto, label)
+		puts "**************** f_tabla_field"
+		puts Rails.configuration.x.tables.bt_fields[objeto.class.name].present?
 		if Rails.configuration.x.tables.bt_fields[objeto.class.name].present?
+			puts Rails.configuration.x.tables.bt_fields[objeto.class.name][label].present?
 			if Rails.configuration.x.tables.bt_fields[objeto.class.name][label].present?
+				puts Rails.configuration.x.tables.bt_fields[objeto.class.name][label][0] == 'bt_field'
 				if Rails.configuration.x.tables.bt_fields[objeto.class.name][label][0] == 'bt_field'
 					objeto.send(Rails.configuration.x.tables.bt_fields[objeto.class.name][label][1]).send(label)
 				else

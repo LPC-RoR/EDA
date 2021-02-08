@@ -61,14 +61,12 @@ class Publicacion < ApplicationRecord
 
 	belongs_to :registro, optional: true
 	belongs_to :revista, optional: true
-	belongs_to :equipo, optional: true
 	belongs_to :perfil, optional: true
 	# En esta versión NO exploramos la clasificación por áreas
 	# QUEDA PENDIENTE
 #	belongs_to :area, optional: true
 
 	has_many :evaluaciones
-	has_many :metodologias
 
 	has_many :citas
 	has_many :textos, through: :citas

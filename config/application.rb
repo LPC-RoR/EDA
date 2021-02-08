@@ -92,6 +92,9 @@ module Eda
         },
         'Clasificacion' => {
             'texto' => ['bt_field', 'texto']
+        },
+        'Proyecto' => {
+            'email' => ['bt_field', 'administrador']
         }
     }
 
@@ -118,6 +121,26 @@ module Eda
                 #'controller' => 'tipo_new'
                 # '*' en todo controller_name
                 '*' => 'inline'
+            }
+        },
+        'versiones' => {
+            elementos: {
+                nuevo: ['proyectos']
+            }
+        },
+        'etapas' => {
+            elementos: {
+                nuevo: ['proyectos']
+            }
+        },
+        'tablas' => {
+            elementos: {
+                nuevo: ['etapas']
+            }
+        },
+        'especificaciones' => {
+            elementos: {
+                nuevo: ['etapas']
             }
         }
     }
@@ -208,7 +231,13 @@ module Eda
             elementos: [:clasifica, :detalle, :inline_form, 'show_title', :tabla]
         },
         'Proyecto'     => {
-            elementos: [:detalle, :inline_form]
+            elementos: [:clasifica, :tabla]
+        },
+        'Etapa' => {
+            elementos: [:clasifica, :tabla]
+        },
+        'Tabla' => {
+            elementos: [:clasifica, :tabla]
         }
     }
 

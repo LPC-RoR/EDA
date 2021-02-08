@@ -1,9 +1,0 @@
-<% if @tab == 'temas' %>
-	<%= form_for :tema_base, url: "/proyectos/nuevo_tema_proyecto?proyecto_id=#{@objeto.id}" do |form| %>
-		<div class='form-inline'>
-			<%= form.select :tema_id, @activo.temas.collect { |p| [p.tema, p.id] }, include_blank: false, prompt: "Seleccione Tema" %>
-			<%= form.submit '+ Tema'  %>
-		</div>
-	<% end  %>
-	</br>
-<% end %>

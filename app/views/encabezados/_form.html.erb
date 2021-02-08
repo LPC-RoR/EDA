@@ -1,0 +1,32 @@
+<%= form_with(model: encabezado, local: true) do |form| %>
+  <% if encabezado.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(encabezado.errors.count, "error") %> prohibited this encabezado from being saved:</h2>
+
+      <ul>
+      <% encabezado.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :orden %>
+    <%= form.number_field :orden %>
+  </div>
+
+  <div class="field">
+    <%= form.label :encabezado %>
+    <%= form.text_field :encabezado %>
+  </div>
+
+  <div class="field">
+    <%= form.label :tipo %>
+    <%= form.text_field :tipo %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

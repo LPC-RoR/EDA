@@ -34,7 +34,10 @@ class ProyectosController < ApplicationController
     # tenemos que cubrir todos los casos
     # 1. has_many : }
     @coleccion = {}
-    @coleccion[@tab] = @objeto.send(@tab) #.where(estado: @estado)
+    @coleccion['perfiles']  = @objeto.perfiles
+    @coleccion['versiones'] = @objeto.versiones
+    @coleccion['temas']     = @objeto.temas
+    @coleccion['etapas']    = @objeto.etapas
   end
 
   # GET /proyectos/new
