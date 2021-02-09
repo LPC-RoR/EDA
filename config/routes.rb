@@ -1,15 +1,13 @@
 Rails.application.routes.draw do
 
   resources :encabezados
-  resources :observaciones
-  resources :archivos
-  resources :valores
   resources :columnas
-  resources :lineas
   resources :herencias
   resources :coautores
   resources :administradores
   resources :configuraciones
+
+  resources :archivos
   resources :autores
   resources :cargas do
     match :procesa_carga, via: :get, on: :member
@@ -30,7 +28,9 @@ Rails.application.routes.draw do
   resources :equipos do
     match :nuevo, via: :post, on: :collection
   end
-  resources :especificaciones
+  resources :especificaciones do
+    match :nuevo, via: :post, on: :collection
+  end
   resources :etapas do
     resources :tablas
     resources :especificaciones
@@ -39,6 +39,7 @@ Rails.application.routes.draw do
   resources :idiomas do 
     resources :revistas
   end
+  resources :imagenes
   resources :ingresos
   resources :instituciones do
     resources :departamentos
@@ -47,7 +48,14 @@ Rails.application.routes.draw do
   resources :investigadores do
     match :perfil, via: :get, on: :member
   end
+  resources :lineas do
+    resources :archivos
+    resources :imagenes
+  end
   resources :metodologias do
+    match :nuevo, via: :post, on: :collection
+  end
+  resources :observaciones do
     match :nuevo, via: :post, on: :collection
   end
   resources :origenes
@@ -80,7 +88,9 @@ Rails.application.routes.draw do
   resources :revistas do
     resources :publicaciones
   end
-  resources :tablas
+  resources :tablas do 
+    match :cargar_tabla, via: :get, on: :member
+  end
   resources :temas do
     match :nuevo, via: :post, on: :collection
     match :remueve_tema, via: :get, on: :member

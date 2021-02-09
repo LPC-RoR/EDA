@@ -10,6 +10,18 @@ class LineasController < ApplicationController
   # GET /lineas/1
   # GET /lineas/1.json
   def show
+    if params[:html_options].blank?
+      @tab = 'columnas'
+    else
+      @tab = params[:html_options][:tab].blank? ? 'columnas' : params[:html_options][:tab]
+    end
+    @options = { 'tab' => @tab }
+
+    @coleccion = {}
+    @coleccion['columnas'] = @objeto.columnas.order(:orden)
+    @coleccion['observaciones'] = @objeto.observaciones.order(created_at: :desc)
+    @coleccion['archivos'] = @objeto.archivos 
+    @coleccion['imagenes'] = @objeto.imagenes
   end
 
   # GET /lineas/new

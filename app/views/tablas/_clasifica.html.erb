@@ -1,17 +1,57 @@
 <div class='row'>
 	<div class='col-md-12'>
-		<%= render partial: '0p/general/titulo', locals: {c: nil, a: nil, titulo: 'Lineas', size: '5'} %>
-		<%= render partial: '0p/tabla/tabla', locals: {c: alias_tabla('lineas'), a: 'index'} unless @coleccion['lineas'].empty? %>
+		<%= render partial: '0p/general/btn', locals: {texto: @objeto.etapa.proyecto.proyecto, link: @objeto.etapa.proyecto, delete: false, style: 'btn-outline-dark'} %>
+		<%= render partial: '0p/general/btn', locals: {texto: @objeto.etapa.etapa, link: @objeto.etapa, delete: false, style: 'btn-outline-dark'} %>
+	</div>
+</div>
+<div class='row'>
+	<div class='col-md-12'>
+
+		<table class="table table-bordered table-sm  thead-dark">
+			<thead>
+				<tr>
+					<% @objeto.encabezados.order(:orden).each do |campo| %>
+						<td align='center'><small><i><%= campo.encabezado %></i></small></td>				
+					<% end %>
+				</tr>
+			</thead>
+			<tbody>
+				<% @objeto.lineas.order(:orden).each do |linea| %>
+					<tr>
+						<% linea.columnas.order(:orden).each do |columna| %>
+							<% if @objeto.encabezados.find_by(orden: columna.orden).tipo == 'valor' %>
+								<td align="right">
+							<% else %>
+								<td>
+							<% end %>
+							<small>
+								<% if (columna.orden == 1 and (@objeto.archivos == true or @objeto.imagenes == true)) %>
+									<%= link_to "[ #{columna.columna} ]", linea %>
+								<% else %>
+									<%= columna.columna %>
+								<% end %>
+							</small></td>
+						<% end %>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+
+		<%#= render partial: '0p/tabla/tabla', locals: {c: alias_tabla('lineas'), a: 'index'} unless @coleccion['lineas'].empty? %>
 	</div>
 </div>
 <div class='row'>
 	<div class='col-md-6'>
 		<%= render partial: '0p/general/titulo', locals: {c: nil, a: nil, titulo: 'Especificaciones', size: '5'} %>
-		<%= render partial: '0p/tabla/tabla', locals: {c: alias_tabla('especificaciones'), a: 'index'} unless @coleccion['especificaciones'].empty? %>
+
+		<%= render partial: "0data/especificaciones" %>
+
 	</div>
 	<div class='col-md-6'>
 		<%= render partial: '0p/general/titulo', locals: {c: nil, a: nil, titulo: 'Observaciones', size: '5'} %>
-		<%= render partial: '0p/tabla/tabla', locals: {c: alias_tabla('observaciones'), a: 'index'} unless @coleccion['observaciones'].empty? %>
+
+		<%= render partial: "0data/observaciones" %>
+
 	</div>
 </div>
 </br>

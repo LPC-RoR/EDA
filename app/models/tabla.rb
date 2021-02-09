@@ -4,7 +4,8 @@ class Tabla < ApplicationRecord
 
 	TABLA_FIELDS = [
 		['orden',     'normal'],
-		['tabla',       'show']
+		['tabla',       'show'],
+		['archivo', 'link_file']
 	]
 
 	# -------------------- FORM  -----------------------
@@ -12,12 +13,14 @@ class Tabla < ApplicationRecord
 		['orden',        'entry'],
 		['tabla',        'entry'],
 		['archivo', 'file_field'],
-		['padre_id',    'hidden']
+		['padre_id',    'hidden'],
+		['archivos', 'check_box'],
+		['imagenes', 'check_box']
 	]
 
 	belongs_to :etapa, foreign_key: 'padre_id'
 
-	has_one :encabezado
+	has_many :encabezados
 
 	has_many :lineas
 	has_many :especificaciones

@@ -1,0 +1,18 @@
+<% unless @coleccion['especificaciones'].empty? %>
+	<table class="table table-striped table-sm  thead-dark">
+		<tbody>
+			<% @coleccion['especificaciones'].each do |esp| %>
+				<tr><td><%= "| #{esp.orden} | #{esp.especificacion} |" %></td><td><%= render partial: '0p/tabla/btns', locals: {a: 'index', objeto: esp} %></td></tr>
+				<tr><td><small><%= sanitize esp.d_detalle %></small></td></tr>
+			<% end %>
+		</tbody>
+	</table>
+<% end %>
+<%= form_for :especificacion_base, url: "/especificaciones/nuevo?class_name=#{@objeto.class.name}&objeto_id=#{@objeto.id}" do |form| %>
+	<div class='form-inline'>
+		<%= form.text_field(:orden, size: 5, placeholder: 'orden', class: 'form-control' ) %>
+		<%= form.text_field(:especificacion, placeholder: 'especificación', size: 57, class: 'form-control' ) %>
+	</div>
+  	<%= form.text_area :detalle, placeholder: 'detalle', size: '68x3' %>
+	<%= form.submit '+ Especificacion'  %>
+<% end  %>

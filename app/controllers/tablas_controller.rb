@@ -1,5 +1,5 @@
 class TablasController < ApplicationController
-  before_action :set_tabla, only: [:show, :edit, :update, :destroy]
+  before_action :set_tabla, only: [:show, :edit, :update, :destroy, :cargar_tabla]
 
   # GET /tablas
   # GET /tablas.json
@@ -19,8 +19,8 @@ class TablasController < ApplicationController
 
     @coleccion = {}
     @coleccion['lineas'] = @objeto.lineas.order(:orden)
-    @coleccion['especificaciones'] = @objeto.especificaciones
-    @coleccion['observaciones'] = @objeto.observaciones
+    @coleccion['especificaciones'] = @objeto.especificaciones.order(:orden)
+    @coleccion['observaciones'] = @objeto.observaciones.order(created_at: :desc)
   end
 
   # GET /tablas/new
@@ -62,6 +62,34 @@ class TablasController < ApplicationController
     end
   end
 
+  def cargar_tabla
+    etapa = Etapa.find(params[:objeto_id])
+    xlsx = Roo::Spreadsheet.open("#{Rails.root}/public/#{@objeto.archivo.url}")
+    linea_proceso = 1
+    xlsx.each() do |linea_carga|
+      case linea_proceso
+      when 1
+        linea_carga.each_with_index do |nombre, index_nombre|
+          @objeto.encabezados.create(orden: index_nombre+1, encabezado: nombre)
+        end
+      when 2
+        linea_carga.each_with_index do |tipo, index_nombre|
+          encabezado = @objeto.encabezados.find_by(orden: index_nombre+1)
+          encabezado.tipo = tipo
+          encabezado.save
+        end
+      else
+        linea = @objeto.lineas.create(orden: linea_proceso-2)
+        linea_carga.each_with_index do |columna, index_columna|
+          encabezado = @objeto.encabezados.find_by(orden: index_columna+1)
+          linea.columnas.create(orden: index_columna+1, columna: columna)
+        end
+      end
+      linea_proceso += 1
+    end
+    redirect_to @objeto.etapa
+  end
+
   # DELETE /tablas/1
   # DELETE /tablas/1.json
   def destroy
@@ -80,6 +108,6 @@ class TablasController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def tabla_params
-      params.require(:tabla).permit(:tabla, :padre_id, :archivo, :orden)
+      params.require(:tabla).permit(:tabla, :padre_id, :archivo, :orden, :archivos, :imagenes)
     end
 end

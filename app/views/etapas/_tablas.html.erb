@@ -1,0 +1,28 @@
+<% unless @coleccion['tablas'].empty? %>
+	<table class="table table-striped table-sm  thead-dark">
+		<tbody>
+			<% @coleccion['tablas'].each do |tbl| %>
+				<tr>
+					<td><small><%= tbl.orden %></small></td>
+					<td><small>
+						<% if tbl.lineas.present? %>
+							<%= link_to "[ #{tbl.tabla} ]", tbl %>
+						<% else %>
+						<%= tbl.tabla %>
+						<% end %>							
+						</small>
+					</td>
+					<td><small>
+						<% if tbl.archivo.present? %>
+							<%= link_to tbl.archivo.url.split('/').last, tbl.archivo.url %>
+						<% else %>
+							[ sin archivo carga ]
+						<% end %>
+						</small>
+					</td>
+					<td><%= render partial: '0p/tabla/btns', locals: {a: 'index', objeto: tbl} %></td></tr>
+			<% end %>
+		</tbody>
+	</table>
+<% end %>
+<%= render partial: '0p/tabla/btn_nuevo', locals: {c: 'tablas'} %>

@@ -17,5 +17,6 @@ class Linea < ApplicationRecord
 
 	has_many :columnas
 	has_many :archivos
+	has_many :imagenes
 	has_many :observaciones
 end

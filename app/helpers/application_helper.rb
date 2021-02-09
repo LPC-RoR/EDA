@@ -219,6 +219,8 @@ module ApplicationHelper
 			controller_name == 'temas'
 		when Proyecto
 			controller_name == 'proyectos'
+		when 'Tabla'
+			objeto.archivo.blank?
 		end
 	end
 
@@ -234,6 +236,8 @@ module ApplicationHelper
 			objeto.clasificacion != btn
 		when 'Tema'
 			controller_name == 'proyectos' and objeto.perfil.id == session[:perfil_activo]['id'].to_i
+		when 'Tabla'
+			objeto.archivo.present? and objeto.encabezados.empty?
 		end
 	end
 

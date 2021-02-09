@@ -142,6 +142,16 @@ module Eda
             elementos: {
                 nuevo: ['etapas']
             }
+        },
+        'archivos' => {
+            elementos: {
+                nuevo: ['lineas']
+            }
+        },
+        'imagenes' => {
+            elementos: {
+                nuevo: ['lineas']
+            }
         }
     }
 
@@ -191,6 +201,12 @@ module Eda
         },
         'Proyecto'      => {
             conditions: ['crud']
+        },
+        'Tabla' => {
+            conditions: ['crud', 'x'],
+            x_btns: [
+                ['Cargar', '/cargar_tabla', true]
+            ]
         }
     }
 
@@ -237,6 +253,9 @@ module Eda
             elementos: [:clasifica, :tabla]
         },
         'Tabla' => {
+            elementos: [:clasifica, :tabla]
+        },
+        'Linea' => {
             elementos: [:clasifica, :tabla]
         }
     }

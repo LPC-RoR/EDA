@@ -15,6 +15,8 @@ gem 'kaminari'
 
 gem 'carrierwave', '~> 2.0'
 
+gem "roo", "~> 2.8.0"
+
 gem "passenger", ">= 5.0.25", require: "phusion_passenger/rack_handler"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

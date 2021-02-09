@@ -1,21 +1,21 @@
-class Archivo < ApplicationRecord
+class Imagen < ApplicationRecord
 
 	require 'carrierwave/orm/activerecord'
 
 	TABLA_FIELDS = [
 		['orden',      'normal'],
-		['archivo', 'link_file'], 
+		['imagen',  'link_file'], 
 		['nota',       'normal']
 	]
 
  	FORM_FIELDS = [
 		['orden',              'entry'],
 		['nota',               'entry'],
-		['archivo',       'file_field'],
+		['imagen',        'file_field'],
 		['linea_id',          'hidden'],
 	]
 
-	mount_uploader :archivo, ArchivoUploader
+	mount_uploader :imagen, ImagenUploader
 
 	belongs_to :linea
 end

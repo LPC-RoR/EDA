@@ -17,6 +17,19 @@ class EspecificacionesController < ApplicationController
     @objeto = Especificacion.new
   end
 
+  def nuevo
+    case params[:class_name]
+    when 'Etapa'
+      @objeto = Etapa.find(params[:objeto_id])
+    when 'Tabla'
+      @objeto = Tabla.find(params[:objeto_id])
+    end
+    
+    @objeto.especificaciones.create(orden: params[:especificacion_base][:orden], especificacion: params[:especificacion_base][:especificacion], detalle: params[:especificacion_base][:detalle])
+
+    redirect_to @objeto
+  end
+
   # GET /especificaciones/1/edit
   def edit
   end

@@ -1,13 +1,11 @@
 class Observacion < ApplicationRecord
 
 	TABLA_FIELDS = [
-		['orden',     'normal'],
 		['observacion', 'show']
 	]
 
 	# -------------------- FORM  -----------------------
  	FORM_FIELDS = [
-		['orden',       'entry'],
 		['observacion', 'entry'],
 		['etapa_id',   'hidden']
 	]
@@ -15,4 +13,8 @@ class Observacion < ApplicationRecord
 	belongs_to :columna, optional: true
 	belongs_to :linea, optional: true
 	belongs_to :tabla, optional: true
+
+	def d_detalle
+	  self.detalle.blank? ? '' : self.detalle.gsub(/\n/, '<br>')
+	end
 end

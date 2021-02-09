@@ -1,5 +1,1 @@
-<h1>New Archivo</h1>
-
-<%= render 'form', archivo: @archivo %>
-
-<%= link_to 'Back', archivos_path %>
+<%= render partial: '0p/form/form', locals: {c: controller_name, a: action_name} %>

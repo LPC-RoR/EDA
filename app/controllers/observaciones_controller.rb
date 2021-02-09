@@ -17,6 +17,19 @@ class ObservacionesController < ApplicationController
     @objeto = Observacion.new
   end
 
+  def nuevo
+    case params[:class_name]
+    when 'Tabla'
+      @objeto = Tabla.find(params[:objeto_id])
+    when 'Linea'
+      @objeto = Linea.find(params[:objeto_id])
+    end
+    
+    @objeto.observaciones.create(orden: params[:observacion_base][:orden], observacion: params[:observacion_base][:observacion], detalle: params[:observacion_base][:detalle])
+
+    redirect_to @objeto
+  end
+
   # GET /observaciones/1/edit
   def edit
   end
@@ -28,7 +41,8 @@ class ObservacionesController < ApplicationController
 
     respond_to do |format|
       if @objeto.save
-        format.html { redirect_to @objeto, notice: 'Observacion was successfully created.' }
+        set_redireccion
+        format.html { redirect_to @redireccion, notice: 'Observacion was successfully created.' }
         format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
@@ -42,7 +56,8 @@ class ObservacionesController < ApplicationController
   def update
     respond_to do |format|
       if @objeto.update(observacion_params)
-        format.html { redirect_to @objeto, notice: 'Observacion was successfully updated.' }
+        set_redireccion
+        format.html { redirect_to @redireccion, notice: 'Observacion was successfully updated.' }
         format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
@@ -54,9 +69,10 @@ class ObservacionesController < ApplicationController
   # DELETE /observaciones/1
   # DELETE /observaciones/1.json
   def destroy
+    set_redireccion
     @objeto.destroy
     respond_to do |format|
-      format.html { redirect_to observaciones_url, notice: 'Observacion was successfully destroyed.' }
+      format.html { redirect_to @redireccion, notice: 'Observacion was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -67,8 +83,12 @@ class ObservacionesController < ApplicationController
       @objeto = Observacion.find(params[:id])
     end
 
+    def set_redireccion
+      @redireccion = @objeto.linea.present? ? @objeto.linea : @objeto.tabla
+    end
+
     # Only allow a list of trusted parameters through.
     def observacion_params
-      params.require(:observacion).permit(:orden, :observacion, :columna_id, :linea_id, :tabla_id)
+      params.require(:observacion).permit(:orden, :observacion, :columna_id, :linea_id, :tabla_id, :detalle)
     end
 end

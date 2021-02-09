@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_08_011402) do
+ActiveRecord::Schema.define(version: 2021_02_09_144547) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,8 @@ ActiveRecord::Schema.define(version: 2021_02_08_011402) do
     t.string "nota"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "linea_id"
+    t.index ["linea_id"], name: "index_archivos_on_linea_id"
     t.index ["orden"], name: "index_archivos_on_orden"
   end
 
@@ -107,6 +109,7 @@ ActiveRecord::Schema.define(version: 2021_02_08_011402) do
     t.integer "linea_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "columna"
     t.index ["linea_id"], name: "index_columnas_on_linea_id"
     t.index ["orden"], name: "index_columnas_on_orden"
   end
@@ -125,7 +128,9 @@ ActiveRecord::Schema.define(version: 2021_02_08_011402) do
     t.string "tipo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "tabla_id"
     t.index ["orden"], name: "index_encabezados_on_orden"
+    t.index ["tabla_id"], name: "index_encabezados_on_tabla_id"
   end
 
   create_table "equipos", force: :cascade do |t|
@@ -190,6 +195,17 @@ ActiveRecord::Schema.define(version: 2021_02_08_011402) do
     t.index ["idioma"], name: "index_idiomas_on_idioma"
   end
 
+  create_table "imagenes", force: :cascade do |t|
+    t.integer "orden"
+    t.string "imagen"
+    t.string "nota"
+    t.integer "linea_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["linea_id"], name: "index_imagenes_on_linea_id"
+    t.index ["orden"], name: "index_imagenes_on_orden"
+  end
+
   create_table "instituciones", force: :cascade do |t|
     t.string "institucion"
     t.datetime "created_at", null: false
@@ -239,12 +255,11 @@ ActiveRecord::Schema.define(version: 2021_02_08_011402) do
   create_table "observaciones", force: :cascade do |t|
     t.integer "orden"
     t.string "observacion"
-    t.integer "columna_id"
     t.integer "linea_id"
     t.integer "tabla_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["columna_id"], name: "index_observaciones_on_columna_id"
+    t.text "detalle"
     t.index ["linea_id"], name: "index_observaciones_on_linea_id"
     t.index ["orden"], name: "index_observaciones_on_orden"
     t.index ["tabla_id"], name: "index_observaciones_on_tabla_id"
@@ -361,6 +376,10 @@ ActiveRecord::Schema.define(version: 2021_02_08_011402) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "archivo"
+    t.boolean "archivos"
+    t.boolean "imagenes"
+    t.index ["archivos"], name: "index_tablas_on_archivos"
+    t.index ["imagenes"], name: "index_tablas_on_imagenes"
     t.index ["orden"], name: "index_tablas_on_orden"
     t.index ["padre_id"], name: "index_tablas_on_padre_id"
   end
