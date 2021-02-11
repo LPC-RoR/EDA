@@ -44,6 +44,26 @@ module Eda
         tabla:        true,
         adjuntos:    false
     }
+
+    ## ------------------------------------------------- COLORES ESTRUCTURA
+    # En 'app' los controladores son los que NO son de los otros tipos
+    config.colors = {
+        'navbar' => {
+            color: 'bg-primary'
+        },
+        'app' => {
+            color: 'bg-primary'
+        },
+        'help' => {
+            color: 'bg-warning',
+            controllers: ['tema_ayudas', 'tutoriales', 'pasos']
+        },
+        'data' => {
+            color: 'bg-success',
+            controllers: ['etapas', 'tablas', 'lineas']
+        }
+    }
+
     ## ------------------------------------------------- MENU
     # controladores que NO despliegan MENU
     # se usa en nomenu?
@@ -55,14 +75,16 @@ module Eda
     # [2] : Tipo de ítem {'admin', 'usuario', 'anonimo', 'excluir'}
     # se usa directamente en 0p/navbar/_navbar.html.erb
     config.menu = [
-        ["Publicaciones", "/publicaciones",   'usuario'],
-        ["Equipos",       "/equipos",         'excluir'],
-        ["Proyectos",     "/proyectos",       'usuario'],
-        ["Carpetas",      "/carpetas",        'usuario'],
-        ["Temas",         "/temas",           'usuario'],
-        ["Textos",        "/textos",          'usuario'],
-        ["Ingresos",      "/ingresos",        'usuario'],
-        ["Cargas",        "/cargas",          'usuario'] 
+        ["Publicaciones",   "/publicaciones",   'usuario'],
+        ["Equipos",         "/equipos",         'excluir'],
+        ["Proyectos",       "/proyectos",       'usuario'],
+        ["Carpetas",        "/carpetas",        'usuario'],
+        ["Temas",           "/temas",           'usuario'],
+        ["Textos",          "/textos",          'usuario'],
+        ["Ingresos",        "/ingresos",        'usuario'],
+        ["Cargas",          "/cargas",          'usuario'],
+        ["Administradores", "/administradores",   'admin'],
+        ["Temas Ayuda",     "/tema_ayudas",       'admin'] 
     ]
 
     ## ------------------------------------------------- FRAMES

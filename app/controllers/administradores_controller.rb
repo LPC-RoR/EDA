@@ -1,12 +1,14 @@
 class AdministradoresController < ApplicationController
   before_action :authenticate_usuario!
   before_action :inicia_sesion
+  before_action :carga_temas_ayuda
   before_action :set_administrador, only: [:show, :edit, :update, :destroy]
 
   # GET /administradores
   # GET /administradores.json
   def index
-    @administradores = Administrador.all
+    @coleccion = {}
+    @coleccion['administradores'] = Administrador.all
   end
 
   # GET /administradores/1
@@ -16,7 +18,7 @@ class AdministradoresController < ApplicationController
 
   # GET /administradores/new
   def new
-    @administrador = Administrador.new
+    @objeto = Administrador.new
   end
 
   # GET /administradores/1/edit
@@ -26,15 +28,16 @@ class AdministradoresController < ApplicationController
   # POST /administradores
   # POST /administradores.json
   def create
-    @administrador = Administrador.new(administrador_params)
+    @objeto = Administrador.new(administrador_params)
 
     respond_to do |format|
-      if @administrador.save
-        format.html { redirect_to @administrador, notice: 'Administrador was successfully created.' }
-        format.json { render :show, status: :created, location: @administrador }
+      if @objeto.save
+        set_redireccion
+        format.html { redirect_to @redireccion, notice: 'Administrador was successfully created.' }
+        format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
-        format.json { render json: @administrador.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -43,12 +46,13 @@ class AdministradoresController < ApplicationController
   # PATCH/PUT /administradores/1.json
   def update
     respond_to do |format|
-      if @administrador.update(administrador_params)
-        format.html { redirect_to @administrador, notice: 'Administrador was successfully updated.' }
-        format.json { render :show, status: :ok, location: @administrador }
+      if @objeto.update(administrador_params)
+        set_redireccion
+        format.html { redirect_to @redireccion, notice: 'Administrador was successfully updated.' }
+        format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
-        format.json { render json: @administrador.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -56,9 +60,10 @@ class AdministradoresController < ApplicationController
   # DELETE /administradores/1
   # DELETE /administradores/1.json
   def destroy
-    @administrador.destroy
+    set_redireccion
+    @objeto.destroy
     respond_to do |format|
-      format.html { redirect_to administradores_url, notice: 'Administrador was successfully destroyed.' }
+      format.html { redirect_to @redireccion, notice: 'Administrador was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -66,7 +71,11 @@ class AdministradoresController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_administrador
-      @administrador = Administrador.find(params[:id])
+      @objeto = Administrador.find(params[:id])
+    end
+
+    def set_redireccion
+      @redireccion = administradores_path
     end
 
     # Only allow a list of trusted parameters through.

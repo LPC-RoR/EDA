@@ -1,4 +1,10 @@
 class ApplicationController < ActionController::Base
+
+	## TEMAS AYUDA
+	def carga_temas_ayuda
+		@temas_ayuda = TemaAyuda.all.order(:tipo).order(:orden)
+	end
+
 	## USO GENERAL
 	# Este método se usa para construir un nombre de directorio a partir de un correo electrónico.
 	def archivo_usuario(email)

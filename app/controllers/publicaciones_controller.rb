@@ -1,6 +1,7 @@
 class PublicacionesController < ApplicationController
   before_action :authenticate_usuario!
   before_action :inicia_sesion
+  before_action :carga_temas_ayuda
   before_action :set_publicacion, only: [:show, :edit, :update, :destroy, :cambia_evaluacion]
 
   after_action :procesa_author, only: [:update, :create]

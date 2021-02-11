@@ -385,6 +385,20 @@ module ApplicationHelper
 
 	## ------------------------------------------------------- GENERAL
 
+	def navbar_color
+		Rails.configuration.colors['navbar'][:color]
+	end
+
+	def controller_color(controller)
+		if Rails.configuration.colors['help'][:controllers].include?(controller)
+			Rails.configuration.colors['help'][:color]
+		elsif Rails.configuration.colors['data'][:controllers].include?(controller)
+			Rails.configuration.colors['data'][:color]
+		else
+			Rails.configuration.colors['app'][:color]
+		end
+	end
+
 	# Manejode options para selectors múltiples
 	def get_html_opts(options, label, value)
 		opts = options.clone

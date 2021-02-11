@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_09_144547) do
+ActiveRecord::Schema.define(version: 2021_02_11_202410) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -265,6 +265,17 @@ ActiveRecord::Schema.define(version: 2021_02_09_144547) do
     t.index ["tabla_id"], name: "index_observaciones_on_tabla_id"
   end
 
+  create_table "pasos", force: :cascade do |t|
+    t.integer "orden"
+    t.string "paso"
+    t.text "detalle"
+    t.integer "tutorial_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["orden"], name: "index_pasos_on_orden"
+    t.index ["tutorial_id"], name: "index_pasos_on_tutorial_id"
+  end
+
   create_table "perfiles", force: :cascade do |t|
     t.integer "usuario_id"
     t.integer "administrador_id"
@@ -384,6 +395,17 @@ ActiveRecord::Schema.define(version: 2021_02_09_144547) do
     t.index ["padre_id"], name: "index_tablas_on_padre_id"
   end
 
+  create_table "tema_ayudas", force: :cascade do |t|
+    t.integer "orden"
+    t.string "tema_ayuda"
+    t.text "detalle"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "tipo"
+    t.index ["orden"], name: "index_tema_ayudas_on_orden"
+    t.index ["tipo"], name: "index_tema_ayudas_on_tipo"
+  end
+
   create_table "temas", force: :cascade do |t|
     t.string "tema"
     t.datetime "created_at", null: false
@@ -400,6 +422,17 @@ ActiveRecord::Schema.define(version: 2021_02_09_144547) do
     t.datetime "updated_at", null: false
     t.string "sha1", limit: 40
     t.index ["sha1"], name: "index_textos_on_sha1"
+  end
+
+  create_table "tutoriales", force: :cascade do |t|
+    t.integer "orden"
+    t.string "tutorial"
+    t.text "detalle"
+    t.integer "tema_ayuda_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["orden"], name: "index_tutoriales_on_orden"
+    t.index ["tema_ayuda_id"], name: "index_tutoriales_on_tema_ayuda_id"
   end
 
   create_table "usuarios", force: :cascade do |t|
