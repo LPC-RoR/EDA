@@ -1,5 +1,4 @@
 class TemaAyudasController < ApplicationController
-  before_action :authenticate_usuario!
   before_action :inicia_sesion
   before_action :carga_temas_ayuda
   before_action :set_tema_ayuda, only: [:show, :edit, :update, :destroy]
@@ -9,12 +8,14 @@ class TemaAyudasController < ApplicationController
   def index
     @coleccion = {}
     @coleccion['tema_inicio'] = TemaAyuda.where(tipo: 'inicio')
-    @coleccion['tema_tutorial'] = TemaAyuda.where(tipo: 'tutorial')
+    @coleccion['tema_tutorial'] = TemaAyuda.where(tipo: 'tema')
   end
 
   # GET /tema_ayudas/1
   # GET /tema_ayudas/1.json
   def show
+    @coleccion = {}
+    @coleccion['tutoriales'] = @objeto.tutoriales.order(:orden)
   end
 
   # GET /tema_ayudas/new

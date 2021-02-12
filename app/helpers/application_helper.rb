@@ -283,7 +283,7 @@ module ApplicationHelper
 	# Manejo de campos condicionales FORM y SHOW
 	def filtro_conditional_field?(objeto, field)
 		if Rails.configuration.x.form.exceptions[objeto.class.name].present?
-			Rails.configuration.x.form.exceptions[objeto.class.name][:conditional_fields].include?(field) ? get_field_condition(objeto, field) : false
+			Rails.configuration.x.form.exceptions[objeto.class.name][:conditional_fields].include?(field) ? get_field_condition(objeto, field) : true
 		else
 			true
 		end
@@ -323,15 +323,17 @@ module ApplicationHelper
 					case objeto.class.name
 					when 'Publicacion'
 						objeto.title
+					when 'Linea'
+						objeto.columnas.order(:orden).first.columna
 					end
 				else
-					objeto.send(objeto.class.name.downcase)
+					objeto.send(objeto.class.name.tableize.singularize)
 				end
 			else
-				objeto.send(objeto.class.name.downcase)
+				objeto.send(objeto.class.name.tableize.singularize)
 			end
 		else
-			objeto.send(objeto.class.name.downcase)
+			objeto.send(objeto.class.name.tableize.singularize)
 		end
 	end
 
@@ -364,12 +366,8 @@ module ApplicationHelper
 	# manejo de f_tabla para manejar tablas asociadas
 	# /show/_detalle.html.erb
 	def f_tabla_field(objeto, label)
-		puts "**************** f_tabla_field"
-		puts Rails.configuration.x.tables.bt_fields[objeto.class.name].present?
 		if Rails.configuration.x.tables.bt_fields[objeto.class.name].present?
-			puts Rails.configuration.x.tables.bt_fields[objeto.class.name][label].present?
 			if Rails.configuration.x.tables.bt_fields[objeto.class.name][label].present?
-				puts Rails.configuration.x.tables.bt_fields[objeto.class.name][label][0] == 'bt_field'
 				if Rails.configuration.x.tables.bt_fields[objeto.class.name][label][0] == 'bt_field'
 					objeto.send(Rails.configuration.x.tables.bt_fields[objeto.class.name][label][1]).send(label)
 				else
@@ -389,7 +387,7 @@ module ApplicationHelper
 		Rails.configuration.colors['navbar'][:color]
 	end
 
-	def controller_color(controller)
+	def c_color(controller)
 		if Rails.configuration.colors['help'][:controllers].include?(controller)
 			Rails.configuration.colors['help'][:color]
 		elsif Rails.configuration.colors['data'][:controllers].include?(controller)

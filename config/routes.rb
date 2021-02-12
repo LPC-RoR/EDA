@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :pasos
-  resources :tutoriales
   resources :encabezados
   resources :columnas
   resources :herencias
@@ -61,6 +59,7 @@ Rails.application.routes.draw do
     match :nuevo, via: :post, on: :collection
   end
   resources :origenes
+  resources :pasos
   resources :perfiles
   resources :procesos
   resources :proyectos do
@@ -99,12 +98,16 @@ Rails.application.routes.draw do
   end
   resources :tema_ayudas do
     match :nuevo, via: :post, on: :collection
+    resources :tutoriales
   end
   resources :textos do
     match :nuevo, via: :post, on: :collection
     match :agregar_tema, via: :post, on: :collection
     match :eliminar_tema, via: :post, on: :collection
     match :remueve_texto, via: :get, on: :member
+  end
+  resources :tutoriales do
+    resources :pasos
   end
   resources :versiones
 

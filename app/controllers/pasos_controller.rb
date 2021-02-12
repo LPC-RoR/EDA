@@ -1,10 +1,12 @@
 class PasosController < ApplicationController
+  before_action :inicia_sesion
+  before_action :carga_temas_ayuda
   before_action :set_paso, only: [:show, :edit, :update, :destroy]
 
   # GET /pasos
   # GET /pasos.json
   def index
-    @pasos = Paso.all
+    @coleccion = Paso.all
   end
 
   # GET /pasos/1
@@ -14,7 +16,7 @@ class PasosController < ApplicationController
 
   # GET /pasos/new
   def new
-    @paso = Paso.new
+    @objeto = Paso.new(tutorial_id: params[:tutorial_id])
   end
 
   # GET /pasos/1/edit
@@ -24,15 +26,16 @@ class PasosController < ApplicationController
   # POST /pasos
   # POST /pasos.json
   def create
-    @paso = Paso.new(paso_params)
+    @objeto = Paso.new(paso_params)
 
     respond_to do |format|
-      if @paso.save
-        format.html { redirect_to @paso, notice: 'Paso was successfully created.' }
-        format.json { render :show, status: :created, location: @paso }
+      if @objeto.save
+        set_redireccion
+        format.html { redirect_to @redireccion, notice: 'Paso was successfully created.' }
+        format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
-        format.json { render json: @paso.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -41,12 +44,13 @@ class PasosController < ApplicationController
   # PATCH/PUT /pasos/1.json
   def update
     respond_to do |format|
-      if @paso.update(paso_params)
-        format.html { redirect_to @paso, notice: 'Paso was successfully updated.' }
-        format.json { render :show, status: :ok, location: @paso }
+      if @objeto.update(paso_params)
+        set_redireccion
+        format.html { redirect_to @redireccion, notice: 'Paso was successfully updated.' }
+        format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
-        format.json { render json: @paso.errors, status: :unprocessable_entity }
+        format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -54,9 +58,10 @@ class PasosController < ApplicationController
   # DELETE /pasos/1
   # DELETE /pasos/1.json
   def destroy
-    @paso.destroy
+    set_redireccion
+    @objeto.destroy
     respond_to do |format|
-      format.html { redirect_to pasos_url, notice: 'Paso was successfully destroyed.' }
+      format.html { redirect_to @redireccion, notice: 'Paso was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -64,7 +69,11 @@ class PasosController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_paso
-      @paso = Paso.find(params[:id])
+      @objeto = Paso.find(params[:id])
+    end
+
+    def set_redireccion
+      @redireccion = @objeto.tutorial
     end
 
     # Only allow a list of trusted parameters through.

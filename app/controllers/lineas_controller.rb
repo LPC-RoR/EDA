@@ -1,4 +1,5 @@
 class LineasController < ApplicationController
+  before_action :carga_temas_ayuda
   before_action :set_linea, only: [:show, :edit, :update, :destroy]
 
   # GET /lineas

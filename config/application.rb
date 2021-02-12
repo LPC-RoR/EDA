@@ -49,18 +49,18 @@ module Eda
     # En 'app' los controladores son los que NO son de los otros tipos
     config.colors = {
         'navbar' => {
-            color: 'bg-primary'
+            color: 'primary'
         },
         'app' => {
-            color: 'bg-primary'
+            color: 'primary'
         },
         'help' => {
-            color: 'bg-warning',
+            color: 'secondary',
             controllers: ['tema_ayudas', 'tutoriales', 'pasos']
         },
         'data' => {
-            color: 'bg-success',
-            controllers: ['etapas', 'tablas', 'lineas']
+            color: 'success',
+            controllers: ['etapas', 'tablas', 'lineas', 'especificaciones', 'observaciones', 'archivos', 'imagenes']
         }
     }
 
@@ -174,6 +174,11 @@ module Eda
             elementos: {
                 nuevo: ['lineas']
             }
+        },
+        'tutoriales' => {
+            elementos: {
+                nuevo: ['tema_ayudas']
+            }
         }
     }
 
@@ -257,6 +262,18 @@ module Eda
                 'academic_degree',
                 'ciudad_pais'
             ]
+        },
+        'TemaAyuda' => {
+            f_detail: true,
+            conditional_fields: []
+        },
+        'Tutorial' => {
+            f_detail: true,
+            conditional_fields: []
+        },
+        'Paso' => {
+            f_detail: true,
+            conditional_fields: []
         }
     }
 
@@ -278,7 +295,7 @@ module Eda
             elementos: [:clasifica, :tabla]
         },
         'Linea' => {
-            elementos: [:clasifica, :tabla]
+            elementos: [:clasifica, :tabla, 'show_title']
         }
     }
 

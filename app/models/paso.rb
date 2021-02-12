@@ -1,3 +1,7 @@
 class Paso < ApplicationRecord
 	belongs_to :tutorial
-send
+
+	def d_detalle
+	  self.detalle.blank? ? '' : self.detalle.gsub(/\n/, '<br>')
+	end
+end

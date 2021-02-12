@@ -1,4 +1,5 @@
 class EtapasController < ApplicationController
+  before_action :carga_temas_ayuda
   before_action :set_etapa, only: [:show, :edit, :update, :destroy]
 
   # GET /etapas

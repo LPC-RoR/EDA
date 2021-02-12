@@ -1,4 +1,5 @@
 class TablasController < ApplicationController
+  before_action :carga_temas_ayuda
   before_action :set_tabla, only: [:show, :edit, :update, :destroy, :cargar_tabla]
 
   # GET /tablas
