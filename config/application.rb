@@ -56,7 +56,7 @@ module Eda
         },
         'help' => {
             color: 'secondary',
-            controllers: ['tema_ayudas', 'tutoriales', 'pasos']
+            controllers: ['tema_ayudas', 'tutoriales', 'pasos', 'mensajes']
         },
         'data' => {
             color: 'success',
@@ -86,6 +86,9 @@ module Eda
         ["Administradores", "/administradores",   'admin'],
         ["Temas Ayuda",     "/tema_ayudas",       'admin'] 
     ]
+
+    config.menu_con_contacto = true
+    config.menu_con_ayuda = true
 
     ## ------------------------------------------------- FRAMES
     config.frames = {
@@ -274,6 +277,10 @@ module Eda
         'Paso' => {
             f_detail: true,
             conditional_fields: []
+        },
+        'Mensaje' => {
+            f_detail: true,
+            conditional_fields: ['email']
         }
     }
 

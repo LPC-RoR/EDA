@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :relaciones
+  resources :contactos
   resources :encabezados
   resources :columnas
   resources :herencias
@@ -52,8 +54,9 @@ Rails.application.routes.draw do
     resources :archivos
     resources :imagenes
   end
-  resources :metodologias do
-    match :nuevo, via: :post, on: :collection
+  resources :mensajes do
+    match :estado, via: :get, on: :member
+    match :respuesta, via: :post, on: :collection
   end
   resources :observaciones do
     match :nuevo, via: :post, on: :collection
@@ -111,7 +114,15 @@ Rails.application.routes.draw do
   end
   resources :versiones
 
-  devise_for :usuarios
+  devise_for :usuarios, controllers: {
+        confirmations: 'usuarios/confirmations',
+#        omniauth_callbacks: 'usuarios/omniauth_callbacks',
+        passwords: 'usuarios/passwords',
+        registrations: 'usuarios/registrations',
+        sessions: 'usuarios/sessions',
+        unlocks: 'usuarios/unlocks'
+      }
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   root 'publicaciones#index'

@@ -14,6 +14,7 @@ class Perfil < ApplicationRecord
 	has_many :cargas
 	has_many :ingresos, class_name: 'Publicacion'
 	has_many :evaluaciones
+	has_many :mensajes
 
 	has_many :coautores
 	has_many :colaboraciones, through: :coautores, source: :proyecto

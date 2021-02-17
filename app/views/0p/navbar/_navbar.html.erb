@@ -1,54 +1,42 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-<%=navbar_color%>">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      </button>
-      <%= link_to (image_tag 'logo_navbar.gif', height: "40"), root_path, :class => 'navbar-brand' %>
-    </div>
+<!--nav class="navbar navbar-expand-lg navbar-light bg-light"-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-<%=navbar_color%>">
+  <div class="container-fluid">
 
-    <% unless nomenu?(controller_name) %>
-      <div id="navbar" class="navbar-collapse collapse">
-      <!--div class="collapse navbar-collapse" id="navbarNav"-->
+    <a class="navbar-brand" href="http://www.edasoft.cl">
+      <%= image_tag("logo_navbar.gif", height: "40", class: "img-responsive", id: "navbar-logo") %>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <ul class="nav navbar-nav mr-auto">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+      <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
+        <% unless nomenu?(controller_name) %>
             <% menu.each do |item| %>
               <%= render partial: '0p/navbar/btn', locals: {nombre: item[0].capitalize, link: item[1], active: item_active(item[1]), delete: false} if display_item_menu?(item[2]) %>
             <% end %>
-        </ul>
+        <% end %>
+      </ul>
 
-        <ul class="nav navbar-nav navbar-right">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-          <li class="nav-item dropdown ml-auto">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Ayuda
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <% unless @temas_ayuda.empty? %>
-                <% @temas_ayuda.each do |tema| %>
-                  <%= link_to tema.tema_ayuda, tema, class: "dropdown-item" %>
-                <% end %>
-              <% end %>
-              <a class="dropdown-item" href="#">Action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </li>
+        <%= render partial: '0help/tema_ayuda/dropdown_menu' if menu_con_ayuda %>
 
-          <% if usuario_signed_in? %>
-            <!--li><%= link_to('My Account', edit_usuario_registration_path) %></li-->
-            <%= render partial: '0p/navbar/btn', locals: {nombre: 'Salir', link: destroy_usuario_session_path, active: false, delete: true} %>
-          <% else %>
-            <%= render partial: '0p/navbar/btn', locals: {nombre: 'Ingreso', link: new_usuario_session_path, active: false, delete: false} %>
-            <%= render partial: '0p/navbar/btn', locals: {nombre: 'Registro', link: new_usuario_registration_path, active: false, delete: false} %>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
+        <% if usuario_signed_in? %>
+
+          <%= render partial: '0p/navbar/btn', locals: {nombre: 'Contacto', link: mensajes_path, active: controller_name == 'contactos', delete: false} if menu_con_contacto %>
+
+          <%= render partial: '0p/navbar/btn', locals: {nombre: 'Salir', link: destroy_usuario_session_path, active: false, delete: true} %>
+        <% else %>
+          <%= render partial: '0p/navbar/btn', locals: {nombre: 'Contacto', link: new_mensaje_path, active: controller_name == 'contactos', delete: false} if menu_con_contacto %>
+
+          <%= render partial: '0p/navbar/btn', locals: {nombre: 'Ingreso', link: new_usuario_session_path, active: (controller_name == 'sessions'), delete: false} %>
+          <%= render partial: '0p/navbar/btn', locals: {nombre: 'Registro', link: new_usuario_registration_path, active: (controller_name == 'registrations'), delete: false} %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
 </nav>
 </br>
 

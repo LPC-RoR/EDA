@@ -34,6 +34,14 @@ module ApplicationHelper
 		end
 	end
 
+	def menu_con_ayuda
+		Rails.configuration.menu_con_ayuda
+	end
+
+	def menu_con_contacto
+		Rails.configuration.menu_con_contacto
+	end
+
 	## ------------------------------------------------------- FRAME
 
 	def frame_titulo(controlador, accion)
@@ -277,6 +285,8 @@ module ApplicationHelper
 		case objeto.class.name
 		when 'Publicacion'
 			objeto.origen == 'ingreso'
+		when 'Mensaje'
+			field != 'email' or not usuario_signed_in?
 		end
 	end
 

@@ -18,9 +18,6 @@
 			</table>
 		<% end %>
 
-		<%= render partial: '0p/tabla/btn_nuevo', locals: {c: 'pasos'} %>
-		<%# unless @coleccion['tutoriales'].blank? %>
-			<%#= render partial: '0p/tabla/tabla', locals: {c: 'pasos', a: 'index'} %>
-		<%# end %>
+		<%= render partial: '0p/tabla/btn_nuevo', locals: {c: 'pasos'} if session[:es_administrador] %>
 	</div>
 </div>

@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tipo: MyString
+  estado: MyString
+  contacto: MyString
+  perfil_id: 1
+  padre_id: 1
+
+two:
+  tipo: MyString
+  estado: MyString
+  contacto: MyString
+  perfil_id: 1
+  padre_id: 1

@@ -27,4 +27,4 @@
 	</div>
 </div>
 
-<%= render partial: '0p/tabla/btn_nuevo', locals: {c: 'tema_ayudas'} %>
+<%= render partial: '0p/tabla/btn_nuevo', locals: {c: 'tema_ayudas'} if session[:es_administrador] %>

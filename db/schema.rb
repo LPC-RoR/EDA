@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_11_202410) do
+ActiveRecord::Schema.define(version: 2021_02_16_221145) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -112,6 +112,22 @@ ActiveRecord::Schema.define(version: 2021_02_11_202410) do
     t.string "columna"
     t.index ["linea_id"], name: "index_columnas_on_linea_id"
     t.index ["orden"], name: "index_columnas_on_orden"
+  end
+
+  create_table "contactos", force: :cascade do |t|
+    t.string "tipo"
+    t.string "estado"
+    t.string "contacto"
+    t.integer "perfil_id"
+    t.datetime "sended_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "email"
+    t.text "detalle"
+    t.index ["estado"], name: "index_contactos_on_estado"
+    t.index ["perfil_id"], name: "index_contactos_on_perfil_id"
+    t.index ["sended_at"], name: "index_contactos_on_sended_at"
+    t.index ["tipo"], name: "index_contactos_on_tipo"
   end
 
   create_table "departamentos", force: :cascade do |t|
@@ -242,6 +258,23 @@ ActiveRecord::Schema.define(version: 2021_02_11_202410) do
     t.index ["tabla_id"], name: "index_lineas_on_tabla_id"
   end
 
+  create_table "mensajes", force: :cascade do |t|
+    t.string "mensaje"
+    t.string "tipo"
+    t.string "estado"
+    t.string "email"
+    t.datetime "fecha_envio"
+    t.text "detalle"
+    t.integer "perfil_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_mensajes_on_email"
+    t.index ["estado"], name: "index_mensajes_on_estado"
+    t.index ["fecha_envio"], name: "index_mensajes_on_fecha_envio"
+    t.index ["perfil_id"], name: "index_mensajes_on_perfil_id"
+    t.index ["tipo"], name: "index_mensajes_on_tipo"
+  end
+
   create_table "metodologias", force: :cascade do |t|
     t.string "metodologia"
     t.integer "orden"
@@ -369,6 +402,15 @@ ActiveRecord::Schema.define(version: 2021_02_11_202410) do
     t.datetime "updated_at", null: false
     t.index ["doi"], name: "index_registros_on_doi"
     t.index ["institucion_id"], name: "index_registros_on_institucion_id"
+  end
+
+  create_table "relaciones", force: :cascade do |t|
+    t.integer "parent_id"
+    t.integer "child_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["child_id"], name: "index_relaciones_on_child_id"
+    t.index ["parent_id"], name: "index_relaciones_on_parent_id"
   end
 
   create_table "revistas", force: :cascade do |t|
