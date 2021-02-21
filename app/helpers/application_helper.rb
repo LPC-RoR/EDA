@@ -171,7 +171,7 @@ module ApplicationHelper
 		when 'detalle_pedido'
 			"/#{controller.classify.constantize::SELECTOR}/seleccion?#{@objeto.class.name.downcase}_id=#{@objeto.id}&empresa_id=#{@objeto.registro.empresa.id}"
 		when 'normal'
-			f_controller(controller_name) == controller ? "/#{controller}/new" : "/#{@objeto.class.name.tableize}/#{@objeto.id}/#{controller}/new"
+			(f_controller(controller_name) == controller or @objeto.blank?) ? "/#{controller}/new" : "/#{@objeto.class.name.tableize}/#{@objeto.id}/#{controller}/new"
 		end
 	end
 
@@ -207,6 +207,32 @@ module ApplicationHelper
 	# "-tabla.html.erb"
 	def c_estados(controller)
 		Rails.configuration.x.tables.exceptions[controller][:estados]
+	end
+
+	def tr_row(objeto)
+		case objeto.class.name
+		when 'Publicacion'
+			if usuario_signed_in?
+				#activo = Perfil.find(session[:perfil_activo]['id'])
+				#(objeto.carpetas.ids & activo.carpetas.ids).empty? ? 'default' : 'dark'
+				'default'
+			else
+				'default'
+			end
+		else
+			'default'
+		end
+	end
+
+	def sortable?(controller)
+		Rails.configuration.sortable_tables.include?(controller)
+	end
+
+	def sortable(column, title = nil)
+	  title ||= column.titleize
+	  css_class = column == sort_column ? "current #{sort_direction}" : nil
+	  direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
+	  link_to title, {:sort => column, :direction => direction}, {:class => css_class}
 	end
 
 	## ------------------------------------------------------- TABLA | BTNS

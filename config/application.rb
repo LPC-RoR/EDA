@@ -185,6 +185,8 @@ module Eda
         }
     }
 
+    config.sortable_tables = []
+
     ## ------------------------------------------------- TABLA | BTNS
 
     ## x_btns
