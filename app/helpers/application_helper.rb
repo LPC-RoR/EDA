@@ -72,16 +72,7 @@ module ApplicationHelper
 
 	# valida el uso de alias en las tablas
 	def alias_tabla(controlador)
-		case controlador
-		when 'papers'
-			'publicaciones'
-		when 'hijos'
-			'conceptos'
-		when 'ingresos'
-			'publicaciones'
-		else
-			controlador
-		end
+		Rails.configuration.alias_controllers[controlador].present? ? Rails.configuration.alias_controllers[controlador] : controlador
 	end
 
 	# Maneja comportamiento por defecto y excepciones de TABLA
@@ -336,6 +327,14 @@ module ApplicationHelper
 	end
 
 	## ------------------------------------------------------- SHOW
+
+	def status?(objeto)
+		if Rails.configuration.x.show.exceptions[objeto.class.name].present?
+		Rails.configuration.x.show.exceptions[objeto.class.name][:elementos].include?(:status)
+		else
+			false
+		end
+	end
 
 	# Maneja comportamiento por defecto y excepciones de SHOW
 	def in_show?(objeto, label)

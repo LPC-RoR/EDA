@@ -185,6 +185,9 @@ module Eda
         }
     }
 
+    config.alias_controllers = {
+    }
+
     config.sortable_tables = []
 
     ## ------------------------------------------------- TABLA | BTNS
