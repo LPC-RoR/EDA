@@ -120,7 +120,7 @@ class CarpetasController < ApplicationController
     end
 
     def set_redireccion
-      @redireccion = "/carpetas"
+      @redireccion = publicaciones_path
     end
 
     # Only allow a list of trusted parameters through.

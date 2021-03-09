@@ -1,20 +1,11 @@
 class RecursosController < ApplicationController
+  before_action :inicia_sesion
+  before_action :carga_temas_ayuda
 #  before_action :set_recurso, only: [:show, :edit, :update, :destroy]
 
-  # GET /recursos/tablas
-  def tablas
-    @ftab = params[:ftab].blank? ? Configuracion::RECURSO_ACTIONS_TABS[action_name][0] : params[:ftab]
-    @estado = params[:estado].blank? ? @ftab.classify.constantize::ESTADOS[0] : params[:estado]
-    # Manejo de Tablas, Tabs y Estados
-#    @coleccion = @ftab.classify.constantize::all.where(estado: @estado)
-    @coleccion = @ftab.classify.constantize::all
-  end
-
-  def manual
-    @ftab = 'publicaciones'
-#    @ftab = params[:ftab].blank? ? Configuracion::RECURSO_ACTIONS_TABS[action_name][0] : params[:ftab]
-#    @estado = params[:estado].blank? ? @ftab.classify.constantize::ESTADOS[0] : params[:estado]
-    @coleccion = Publicacion.where(origen: 'Manual').page(params[:page])
+  def home
+    @coleccion = {}
+    @coleccion['tema_ayudas'] = TemaAyuda.where(tipo: 'inicio').order(:orden)
   end
 
   private

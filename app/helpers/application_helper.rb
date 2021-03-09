@@ -14,6 +14,14 @@ module ApplicationHelper
 		Rails.configuration.menu
 	end
 
+	def foot_image
+		TemaAyuda.where(tipo: 'foot').any? ? TemaAyuda.where(tipo: 'foot').first.ilustracion.half.url : nil
+	end
+
+	def portada_image
+		TemaAyuda.where(tipo: 'portada').any? ? TemaAyuda.where(tipo: 'portada').first.ilustracion.url : nil
+	end
+
 	def item_active(link)
 		detalle_link = link.split('/')
 		nombre_accion = (detalle_link.length == 2 ? 'index' : detalle_link[2])
@@ -40,6 +48,14 @@ module ApplicationHelper
 
 	def menu_con_contacto
 		Rails.configuration.menu_con_contacto
+	end
+
+	def menu_con_logo
+		Rails.configuration.menu_con_logo
+	end
+
+	def logo_sobre_el_menu
+		Rails.configuration.logo_sobre_el_menu
 	end
 
 	## ------------------------------------------------------- FRAME
@@ -112,16 +128,6 @@ module ApplicationHelper
 		end
 	end
 
-	# Método de apoyo usado en get_new_link (abajo)
-	def f_controller(controller)
-		case controller
-		when 'ingresos'
-			'publicaciones'
-		else
-			controller
-		end
-	end
-
 	# Objtiene LINK DEL BOTON NEWf
 	def get_new_link(controller)
 		# CONTROLA EXCEPCIONES
@@ -145,24 +151,8 @@ module ApplicationHelper
 
 		# GENERA EL LINK
 		case tipo_new
-		when 'mask'
-			"/#{controller}/mask_new?origen=#{controller_name}"
-		# TIPO_NEW = 'child_nuevo'
-		# {'pedidos'}
-		when 'child_nuevo'
-			"/#{controller}/nuevo?#{@objeto.class.name.downcase}_id=#{@objeto.id}"
-		# TIPO_NEW = 'child_sel' : seleccion ? parametro_padre
-		# {'empleados', 'productos', 'clientes(*)'}
-		when 'child_sel'
-			# TIPO_NEW = 'child_sel'
-			# TABLA_SEL = 'controller'
-			"/#{controller.classify.constantize::TABLA_SEL}/seleccion?#{@objeto.class.name.downcase}_id=#{@objeto.id}"
-		# TIPO_NEW = 'detalle_pedido' : seleccion ? parametro_padre & empresa
-		# {'empleados', 'productos', 'clientes(*)'}
-		when 'detalle_pedido'
-			"/#{controller.classify.constantize::SELECTOR}/seleccion?#{@objeto.class.name.downcase}_id=#{@objeto.id}&empresa_id=#{@objeto.registro.empresa.id}"
 		when 'normal'
-			(f_controller(controller_name) == controller or @objeto.blank?) ? "/#{controller}/new" : "/#{@objeto.class.name.tableize}/#{@objeto.id}/#{controller}/new"
+			(alias_tabla(controller_name) == controller or @objeto.blank?) ? "/#{controller}/new" : "/#{@objeto.class.name.tableize}/#{@objeto.id}/#{controller}/new"
 		end
 	end
 
@@ -228,44 +218,6 @@ module ApplicationHelper
 
 	## ------------------------------------------------------- TABLA | BTNS
 
-	def crud_conditions(objeto)
-		case objeto.class.name
-		when 'Carga'
-			objeto.estado == 'ingreso'
-		when 'Publicacion'
-			objeto.origen == 'ingreso'
-		when 'Carpeta'
-			not Carpeta::NOT_MODIFY.include?(objeto.carpeta) and controller_name == 'carpetas'
-		when 'Texto'
-			false
-		when 'Clasificacion'
-			false
-		when 'Tema'
-			controller_name == 'temas'
-		when Proyecto
-			controller_name == 'proyectos'
-		when 'Tabla'
-			objeto.archivo.blank?
-		end
-	end
-
-	def x_conditions(objeto, btn)
-		case objeto.class.name
-		when 'Carga'
-			objeto.estado == 'ingreso'
-		when 'Texto'
-			controller_name == 'publicaciones'
-		when 'Carpeta'
-			controller_name == 'publicaciones' and (not Carpeta::NOT_MODIFY.include?(objeto.carpeta))
-		when 'Clasificacion'
-			objeto.clasificacion != btn
-		when 'Tema'
-			controller_name == 'proyectos' and objeto.perfil.id == session[:perfil_activo]['id'].to_i
-		when 'Tabla'
-			objeto.archivo.present? and objeto.encabezados.empty?
-		end
-	end
-
 	def btns?(objeto, tipo)
 		if Rails.configuration.x.btns.exceptions[objeto.class.name].present?
 			if Rails.configuration.x.btns.exceptions[objeto.class.name][:conditions].present?
@@ -296,16 +248,6 @@ module ApplicationHelper
 	end
 
 	## ------------------------------------------------------- FORM & SHOW
-
-	# apoyo de filtro_condicional_field? (abajo)
-	def get_field_condition(objeto, field)
-		case objeto.class.name
-		when 'Publicacion'
-			objeto.origen == 'ingreso'
-		when 'Mensaje'
-			field != 'email' or not usuario_signed_in?
-		end
-	end
 
 	# Manejo de campos condicionales FORM y SHOW
 	def filtro_conditional_field?(objeto, field)
@@ -355,12 +297,7 @@ module ApplicationHelper
 		if Rails.configuration.x.show.exceptions[objeto.class.name].present?
 			if Rails.configuration.x.show.exceptions[objeto.class.name][:elementos].present?
 				if Rails.configuration.x.show.exceptions[objeto.class.name][:elementos].include?('show_title')
-					case objeto.class.name
-					when 'Publicacion'
-						objeto.title
-					when 'Linea'
-						objeto.columnas.order(:orden).first.columna
-					end
+					objeto_title(objeto)
 				else
 					objeto.send(objeto.class.name.tableize.singularize)
 				end
@@ -369,21 +306,6 @@ module ApplicationHelper
 			end
 		else
 			objeto.send(objeto.class.name.tableize.singularize)
-		end
-	end
-
-	def show_links(objeto)
-		case objeto.class.name
-		when 'Publicacion'
-			[
-				['Editar',     [:edit, objeto], objeto.origen == 'ingreso'],
-				['Papelera',   "/publicaciones/estado?publicacion_id=#{objeto.id}&estado=papelera",     (['ingreso', 'duplicado'].include?(objeto.estado) and objeto.origen = 'ingreso')],
-				['Eliminar',   "/publicaciones/estado?publicacion_id=#{objeto.id}&estado=eliminado",    ['papelera'].include?(objeto.estado)],
-				['Publicar',   "/publicaciones/estado?publicacion_id=#{objeto.id}&estado=publicada",    (['ingreso'].include?(objeto.estado) and objeto.title.present? and objeto.author.present? and objeto.journal.present?)],	
-				['Ingreso',    "/publicaciones/estado?publicacion_id=#{objeto.id}&estado=ingreso",      (['publicado', 'papelera'].include?(objeto.estado) and objeto.origen == 'ingreso')],
-				['Múltiple',   "/publicaciones/estado?publicacion_id=#{objeto.id}&estado=multiple",     objeto.estado == 'duplicado'],
-				['Corrección', "/publicaciones/estado?publicacion_id=#{objeto.id}&estado=correccion",   (objeto.estado == 'publicada' and objeto.origen == 'ingreso' and objeto.textos.empty?)]
-			]
 		end
 	end
 
@@ -437,17 +359,6 @@ module ApplicationHelper
 		opts = options.clone
 		opts[label] = value
 		opts
-	end
-
-	# Corrige palabras
-	# "_title.html.erb"
-	def corrige(w)
-		case w
-		when 'Controlador'
-			'label'
-		else
-			w.capitalize
-		end
 	end
 
 	## ------------------------------------------------------- LIST

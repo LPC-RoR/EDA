@@ -1,4 +1,7 @@
 class PublicacionesController < ApplicationController
+
+  include ProcesaCarga
+
   before_action :authenticate_usuario!
   before_action :inicia_sesion
   before_action :carga_temas_ayuda
@@ -28,6 +31,8 @@ class PublicacionesController < ApplicationController
 
     @coleccion = {}
     @coleccion[controller_name] = @carpeta.publicaciones.page(params[:page])
+    @coleccion['carpetas'] = @activo.carpetas.all
+    @coleccion['temas'] = @activo.temas.all.order(:temas)
 
   end
 
@@ -96,7 +101,7 @@ class PublicacionesController < ApplicationController
   # GET /publicaciones/new
   def new
     @activo = Perfil.find(session[:perfil_activo]['id'])
-    @objeto = @activo.ingresos.new(origen: 'ingreso', estado: 'ingreso')
+    @objeto = @activo.publicaciones.new(origen: 'ingreso', estado: 'ingreso')
   end
 
   # GET /publicaciones/1/edit

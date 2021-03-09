@@ -65,6 +65,10 @@ module Eda
     }
 
     ## ------------------------------------------------- MENU
+
+    config.menu_con_logo = true
+    config.logo_sobre_el_menu = false
+
     # controladores que NO despliegan MENU
     # se usa en nomenu?
     config.x.menu.exceptions_controllers = ['confirmations', 'mailer', 'passwords', 'registrations', 'sessions', 'unlocks']    
@@ -78,8 +82,8 @@ module Eda
         ["Publicaciones",   "/publicaciones",   'usuario'],
         ["Equipos",         "/equipos",         'excluir'],
         ["Proyectos",       "/proyectos",       'usuario'],
-        ["Carpetas",        "/carpetas",        'usuario'],
-        ["Temas",           "/temas",           'usuario'],
+#        ["Carpetas",        "/carpetas",        'usuario'],
+#        ["Temas",           "/temas",           'usuario'],
         ["Textos",          "/textos",          'usuario'],
         ["Ingresos",        "/ingresos",        'usuario'],
         ["Cargas",          "/cargas",          'usuario'],
@@ -182,10 +186,23 @@ module Eda
             elementos: {
                 nuevo: ['tema_ayudas']
             }
+        },
+        'carpetas' => {
+            elementos: {
+                titulo: ['publicaciones'],
+                nuevo: ['publicaciones']
+            }
+        },
+        'temas' => {
+            elementos: {
+                titulo: ['publicaciones'],
+                nuevo: ['publicaciones']
+            }
         }
     }
 
     config.alias_controllers = {
+        'ingresos' => 'publicaciones'
     }
 
     config.sortable_tables = []

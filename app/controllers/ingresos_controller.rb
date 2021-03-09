@@ -17,7 +17,7 @@ class IngresosController < ApplicationController
     @options = { 'ftab' => @ftab }
 
     @coleccion = {}
-    @coleccion['publicaciones'] = @activo.ingresos.where(origen: 'ingreso').where(estado: @ftab).page(params[:page])
+    @coleccion['publicaciones'] = @activo.publicaciones.where(estado: @ftab).page(params[:page])
   end
 
   # GET /ingresos/1

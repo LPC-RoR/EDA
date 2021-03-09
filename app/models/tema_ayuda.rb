@@ -1,5 +1,7 @@
 class TemaAyuda < ApplicationRecord
 
+	require 'carrierwave/orm/activerecord'
+
 	TIPO = ['inicio', 'tema']
 
 	TABLA_FIELDS = [
@@ -18,6 +20,8 @@ class TemaAyuda < ApplicationRecord
 	]
 
 	has_many :tutoriales
+
+	mount_uploader :ilustracion, IlustracionUploader
 
 	def d_detalle
 	  self.detalle.blank? ? '' : self.detalle.gsub(/\n/, '<br>')

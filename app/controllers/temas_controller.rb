@@ -116,7 +116,7 @@ class TemasController < ApplicationController
     end
 
     def set_redireccion
-      @redireccion = '/temas'
+      @redireccion = publicaciones_path
     end
 
     # Only allow a list of trusted parameters through.

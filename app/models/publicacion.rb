@@ -88,59 +88,22 @@ class Publicacion < ApplicationRecord
 #	has_many :rutas
 #	has_many :instancias, through: :rutas
 
-	# REVISAR SI SE USARÁ
-	def procesa_autor(author, ind)
-		# SE DEBE PROCESAR
-		if self.c_d_author.present?
-			elementos = author.split(' ')
-
-			case elementos.length
-			when 1
-				# Es el apellido
-				author.strip.upcase
-			when 2
-				if elementos[0] == elementos[0].upcase
-					if elementos[0].length < elementos[1].length
-						(ind == 0 ? "#{elementos[1].upcase} #{elementos[0].upcase}" : "#{elementos[0].upcase} #{elementos[1].upcase}" )
-					else
-						(ind == 0 ? "#{elementos[0].upcase} #{elementos[1].upcase}" : "#{elementos[1].upcase} #{elementos[0].upcase}" )
-					end
-				else
-					(ind == 0 ? "#{elementos[1].upcase} #{elementos[0][0].upcase}" : "#{elementos[0][0].upcase} #{elementos[1].upcase}" )
-				end
-			when 3
-				(ind == 0 ? "#{elementos[2].upcase} #{elementos[0][0].upcase}#{elementos[1].upcase}" : "#{elementos[0][0].upcase}#{elementos[1].upcase} #{elementos[2].upcase}")
-			else
-				(ind == 0 ? "#{elementos.last.upcase} #{elementos[0..-2].map {|i| i[0]}.join('')}" : "#{elementos[0..-2].map {|i| i[0]}.join('')} #{elementos.last.upcase}")
-			end
-		end
-	end
-	def procesa_autores(author)
-		ultimo = procesa_autor(author.split(' &').last, 666)
-
-		primeros = author.split(' & ')[0].split(', ')
-		primeros_ok = []
-		primeros.each_with_index do |aut, i|
-			primeros_ok << procesa_autor(aut, i)
-		end
-		primeros_ok.join(', ')+' & '+ultimo
-	end
-
 	def m_quote
-		autores = self.d_author.present? ? procesa_autores(self.author) : self.author
+#		autores = self.d_author.present? ? procesa_autores(self.author) : self.author
+		autores = self.author
 		case self.doc_type
 		when 'Article'
-			"#{autores} (#{self.year}) #{self.title}#{"." unless ['?', '-'].include?(self.title[-1])} #{self.journal} #{self.volume}: #{self.pages} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
+			"#{autores} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} #{self.journal} #{self.volume}: #{self.pages} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
 		when 'Book'
-			"#{autores}#{", #{self.editor} (Ed.)" unless self.editor.blank?} (#{self.year}) #{self.title}#{"." unless ['?', '-'].include?(self.title[-1])} #{"#{self.ciudad_pais}: " unless self.ciudad_pais.blank?}#{self.journal} #{self.pages}#{" pp" if self.pages.present?} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
+			"#{autores}#{", #{self.editor} (Ed.)" unless self.editor.blank?} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} #{"#{self.ciudad_pais}: " unless self.ciudad_pais.blank?}#{self.journal} #{self.pages}#{" pp" if self.pages.present?} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
 		when 'Tesis'
-			"#{autores} (#{self.year}) #{self.title}#{"." unless ['?', '-'].include?(self.title[-1])} Tesis #{self.journal} #{self.pages}#{"pp" if self.pages.present?} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
+			"#{autores} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} Tesis #{self.journal} #{self.pages}#{"pp" if self.pages.present?} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
 		when 'Memoir'
-			"#{autores} (#{self.year}) #{self.title}#{"." unless ['?', '-'].include?(self.title[-1])} Memoria para optar al Título Profesional de #{self.academic_degree}, #{self.journal} #{self.pages}#{"pp" if self.pages.present?} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
+			"#{autores} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} Memoria para optar al Título Profesional de #{self.academic_degree}, #{self.journal} #{self.pages}#{"pp" if self.pages.present?} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
 		when 'Chapter'
-			"#{autores} (#{self.year}) #{self.title}#{"." unless ['?', '-'].include?(self.title[-1])} En: #{"#{self.editor} (Ed.), " unless self.editor.blank?}#{self.book} (pp #{self.pages}). #{self.ciudad_pais}#{": " unless self.ciudad_pais.blank?}#{self.journal}. #{"doi: " if self.doi.present?}#{self.doi}".strip
+			"#{autores} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} En: #{"#{self.editor} (Ed.), " unless self.editor.blank?}#{self.book} (pp #{self.pages}). #{self.ciudad_pais}#{": " unless self.ciudad_pais.blank?}#{self.journal}. #{"doi: " if self.doi.present?}#{self.doi}".strip
 		when 'Generic'
-			"#{autores} (#{self.year}) #{self.title}#{"." unless ['?', '-'].include?(self.title[-1])} #{self.journal} #{self.pages}#{" pp" if self.pages.present?} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
+			"#{autores} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} #{self.journal} #{self.pages}#{" pp" if self.pages.present?} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
 		end
 	end
 

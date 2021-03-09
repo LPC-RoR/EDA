@@ -9,10 +9,12 @@
 	</table>
 <% end %>
 <%= form_for :observacion_base, url: "/observaciones/nuevo?class_name=#{@objeto.class.name}&objeto_id=#{@objeto.id}" do |form| %>
+	<small><%= form.label 'Observación' %></small></br>
 	<div class='form-inline'>
 		<%#= form.text_field(:orden, size: 5, placeholder: 'orden', class: 'form-control' ) %>
-		<%= form.text_field(:observacion, placeholder: 'observación', size: 67, class: 'form-control' ) %>
+		<%= form.text_field(:observacion, size: 67, class: 'form-control' ) %>
 	</div>
-  	<%= form.text_area :detalle, placeholder: 'detalle', size: '68x3' %>
+	<small><%= form.label :detalle %></small></br>
+  	<%= form.text_area :detalle, size: '68x3' %>
 	<%= form.submit '+ Observacion'  %>
 <% end  %>

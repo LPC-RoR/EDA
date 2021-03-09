@@ -17,8 +17,9 @@
     <div class="container-fluid">
       <%= yield %>          
     </div>
+    <!------------------------------------------->
     </br></br></br>
-    <%= image_tag 'foot.jpg', class: "mx-auto d-block" %>
+    <%= image_tag foot_image, class: "mx-auto d-block" unless foot_image.blank? %>
     </br></br></br>
   </body>
 </html>
