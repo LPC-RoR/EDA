@@ -15,7 +15,7 @@ module ApplicationHelper
 	end
 
 	def foot_image
-		TemaAyuda.where(tipo: 'foot').any? ? TemaAyuda.where(tipo: 'foot').first.ilustracion.half.url : nil
+		TemaAyuda.where(tipo: 'foot').any? ? TemaAyuda.where(tipo: 'foot').first.ilustracion.quarter.url : nil
 	end
 
 	def portada_image
