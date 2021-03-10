@@ -3,6 +3,26 @@ module ApplicationHelper
 
 	## CAPITAN
 
+	def imagen_portada
+		Rails.configuration.home[:imagen_portada]
+	end
+
+	def t_size
+		Rails.configuration.home[:titulo_size]
+	end
+
+	def t_color
+		Rails.configuration.home[:titulo_color]
+	end
+
+	def d_size
+		Rails.configuration.home[:detalle_size]
+	end
+
+	def d_color
+		Rails.configuration.home[:detalle_color]
+	end
+
 	## ------------------------------------------------------- MENU
 
 	# Obtiene los controladores que no despliegan menu

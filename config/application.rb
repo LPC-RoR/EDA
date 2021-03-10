@@ -64,6 +64,16 @@ module Eda
         }
     }
 
+    ## ------------------------------------------------- CONFIGURACION HOME
+
+    config.home = {
+        imagen_portada: false,
+        titulo_size: '1',
+        titulo_color: 'primary',
+        detalle_size: '6',
+        detalle_color: 'primary'
+    }
+
     ## ------------------------------------------------- MENU
 
     config.menu_con_logo = true

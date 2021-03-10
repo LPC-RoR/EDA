@@ -1,30 +1,7 @@
-<div class='row'>
-	<%#= image_tag portada_image, class: "mx-auto d-block" unless portada_image.blank? %>
-</div>
+<%= render partial: '0p/home/home' %>
 
-<% @coleccion['tema_ayudas'].each do |tema| %>
-<div class='row'>
-	<div class='col-md-1'></div>
-	<div class='col-md-6'>
-		</br>
-		<h1 class='text-info'><%= tema.tema_ayuda %></h1>
-		<h5 class='text-info'>
-			<%= sanitize tema.d_detalle %>
-		</h5>
-	</div>
-	<div class='col-md-4'>
-		</br></br></br>
-		<%= image_tag tema.ilustracion.half.url, class: "mx-auto d-block" if tema.ilustracion? %>
-	</div>
-	<div class='col-md-1'></div>
-</div>
-<% end %>
-
+</br></br>
 <h4 class='text-warning text-center'>ADVERTENCIA</h4>
 <%#= image_tag 'Proyecto ID.jpg', class: "mx-auto d-block" %>
 <h6 class='text-warning text-center'>El dispositivo de traducción automática de su navegador produce efectos que distorsionan los datos de nuestra colección, recomendamos su desactivación.</h6>
 </br>
-
-<%#= render partial: '0p/general/titulo', locals: {c: 'publicaciones', a: nil, titulo: 'últimas 10 actualizaciones', size: '5'} %>
-
-<%#= render partial: '0p/tabla/solo_tabla', locals: {c: 'publicaciones', a: 'inidex'} %>
