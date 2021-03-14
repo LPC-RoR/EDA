@@ -67,11 +67,15 @@ module Eda
     ## ------------------------------------------------- CONFIGURACION HOME
 
     config.home = {
+        favicon: true,
+        home: 'http://www.edasoft.cl',
+        nombre: 'Eda',
         imagen_portada: false,
         titulo_size: '1',
         titulo_color: 'primary',
         detalle_size: '6',
-        detalle_color: 'primary'
+        detalle_color: 'primary',
+        foot_size: 'quarter'
     }
 
     ## ------------------------------------------------- MENU
@@ -89,16 +93,16 @@ module Eda
     # [2] : Tipo de ítem {'admin', 'usuario', 'anonimo', 'excluir'}
     # se usa directamente en 0p/navbar/_navbar.html.erb
     config.menu = [
-        ["Publicaciones",   "/publicaciones",   'usuario'],
-        ["Equipos",         "/equipos",         'excluir'],
-        ["Proyectos",       "/proyectos",       'usuario'],
+        ["Publicaciones",   "/publicaciones",             'usuario'],
+        ["Proyecto Activo", "/proyectos/proyecto_activo", 'usuario'],
+        ["Proyectos",       "/proyectos",                 'usuario'],
 #        ["Carpetas",        "/carpetas",        'usuario'],
-#        ["Temas",           "/temas",           'usuario'],
-        ["Textos",          "/textos",          'usuario'],
-        ["Ingresos",        "/ingresos",        'usuario'],
-        ["Cargas",          "/cargas",          'usuario'],
-        ["Administradores", "/administradores",   'admin'],
-        ["Temas Ayuda",     "/tema_ayudas",       'admin'] 
+        ["Temas",           "/temas",                     'usuario'],
+        ["Textos",          "/textos",                    'usuario'],
+        ["Ingresos",        "/ingresos",                  'usuario'],
+        ["Cargas",          "/cargas",                    'usuario'],
+        ["Administradores", "/administradores",             'admin'],
+        ["Temas Ayuda",     "/tema_ayudas",                 'admin'] 
     ]
 
     config.menu_con_contacto = true
@@ -199,8 +203,8 @@ module Eda
         },
         'carpetas' => {
             elementos: {
-                titulo: ['publicaciones'],
-                nuevo: ['publicaciones']
+                titulo: ['publicaciones', 'proyectos'],
+                nuevo: ['publicaciones', 'proyectos']
             }
         },
         'temas' => {
@@ -262,7 +266,10 @@ module Eda
             ]
         },
         'Proyecto'      => {
-            conditions: ['crud']
+            conditions: ['crud', 'x'],
+            x_btns: [
+                    ['Activo', '/activo', false]
+            ]
         },
         'Tabla' => {
             conditions: ['crud', 'x'],
@@ -274,10 +281,14 @@ module Eda
 
     ## ------------------------------------------------- FORM
 
+    config.detail_types_controller = {
+        dependencias: ['mejoras', 'mensajes', 'observaciones', 'tema_ayudas', 'tutoriales', 'pasos'],
+        modelo: []
+    }
+
     # estan condiciones se aplican a FORM y SHOW
     config.x.form.exceptions = {
         'Publicacion' => {
-            f_detail: true,
             conditional_fields: [
                 'd_quote',
                 'm_quote',
@@ -298,20 +309,7 @@ module Eda
                 'ciudad_pais'
             ]
         },
-        'TemaAyuda' => {
-            f_detail: true,
-            conditional_fields: []
-        },
-        'Tutorial' => {
-            f_detail: true,
-            conditional_fields: []
-        },
-        'Paso' => {
-            f_detail: true,
-            conditional_fields: []
-        },
         'Mensaje' => {
-            f_detail: true,
             conditional_fields: ['email']
         }
     }

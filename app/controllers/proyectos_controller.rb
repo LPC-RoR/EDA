@@ -2,7 +2,7 @@ class ProyectosController < ApplicationController
   before_action :authenticate_usuario!
   before_action :inicia_sesion
   before_action :carga_temas_ayuda
-  before_action :set_proyecto, only: [:show, :edit, :update, :destroy]
+  before_action :set_proyecto, only: [:show, :edit, :update, :destroy, :activo]
 
   # GET /proyectos
   # GET /proyectos.json
@@ -17,21 +17,17 @@ class ProyectosController < ApplicationController
     @options = {'tab' => @tab}
 
     @coleccion = {}
-    @coleccion[controller_name] = (@tab == 'Administrados') ? @activo.proyectos : @activo.colaboraciones
+    @coleccion[controller_name] = (@tab == 'Administrados') ? @activo.proyectos.order(:proyecto) : @activo.colaboraciones.order(:proyecto)
 
   end
 
-  # GET /proyectos/1
-  # GET /proyectos/1.json
-  def show
+  def proyecto_activo
     @activo = Perfil.find(session[:perfil_activo]['id'])
-    if params[:html_options].blank?
-      @tab = 'temas'
-    else
-      @tab = params[:html_options][:tab].blank? ? 'temas' : params[:html_options][:tab]
-    end
-    @options = { 'tab' => @tab }
-#    @estado = params[:estado].blank? ? @tab.classify.constantize::ESTADOS[0] : params[:estado]
+
+    @objeto = Proyecto.find(session[:proyecto_activo].id)
+
+    @temas_seleccion = Tema.where(id: (@activo.temas.ids - @objeto.temas.ids))
+
     # tenemos que cubrir todos los casos
     # 1. has_many : }
     @coleccion = {}
@@ -39,6 +35,25 @@ class ProyectosController < ApplicationController
     @coleccion['versiones'] = @objeto.versiones
     @coleccion['temas']     = @objeto.temas
     @coleccion['etapas']    = @objeto.etapas
+    @coleccion['carpetas']  = @objeto.carpetas
+
+  end
+
+  # GET /proyectos/1
+  # GET /proyectos/1.json
+  def show
+    @activo = Perfil.find(session[:perfil_activo]['id'])
+
+    @temas_seleccion = Tema.where(id: (@activo.temas.ids - @objeto.temas.ids))
+
+    # tenemos que cubrir todos los casos
+    # 1. has_many : }
+    @coleccion = {}
+    @coleccion['perfiles']  = @objeto.perfiles
+    @coleccion['versiones'] = @objeto.versiones
+    @coleccion['temas']     = @objeto.temas
+    @coleccion['etapas']    = @objeto.etapas
+    @coleccion['carpetas']  = @objeto.carpetas
   end
 
   # GET /proyectos/new
@@ -108,6 +123,19 @@ class ProyectosController < ApplicationController
         format.json { render json: @objeto.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def activo
+    proyectos_activos = Proyecto.where(activo: true)
+    unless proyectos_activos.empty?
+      proyectos_activos.each do |proyecto|
+        proyecto.activo = false
+        proyecto.save
+      end
+    end
+    @objeto.activo = true
+    @objeto.save
+    redirect_to proyectos_path
   end
 
   # DELETE /proyectos/1

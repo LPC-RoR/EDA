@@ -16,14 +16,15 @@ class PublicacionesController < ApplicationController
   # GET /publicaciones.json
   def index
     @activo = Perfil.find(session[:perfil_activo]['id'])
+    @proyecto_activo = Proyecto.find(session[:proyecto_activo].id)
 
     # BI FRAME
-    @frame_selector = @activo.carpetas.all.map {|c| [c.carpeta, c.publicaciones.count]}
+    @frame_selector = @proyecto_activo.carpetas.all.map {|c| [c.carpeta, c.publicaciones.count]}
     # carpeta
     if params[:html_options].blank?
-      @carpeta = @activo.carpetas.first
+      @carpeta = @proyecto_activo.carpetas.first
     else
-      @carpeta = params[:html_options]['sel'].blank? ? @activo.carpetas.first : @activo.carpetas.find_by(carpeta: params[:html_options]['sel'])
+      @carpeta = params[:html_options]['sel'].blank? ? @proyecto_activo.carpetas.first : @proyecto_activo.carpetas.find_by(carpeta: params[:html_options]['sel'])
     end
     @sel = @carpeta.carpeta
     # opciones para los links
@@ -31,8 +32,6 @@ class PublicacionesController < ApplicationController
 
     @coleccion = {}
     @coleccion[controller_name] = @carpeta.publicaciones.page(params[:page])
-    @coleccion['carpetas'] = @activo.carpetas.all
-    @coleccion['temas'] = @activo.temas.all.order(:temas)
 
   end
 
@@ -53,9 +52,11 @@ class PublicacionesController < ApplicationController
     # *********************** CARPETAS ******************************
     @activo = Perfil.find(session[:perfil_activo]['id'])
 
+    @temas_seleccion = session[:proyecto_activo].temas
+
     ## AMBOS
-    @ids_carpetas_base = @activo.carpetas.map {|c| c.id if Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
-    @ids_carpetas_tema = @activo.carpetas.map {|c| c.id unless Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
+    @ids_carpetas_base = session[:proyecto_activo].carpetas.map {|c| c.id if Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
+    @ids_carpetas_tema = session[:proyecto_activo].carpetas.map {|c| c.id unless Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
 
     # ids de las carpetas del @activo
     ids_activo = @ids_carpetas_base | @ids_carpetas_tema
@@ -63,14 +64,14 @@ class PublicacionesController < ApplicationController
     # ids de la publicación que son del perfil
     ids_publicacion = @objeto.carpetas.ids & ids_activo
 
-    id_carpeta_carga      = @activo.carpetas.find_by(carpeta: 'Carga').id
-    id_carpeta_ingreso    = @activo.carpetas.find_by(carpeta: 'Ingreso').id
-    id_carpeta_duplicados = @activo.carpetas.find_by(carpeta: 'Duplicados').id
+    id_carpeta_carga      = session[:proyecto_activo].carpetas.find_by(carpeta: 'Carga').id
+    id_carpeta_ingreso    = session[:proyecto_activo].carpetas.find_by(carpeta: 'Ingreso').id
+    id_carpeta_duplicados = session[:proyecto_activo].carpetas.find_by(carpeta: 'Duplicados').id
 
-    @id_carpeta_revisadas  = @activo.carpetas.find_by(carpeta: 'Revisadas').id
+    @id_carpeta_revisadas  = session[:proyecto_activo].carpetas.find_by(carpeta: 'Revisadas').id
 
-    ids_tres   = @activo.carpetas.where(carpeta: ['Carga', 'Ingreso', 'Duplicados']).ids
-    ids_cuatro = @activo.carpetas.where(carpeta: ['Carga', 'Ingreso', 'Duplicados', 'Revisadas']).ids
+    ids_tres   = session[:proyecto_activo].carpetas.where(carpeta: ['Carga', 'Ingreso', 'Duplicados']).ids
+    ids_cuatro = session[:proyecto_activo].carpetas.where(carpeta: ['Carga', 'Ingreso', 'Duplicados', 'Revisadas']).ids
 
     ids_todas = @ids_carpetas_base | @ids_carpetas_tema
 
@@ -93,7 +94,7 @@ class PublicacionesController < ApplicationController
     # ***************************************** @show_colection[Modelo]
     @coleccion = {}
     @coleccion['textos']   = @objeto.textos
-    @coleccion['temas']    = @perfil.temas
+    @coleccion['temas']    = session[:proyecto_activo].temas
     @coleccion['carpetas'] = @objeto.carpetas
 
   end

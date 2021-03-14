@@ -80,6 +80,9 @@ class Publicacion < ApplicationRecord
 	has_many :clasificaciones
 	has_many :carpetas, through: :clasificaciones
 
+	has_many :asociaciones
+	has_many :proyectos, through: :asociaciones
+
 	# PENDIENTE DE REVISIÓN
 #	has_many :asignaciones, foreign_key: 'paper_id', class_name: 'Clasificacion'
 #	has_many :areas, through: :asignaciones

@@ -64,19 +64,19 @@
 	</div>
 
 </div>
-
+</br></br>
 <div class='row'>
 	<% unless ['ingreso', 'papelera', 'duplicado'].include?(@objeto.estado) %>
 		<div class='col-md-4'>
 
-			<%= render partial: '0p/show/inline_form_modelo', locals: {modelo: 'Tema', size: 30} %>
+			<%#= render partial: '0p/show/inline_form_modelo', locals: {modelo: 'Tema', size: 30} %>
 
 		</div>
 		<div class='col-md-8'>
 			<%= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: '+ Texto', size: '5'} %>
-			<% if @activo.temas.any? %>
+			<% if @temas_seleccion.any? %>
 				<%= form_for :texto_base, url: "/textos/nuevo?publicacion_id=#{@objeto.id}" do |form| %>
-					<%= form.select :tema_id, @activo.temas.collect { |tm| [tm.tema, tm.id] }, include_blank: false, prompt: "Seleccione Tema" %>
+					<%= form.select :tema_id, @temas_seleccion.collect { |tm| [tm.tema, tm.id] }, include_blank: false, prompt: "Seleccione Tema" %>
 					<%= form.select :clasificacion, Clasificacion::CLASIFICACION, include_blank: false, prompt: "Seleccione Clasificacion" %>
 					<div class='form-inline'>
 						<%= form.text_field(:texto, size: 80, class: 'form-control' ) %>

@@ -31,7 +31,7 @@ class CarpetasController < ApplicationController
 
   # GET /carpetas/new
   def new
-    @objeto = Carpeta.new(perfil_id: session[:perfil_activo]['id'])
+    @objeto = Carpeta.new(perfil_id: session[:perfil_activo]['id'], proyecto_id: session[:proyecto_activo].id)
   end
 
   # GET /carpetas/1/edit
@@ -120,11 +120,11 @@ class CarpetasController < ApplicationController
     end
 
     def set_redireccion
-      @redireccion = publicaciones_path
+      @redireccion = '/proyectos/proyecto_activo'
     end
 
     # Only allow a list of trusted parameters through.
     def carpeta_params
-      params.require(:carpeta).permit(:carpeta, :perfil_id)
+      params.require(:carpeta).permit(:carpeta, :perfil_id, :proyecto_id)
     end
 end

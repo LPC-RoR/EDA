@@ -11,22 +11,18 @@ class CargasController < ApplicationController
   # GET /cargas.json
   def index
     @activo = Perfil.find(session[:perfil_activo]['id'])
+    proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
 
     @coleccion = {}
-    @coleccion[controller_name] = @activo.cargas
+    @coleccion[controller_name] = proyecto_activo.cargas
 
     user_dir = session[:es_administrador] == true ? 'admin' : archivo_usuario(current_usuario.email)
     dir_path = "#{Rails.root}/archivos/#{user_dir}/#{controller_name}/"
     @dir = File.dirname("#{dir_path}**")
     FileUtils.mkdir_p(@dir) unless File.directory?(@dir)
 
-    @archivos = Dir.glob("#{@dir}/**") - @activo.cargas.map {|c| c.archivo}
+    @archivos = Dir.glob("#{@dir}/**") - proyecto_activo.cargas.map {|c| c.archivo}
 
-  end
-
-  def sel_archivo
-    @activo = Perfil.find(session[:perfil_activo]['id'])
-    @archivos = Dir.glob("#{Configuracion::RUTA_ARCHIVOS['cargas']}**/*") - @activo.cargas.map {|c| c.archivo}
   end
 
   # GET /cargas/1
@@ -54,7 +50,7 @@ class CargasController < ApplicationController
 
   # GET /cargas/new
   def new
-    @objeto = Carga.new(estado: 'ingreso', perfil_id: session[:perfil_activo]['id'])
+    @objeto = Carga.new(estado: 'ingreso', perfil_id: session[:perfil_activo]['id'], proyecto_id: session[:proyecto_activo]['id'])
   end
 
   # GET /cargas/1/edit
@@ -116,6 +112,6 @@ class CargasController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def carga_params
-      params.require(:carga).permit(:archivo, :nota, :estado, :perfil_id, :archivo_carga, :archivo_carga_cache)
+      params.require(:carga).permit(:archivo, :nota, :estado, :perfil_id, :archivo_carga, :archivo_carga_cache, :proyecto_id)
     end
 end

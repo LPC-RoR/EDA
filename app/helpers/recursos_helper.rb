@@ -1,5 +1,24 @@
 module RecursosHelper
+	## ------------------------------------------------------- MENU
+
+	def display_item_app(item, tipo_item)
+		session[:hay_proyecto] or ['Proyectos', 'Temas'].include?(item)
+	end
+
 	## ------------------------------------------------------- TABLA | BTNS
+
+	def tr_row(objeto)
+		case objeto.class.name
+		when 'Publicacion'
+			if usuario_signed_in?
+				'default'
+			else
+				'default'
+			end
+		else
+			'default'
+		end
+	end
 
 	def crud_conditions(objeto)
 		case objeto.class.name
@@ -8,13 +27,13 @@ module RecursosHelper
 		when 'Publicacion'
 			objeto.origen == 'ingreso'
 		when 'Carpeta'
-			not Carpeta::NOT_MODIFY.include?(objeto.carpeta) and controller_name == 'publicaciones' and action_name == 'index'
+			not Carpeta::NOT_MODIFY.include?(objeto.carpeta) and controller_name == 'proyectos'
 		when 'Texto'
 			false
 		when 'Clasificacion'
 			false
 		when 'Tema'
-			controller_name == 'publicaciones'
+			['publicaciones', 'temas'].include?(controller_name)
 		when Proyecto
 			controller_name == 'proyectos'
 		when 'Tabla'
@@ -36,6 +55,8 @@ module RecursosHelper
 			controller_name == 'proyectos' and objeto.perfil.id == session[:perfil_activo]['id'].to_i
 		when 'Tabla'
 			objeto.archivo.present? and objeto.encabezados.empty?
+		when 'Proyecto'
+			objeto.activo.blank? or objeto.activo == false
 		end
 	end
 

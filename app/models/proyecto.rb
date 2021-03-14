@@ -1,7 +1,7 @@
 class Proyecto < ApplicationRecord
 	TABLA_FIELDS = [
-		['proyecto', 'show'], 
-		['sha1',   'normal']
+		['proyecto', 'normal'], 
+		['sha1',     'normal']
 	]
 
  	FORM_FIELDS = [
@@ -16,12 +16,18 @@ class Proyecto < ApplicationRecord
 
 	belongs_to :administrador, class_name: 'Perfil'
 
+	has_many :cargas
+	has_many :carpetas
+	has_many :versiones
+	has_many :etapas
+
 	has_many :coautores
 	has_many :perfiles, through: :coautores
 
 	has_many :herencias
 	has_many :temas, through: :herencias
 
-	has_many :versiones
-	has_many :etapas
+	has_many :asociaciones
+	has_many :publicaciones, through: :asociaciones
+
 end

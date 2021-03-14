@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :asociaciones
   resources :relaciones
   resources :contactos
   resources :encabezados
@@ -13,7 +14,6 @@ Rails.application.routes.draw do
   resources :autores
   resources :cargas do
     match :procesa_carga, via: :get, on: :member
-    match :sel_archivo, via: :get, on: :collection
   end
   resources :carpetas do
     match :seleccion, via: :get, on: :collection
@@ -68,8 +68,11 @@ Rails.application.routes.draw do
   resources :proyectos do
     match :nuevo, via: :post, on: :collection
     match :nuevo_tema_proyecto, via: :post, on: :collection
+    match :activo, via: :get, on: :member
+    match :proyecto_activo, via: :get, on: :collection
     resources :versiones
     resources :etapas
+    resources :carpetas
   end
   resources :publicaciones do
     match :cambia_evaluacion, via: :get, on: :member

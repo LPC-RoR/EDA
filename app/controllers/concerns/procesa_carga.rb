@@ -83,6 +83,10 @@ module ProcesaCarga
 	        	pub.origen = 'carga' if ['remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
 	        	pub.save if ['remplazar_carga', 'remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
 
+	        	unless pub.proyectos.ids.include?(session[:proyecto_activo].id)
+	        		pub.proyectos << session[:proyecto_activo]
+	        	end
+
 	        	# procesa AUTORES
 	        	if ['remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
 					p_autores = pub.author.gsub(/\r/," ").gsub(/\n/," ").split(' and ')
@@ -97,14 +101,14 @@ module ProcesaCarga
 				end
 
 				## CARPETAS {'Carga', 'Ingreso', 'Duplicados', 'Revisar', 'Excluidas', 'Postergadas', 'Revisadas'}
-				cpt = (unicidad == 'colision_titulo' ? Carpeta.find_by(carpeta: 'Duplicados') : Carpeta.find_by(carpeta: 'Carga'))
+				cpt = (unicidad == 'colision_titulo' ? session[:proyecto_activo].carpetas.find_by(carpeta: 'Duplicados') : session[:proyecto_activo].carpetas.find_by(carpeta: 'Carga'))
 
 	        	# Uso la condicion que que no este en las carpetas del Investigador hay que cubrir
 	        	# 1. Publicacion ya revisada por mi puesta en una carpeta distinta a REVISA
 	        	# 2. Publicacion existente ingresada por otro usuario fuera de mis carpetas
-	        	activo = Perfil.find(session[:perfil_activo]['id'])
+#	        	activo = Perfil.find(session[:perfil_activo]['id'])
 	        	unless unicidad == 'saltar'
-					if pub.carpetas.empty? or pub.carpetas.ids.intersection(activo.carpetas.ids).empty?
+					if pub.carpetas.empty? or pub.carpetas.ids.intersection(session[:proyecto_activo].carpetas.ids).empty?
 						pub.cargas << carga 
 						pub.carpetas << cpt
 					end

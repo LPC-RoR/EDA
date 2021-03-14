@@ -3,6 +3,8 @@ module ApplicationHelper
 
 	## CAPITAN
 
+	## ------------------------------------------------------- HOME
+
 	def imagen_portada
 		Rails.configuration.home[:imagen_portada]
 	end
@@ -23,6 +25,18 @@ module ApplicationHelper
 		Rails.configuration.home[:detalle_color]
 	end
 
+	def favicon?
+		Rails.configuration.home[:favicon]
+	end
+
+	def nombre
+		Rails.configuration.home[:nombre]
+	end
+
+	def home
+		Rails.configuration.home[:home]
+	end
+
 	## ------------------------------------------------------- MENU
 
 	# Obtiene los controladores que no despliegan menu
@@ -35,7 +49,8 @@ module ApplicationHelper
 	end
 
 	def foot_image
-		TemaAyuda.where(tipo: 'foot').any? ? TemaAyuda.where(tipo: 'foot').first.ilustracion.quarter.url : nil
+		size =  Rails.configuration.home[:foot_size]
+		TemaAyuda.where(tipo: 'foot').any? ? TemaAyuda.where(tipo: 'foot').first.ilustracion.send(size).url : nil
 	end
 
 	def portada_image
@@ -48,13 +63,13 @@ module ApplicationHelper
 		detalle_link[1] == controller_name and nombre_accion == action_name
 	end
 
-	def display_item_menu?(tipo_item)
+	def display_item_menu?(item, tipo_item)
 		# ITEMS de MENU sólo para USUARIOS REGISTRADOS
 		case tipo_item
 		when 'admin'
 			(usuario_signed_in? and session[:es_administrador] == true)
 		when 'usuario'
-			usuario_signed_in?
+			usuario_signed_in? and display_item_app(item, tipo_item)
 		when 'anonimo'
 			true
 		when 'excluir'
@@ -210,21 +225,6 @@ module ApplicationHelper
 		Rails.configuration.x.tables.exceptions[controller][:estados]
 	end
 
-	def tr_row(objeto)
-		case objeto.class.name
-		when 'Publicacion'
-			if usuario_signed_in?
-				#activo = Perfil.find(session[:perfil_activo]['id'])
-				#(objeto.carpetas.ids & activo.carpetas.ids).empty? ? 'default' : 'dark'
-				'default'
-			else
-				'default'
-			end
-		else
-			'default'
-		end
-	end
-
 	def sortable?(controller)
 		Rails.configuration.sortable_tables.include?(controller)
 	end
@@ -233,7 +233,7 @@ module ApplicationHelper
 	  title ||= column.titleize
 	  css_class = column == sort_column ? "current #{sort_direction}" : nil
 	  direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
-	  link_to title, {:sort => column, :direction => direction}, {:class => css_class}
+	  link_to title, {:sort => column, :direction => direction, html_options: @options}, {:class => css_class}
 	end
 
 	## ------------------------------------------------------- TABLA | BTNS
@@ -279,6 +279,16 @@ module ApplicationHelper
 	end
 
 	## ------------------------------------------------------- FORM
+
+	def detail_partial(controller)
+		if Rails.configuration.detail_types_controller[:dependencias].include?(controller)
+			"0help/#{controller.singularize}/detail"
+		elsif Rails.configuration.detail_types_controller[:modelo].include?(controller)
+			"#{controller}/detail"
+		else
+			'0p/form/detail'
+		end
+	end
 
 	def form_f_detail?(objeto)
 		if Rails.configuration.x.form.exceptions[objeto.class.name].present?

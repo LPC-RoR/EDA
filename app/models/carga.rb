@@ -19,10 +19,12 @@ class Carga < ApplicationRecord
 		['archivo_carga', 'file_field'],
 		['estado',            'hidden'],
 		['perfil_id',         'hidden'],
+		['proyecto_id',       'hidden'],
 		['archivo',           'hidden']
 	]
 
 	belongs_to :perfil
+	belongs_to :proyecto
 
 	has_many :procesos
 	has_many :publicaciones, through: :procesos

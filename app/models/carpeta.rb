@@ -7,11 +7,13 @@ class Carpeta < ApplicationRecord
 	]
 
  	FORM_FIELDS = [
-		['carpeta',        'entry'],
-		['perfil_id',     'hidden']
+		['carpeta',      'entry'],
+		['proyecto_id', 'hidden'],
+		['perfil_id',   'hidden']
 	]
 
 	belongs_to :perfil, optional: true
+	belongs_to :proyecto
 
 	has_many :clasificaciones
 	has_many :publicaciones, through: :clasificaciones

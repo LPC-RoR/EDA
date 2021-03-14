@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_08_003954) do
+ActiveRecord::Schema.define(version: 2021_03_14_015639) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,15 @@ ActiveRecord::Schema.define(version: 2021_03_08_003954) do
     t.index ["orden"], name: "index_archivos_on_orden"
   end
 
+  create_table "asociaciones", force: :cascade do |t|
+    t.integer "publicacion_id"
+    t.integer "proyecto_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["proyecto_id"], name: "index_asociaciones_on_proyecto_id"
+    t.index ["publicacion_id"], name: "index_asociaciones_on_publicacion_id"
+  end
+
   create_table "autores", force: :cascade do |t|
     t.integer "publicacion_id"
     t.integer "investigador_id"
@@ -59,7 +68,9 @@ ActiveRecord::Schema.define(version: 2021_03_08_003954) do
     t.integer "n_vinculados"
     t.integer "n_existentes"
     t.string "archivo_carga"
+    t.integer "proyecto_id"
     t.index ["perfil_id"], name: "index_cargas_on_perfil_id"
+    t.index ["proyecto_id"], name: "index_cargas_on_proyecto_id"
   end
 
   create_table "carpetas", force: :cascade do |t|
@@ -67,8 +78,10 @@ ActiveRecord::Schema.define(version: 2021_03_08_003954) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "perfil_id"
+    t.integer "proyecto_id"
     t.index ["carpeta"], name: "index_carpetas_on_carpeta"
     t.index ["perfil_id"], name: "index_carpetas_on_perfil_id"
+    t.index ["proyecto_id"], name: "index_carpetas_on_proyecto_id"
   end
 
   create_table "citas", force: :cascade do |t|
@@ -335,6 +348,8 @@ ActiveRecord::Schema.define(version: 2021_03_08_003954) do
     t.integer "administrador_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "activo"
+    t.index ["activo"], name: "index_proyectos_on_activo"
     t.index ["administrador_id"], name: "index_proyectos_on_administrador_id"
     t.index ["proyecto"], name: "index_proyectos_on_proyecto"
     t.index ["sha1"], name: "index_proyectos_on_sha1"
