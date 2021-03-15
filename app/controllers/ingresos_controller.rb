@@ -7,7 +7,7 @@ class IngresosController < ApplicationController
   # GET /ingresos
   # GET /ingresos.json
   def index
-    @activo = Perfil.find(session[:perfil_activo]['id'])
+    proyecto_activo = session[:proyecto_activo]
 
     if params[:html_options].blank?
       @ftab = 'ingreso'
@@ -17,7 +17,7 @@ class IngresosController < ApplicationController
     @options = { 'ftab' => @ftab }
 
     @coleccion = {}
-    @coleccion['publicaciones'] = @activo.publicaciones.where(estado: @ftab).page(params[:page])
+    @coleccion['publicaciones'] = proyecto_activo.publicaciones.where(estado: @ftab).page(params[:page])
   end
 
   # GET /ingresos/1

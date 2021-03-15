@@ -101,8 +101,8 @@ class PublicacionesController < ApplicationController
 
   # GET /publicaciones/new
   def new
-    @activo = Perfil.find(session[:perfil_activo]['id'])
-    @objeto = @activo.publicaciones.new(origen: 'ingreso', estado: 'ingreso')
+    proyecto_activo = session[:proyecto_activo]
+    @objeto = proyecto_activo.publicaciones.new(origen: 'ingreso', estado: 'ingreso')
   end
 
   # GET /publicaciones/1/edit

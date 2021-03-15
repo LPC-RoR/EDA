@@ -43,19 +43,6 @@ class ProyectosController < ApplicationController
   # GET /proyectos/1
   # GET /proyectos/1.json
   def show
-    @activo = Perfil.find(session[:perfil_activo]['id'])
-
-    @temas_seleccion = Tema.where(id: (@activo.temas.ids - @objeto.temas.ids))
-    @temas_proyecto = @objeto.temas.order(:tema)
-
-    # tenemos que cubrir todos los casos
-    # 1. has_many : }
-    @coleccion = {}
-    @coleccion['perfiles']  = @objeto.perfiles
-    @coleccion['versiones'] = @objeto.versiones
-    @coleccion['temas']     = @objeto.temas
-    @coleccion['etapas']    = @objeto.etapas
-    @coleccion['carpetas']  = @objeto.carpetas
   end
 
   # GET /proyectos/new
