@@ -54,6 +54,7 @@ Rails.application.routes.draw do
   resources :lineas do
     resources :archivos
     resources :imagenes
+    resources :observaciones
   end
   resources :mensajes do
     match :estado, via: :get, on: :member
@@ -99,6 +100,8 @@ Rails.application.routes.draw do
     resources :publicaciones
   end
   resources :tablas do 
+    resources :especificaciones
+    resources :observaciones
     match :cargar_tabla, via: :get, on: :member
   end
   resources :temas do

@@ -1,4 +1,5 @@
 class ObservacionesController < ApplicationController
+  before_action :carga_temas_ayuda
   before_action :set_observacion, only: [:show, :edit, :update, :destroy]
 
   # GET /observaciones
@@ -14,20 +15,10 @@ class ObservacionesController < ApplicationController
 
   # GET /observaciones/new
   def new
-    @objeto = Observacion.new
-  end
+    padre = Linea.find(params[:linea_id]) unless params[:linea_id].blank?
+    padre = Tabla.find(params[:tabla_id]) unless params[:tabla_id].blank?
 
-  def nuevo
-    case params[:class_name]
-    when 'Tabla'
-      @objeto = Tabla.find(params[:objeto_id])
-    when 'Linea'
-      @objeto = Linea.find(params[:objeto_id])
-    end
-    
-    @objeto.observaciones.create(orden: params[:observacion_base][:orden], observacion: params[:observacion_base][:observacion], detalle: params[:observacion_base][:detalle])
-
-    redirect_to @objeto
+    @objeto = padre.observaciones.new
   end
 
   # GET /observaciones/1/edit

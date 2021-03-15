@@ -1,10 +1,23 @@
 <%= render partial: '0p/general/o_titulo', locals: {o: @objeto, a: action_name, size: '5'} if in_show?(@objeto, :titulo) %>
+
 <div class='row'>
-	<div class='col-md-12'>
-		<%= render partial: '0p/general/btn', locals: {texto: @objeto.etapa.proyecto.proyecto, link: @objeto.etapa.proyecto, delete: false, style: 'btn-outline-dark', clr: c_color(controller_name)} %>
-		<%= render partial: '0p/general/btn', locals: {texto: @objeto.etapa.etapa, link: @objeto.etapa, delete: false, clr: c_color(controller_name)} %>
+	<div class='col-md-6'>
+		<%= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: 'Especificaciones', size: '5'} %>
+
+		<%= render partial: "0data/especificacion/index" %>
+		<%= render partial: '0p/tabla/btn_nuevo', locals: {c: 'especificaciones'} %>
+
+	</div>
+	<div class='col-md-6'>
+		<%= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: 'Observaciones', size: '5'} %>
+
+		<%= render partial: "0data/observacion/index" %>
+		<%= render partial: '0p/tabla/btn_nuevo', locals: {c: 'observaciones'} %>
+
 	</div>
 </div>
+</br>
+
 <div class='row'>
 	<div class='col-md-12'>
 
@@ -41,18 +54,3 @@
 		<%#= render partial: '0p/tabla/tabla', locals: {c: alias_tabla('lineas'), a: 'index'} unless @coleccion['lineas'].empty? %>
 	</div>
 </div>
-<div class='row'>
-	<div class='col-md-6'>
-		<%= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: 'Especificaciones', size: '5'} %>
-
-		<%= render partial: "0data/especificacion/index" %>
-
-	</div>
-	<div class='col-md-6'>
-		<%= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: 'Observaciones', size: '5'} %>
-
-		<%= render partial: "0data/observacion/index" %>
-
-	</div>
-</div>
-</br>

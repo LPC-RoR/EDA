@@ -1,11 +1,13 @@
 <%= render partial: '0p/general/o_titulo', locals: {o: @objeto, a: action_name, size: '5'} if in_show?(@objeto, :titulo) %>
 <div class='row'>
 	<div class='col-md-12'>
-		<%= render partial: '0p/general/btn', locals: {texto: @objeto.tabla.etapa.proyecto.proyecto, link: @objeto.tabla.etapa.proyecto, delete: false, style: 'btn-outline-dark', clr: c_color(controller_name)} %>
-		<%= render partial: '0p/general/btn', locals: {texto: @objeto.tabla.etapa.etapa, link: @objeto.tabla.etapa, delete: false, style: 'btn-outline-dark', clr: c_color(controller_name)} %>
+		<%#= render partial: '0p/general/btn', locals: {texto: @objeto.tabla.etapa.proyecto.proyecto, link: @objeto.tabla.etapa.proyecto, delete: false, style: 'btn-outline-dark', clr: c_color(controller_name)} %>
+		<%#= render partial: '0p/general/btn', locals: {texto: @objeto.tabla.etapa.etapa, link: @objeto.tabla.etapa, delete: false, style: 'btn-outline-dark', clr: c_color(controller_name)} %>
 		<%= render partial: '0p/general/btn', locals: {texto: @objeto.tabla.tabla, link: @objeto.tabla, delete: false, style: 'btn-outline-dark', clr: c_color(controller_name)} %>
 	</div>
-</div><div class='row'>
+</div>
+</br>
+<div class='row'>
 	<div class='col-md-12'>
 
 		<table class="table table-bordered table-sm  thead-dark">
@@ -43,10 +45,11 @@
 
 			</br></br>
 		<% end %>
-
+</br>
 		<%= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: 'Observaciones', size: '5'} %>
 
 		<%= render partial: "0data/observacion/index" %>
+		<%= render partial: '0p/tabla/btn_nuevo', locals: {c: 'observaciones'} %>
 
 	</div>
 	<div class='col-md-6'>
@@ -54,6 +57,12 @@
 			<%= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: 'Imagenes', size: '5'} %>
 
 			<%= render partial: '0p/tabla/tabla', locals: {c: alias_tabla('imagenes'), a: 'index'} %>
+
+			<% @coleccion['imagenes'].each do |imagen| %>
+				<%= image_tag imagen.imagen.half.url, class: "mx-auto d-block" %>
+				<%= link_to imagen.nota, imagen.imagen.url, class: "mx-auto d-block" %>
+				</br>
+			<% end %>
 		<% end %>
 
 	</div>

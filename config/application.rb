@@ -59,7 +59,7 @@ module Eda
             controllers: ['tema_ayudas', 'tutoriales', 'pasos', 'mensajes']
         },
         'data' => {
-            color: 'success',
+            color: 'info',
             controllers: ['etapas', 'tablas', 'lineas', 'especificaciones', 'observaciones', 'archivos', 'imagenes']
         }
     }
@@ -284,7 +284,7 @@ module Eda
 
     config.detail_types_controller = {
         help: ['mejoras', 'mensajes', 'observaciones', 'tema_ayudas', 'tutoriales', 'pasos'],
-        data: ['especificaciones'],
+        data: ['especificaciones', 'tablas'],
         modelo: []
     }
 

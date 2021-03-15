@@ -1,0 +1,27 @@
+<small><%= form.label 'Orden | Tabla' %></small></br>
+<div class='form-inline'>
+	<%= form.text_field(:orden, size: 3, class: 'form-control' ) %>
+	<%= form.text_field(:tabla, size: 57, class: 'form-control' ) %>
+</div>
+
+</br>
+
+<p>
+	<label>Archivo Tabla</label></br>
+	<% if @objeto.archivo.present? %>
+	  	<i><%= @objeto.archivo.url.split('/').last %></i></br>
+	<% else %>
+	    <%= form.file_field :archivo %>
+	<% end %>
+</p>
+
+<% if @objeto.archivo.present? %>
+	<p>
+	<label>
+	  <%= form.check_box :remove_archivo %>
+	  Remueve Archivo
+	</label>
+	</p>
+<% end %>
+
+<%= form.hidden_field :padre_id %>

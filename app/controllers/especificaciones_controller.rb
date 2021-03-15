@@ -78,7 +78,7 @@ class EspecificacionesController < ApplicationController
     end
 
     def set_redireccion
-      @redireccion = datos_path
+      @redireccion = @objeto.etapa_id.blank? ? @objeto.tabla : datos_path
     end
 
     # Only allow a list of trusted parameters through.

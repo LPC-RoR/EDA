@@ -10,7 +10,6 @@ class Observacion < ApplicationRecord
 		['etapa_id',   'hidden']
 	]
 
-	belongs_to :columna, optional: true
 	belongs_to :linea, optional: true
 	belongs_to :tabla, optional: true
 
