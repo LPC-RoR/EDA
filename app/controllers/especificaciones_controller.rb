@@ -1,4 +1,5 @@
 class EspecificacionesController < ApplicationController
+  before_action :carga_temas_ayuda
   before_action :set_especificacion, only: [:show, :edit, :update, :destroy]
 
   # GET /especificaciones
@@ -14,20 +15,13 @@ class EspecificacionesController < ApplicationController
 
   # GET /especificaciones/new
   def new
-    @objeto = Especificacion.new
+    padre = Etapa.find(params[:etapa_id]) unless params[:etapa_id].blank?
+    padre = Tabla.find(params[:tabla_id]) unless params[:tabla_id].blank?
+
+    @objeto = padre.especificaciones.new
   end
 
   def nuevo
-    case params[:class_name]
-    when 'Etapa'
-      @objeto = Etapa.find(params[:objeto_id])
-    when 'Tabla'
-      @objeto = Tabla.find(params[:objeto_id])
-    end
-    
-    @objeto.especificaciones.create(orden: params[:especificacion_base][:orden], especificacion: params[:especificacion_base][:especificacion], detalle: params[:especificacion_base][:detalle])
-
-    redirect_to @objeto
   end
 
   # GET /especificaciones/1/edit
@@ -41,7 +35,8 @@ class EspecificacionesController < ApplicationController
 
     respond_to do |format|
       if @objeto.save
-        format.html { redirect_to @objeto, notice: 'Especificacion was successfully created.' }
+        set_redireccion
+        format.html { redirect_to @redireccion, notice: 'Especificacion was successfully created.' }
         format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
@@ -55,7 +50,8 @@ class EspecificacionesController < ApplicationController
   def update
     respond_to do |format|
       if @objeto.update(especificacion_params)
-        format.html { redirect_to @objeto, notice: 'Especificacion was successfully updated.' }
+        set_redireccion
+        format.html { redirect_to @redireccion, notice: 'Especificacion was successfully updated.' }
         format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
@@ -67,9 +63,10 @@ class EspecificacionesController < ApplicationController
   # DELETE /especificaciones/1
   # DELETE /especificaciones/1.json
   def destroy
+    set_redireccion
     @objeto.destroy
     respond_to do |format|
-      format.html { redirect_to especificaciones_url, notice: 'Especificacion was successfully destroyed.' }
+      format.html { redirect_to @redireccion, notice: 'Especificacion was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -78,6 +75,10 @@ class EspecificacionesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_especificacion
       @objeto = Especificacion.find(params[:id])
+    end
+
+    def set_redireccion
+      @redireccion = datos_path
     end
 
     # Only allow a list of trusted parameters through.

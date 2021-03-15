@@ -1,0 +1,10 @@
+<small><%= form.label 'Orden | Especificación' %></small></br>
+<div class='form-inline'>
+	<%= form.text_field(:orden, size: 3, class: 'form-control' ) %>
+	<%= form.text_field(:especificacion, size: 57, class: 'form-control' ) %>
+</div>
+<small><%= form.label :detalle %></small></br>
+<%= form.text_area :detalle, size: '66x3' %>
+
+<%= form.hidden_field :etapa_id %>
+<%= form.hidden_field :tabla_id %>

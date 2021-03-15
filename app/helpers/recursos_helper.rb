@@ -37,7 +37,7 @@ module RecursosHelper
 		when Proyecto
 			controller_name == 'proyectos'
 		when 'Tabla'
-			objeto.archivo.blank?
+			controller_name == 'datos'
 		end
 	end
 

@@ -38,23 +38,6 @@ class TemasController < ApplicationController
     @objeto = Tema.new(perfil_id: session[:perfil_activo]['id'])
   end
 
-  def nuevo
-    @objeto = params[:class_name].constantize.find(params[:objeto_id])
-#    @publicacion   = Publicacion.find(params[:publicacion_id])
-
-    unless params[:nuevo_modelo][:modelo].strip.blank?
-      @nuevo_tema = params[:nuevo_modelo][:modelo].strip
-  
-      @activo = Perfil.find(session[:perfil_activo]['id'])
-      t = @activo.temas.find_by(tema: @nuevo_tema)
-      if t.blank?
-        @activo.temas.create(tema: @nuevo_tema)
-      end
-    end
-
-    redirect_to @objeto
-  end
-
   # GET /temas/1/edit
   def edit
   end

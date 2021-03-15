@@ -26,7 +26,8 @@ class ProyectosController < ApplicationController
 
     @objeto = Proyecto.find(session[:proyecto_activo].id)
 
-    @temas_seleccion = Tema.where(id: (@activo.temas.ids - @objeto.temas.ids))
+    @temas_seleccion = Tema.where(id: (@activo.temas.ids - @objeto.temas.ids)).order(:tema)
+    @temas_proyecto = @objeto.temas.order(:tema)
 
     # tenemos que cubrir todos los casos
     # 1. has_many : }
@@ -45,6 +46,7 @@ class ProyectosController < ApplicationController
     @activo = Perfil.find(session[:perfil_activo]['id'])
 
     @temas_seleccion = Tema.where(id: (@activo.temas.ids - @objeto.temas.ids))
+    @temas_proyecto = @objeto.temas.order(:tema)
 
     # tenemos que cubrir todos los casos
     # 1. has_many : }
@@ -83,10 +85,25 @@ class ProyectosController < ApplicationController
 
   def nuevo_tema_proyecto
     @proyecto = Proyecto.find(params[:proyecto_id])
-    @tema     = Tema.find(params[:tema_base][:tema_id])
-    @proyecto.temas << @tema unless @proyecto.temas.ids.include?(@tema.id)
+    @activo = Perfil.find(session[:perfil_activo]['id'])
+#    @publicacion   = Publicacion.find(params[:publicacion_id])
 
-    redirect_to @proyecto
+    unless params[:nuevo_tema][:tema].strip.blank?
+      nuevo_tema = params[:nuevo_tema][:tema].strip
+  
+      tema_perfil = @activo.temas.find_by(tema: nuevo_tema)
+      if tema_perfil.blank?
+        @proyecto.temas.create(tema: nuevo_tema, perfil_id: @activo.id)
+      else
+        tema_proyecto = @proyecto.temas.find_by(tema: nuevo_tema)
+        if tema_proyecto.blank?
+          @proyecto.temas << tema_perfil
+        end
+      end
+    end
+
+    redirect_to '/proyectos/proyecto_activo'
+
   end
 
   # GET /proyectos/1/edit
@@ -125,6 +142,14 @@ class ProyectosController < ApplicationController
     end
   end
 
+  def asigna_tema_proyecto
+    @proyecto = Proyecto.find(params[:proyecto_id])
+    @tema     = Tema.find(params[:tema_base][:tema_id])
+    @proyecto.temas << @tema unless @proyecto.temas.ids.include?(@tema.id)
+
+    redirect_to '/proyectos/proyecto_activo'
+  end
+
   def activo
     proyectos_activos = Proyecto.where(activo: true)
     unless proyectos_activos.empty?
@@ -147,6 +172,16 @@ class ProyectosController < ApplicationController
       format.html { redirect_to @redireccion, notice: 'Proyecto was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def elimina_tema_proyecto
+    @proyecto = Proyecto.find(params[:proyecto_id])
+    @tema     = Tema.find(params[:tema_base][:tema_id])
+    if @tema.proyectos.empty? and @tema.textos.empty?
+      @tema.delete
+    end
+
+    redirect_to '/proyectos/proyecto_activo'
   end
 
   private

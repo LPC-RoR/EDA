@@ -94,12 +94,13 @@ module Eda
     # se usa directamente en 0p/navbar/_navbar.html.erb
     config.menu = [
         ["Publicaciones",   "/publicaciones",             'usuario'],
+        ["Ingresos",        "/ingresos",                  'usuario'],
         ["Proyecto Activo", "/proyectos/proyecto_activo", 'usuario'],
         ["Proyectos",       "/proyectos",                 'usuario'],
 #        ["Carpetas",        "/carpetas",        'usuario'],
-        ["Temas",           "/temas",                     'usuario'],
-        ["Textos",          "/textos",                    'usuario'],
-        ["Ingresos",        "/ingresos",                  'usuario'],
+#        ["Temas",           "/temas",                     'usuario'],
+#        ["Textos",          "/textos",                    'usuario'],
+        ['Datos',           '/datos',                     'usuario'],
         ["Cargas",          "/cargas",                    'usuario'],
         ["Administradores", "/administradores",             'admin'],
         ["Temas Ayuda",     "/tema_ayudas",                 'admin'] 
@@ -282,7 +283,8 @@ module Eda
     ## ------------------------------------------------- FORM
 
     config.detail_types_controller = {
-        dependencias: ['mejoras', 'mensajes', 'observaciones', 'tema_ayudas', 'tutoriales', 'pasos'],
+        help: ['mejoras', 'mensajes', 'observaciones', 'tema_ayudas', 'tutoriales', 'pasos'],
+        data: ['especificaciones'],
         modelo: []
     }
 

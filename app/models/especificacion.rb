@@ -16,6 +16,6 @@ class Especificacion < ApplicationRecord
 	belongs_to :etapa, optional: true
 
 	def d_detalle
-	  self.detalle.gsub(/\n/, '<br>')
+		self.detalle.blank? ? '' : self.detalle.gsub(/\n/, '<br>')
 	end
 end

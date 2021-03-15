@@ -1,4 +1,5 @@
 class EtapasController < ApplicationController
+  before_action :inicia_sesion
   before_action :carga_temas_ayuda
   before_action :set_etapa, only: [:show, :edit, :update, :destroy]
 
@@ -25,7 +26,7 @@ class EtapasController < ApplicationController
   end
   # GET /etapas/new
   def new
-    @objeto = Etapa.new(proyecto_id: params[:proyecto_id])
+    @objeto = Etapa.new(proyecto_id: session[:proyecto_activo].id)
   end
 
   # GET /etapas/1/edit
@@ -82,7 +83,7 @@ class EtapasController < ApplicationController
     end
 
     def set_redireccion
-      @redireccion = proyecto_path(@objeto.proyecto, html_options: {tab: 'etapas'})
+      @redireccion = datos_path
     end
 
     # Only allow a list of trusted parameters through.

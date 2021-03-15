@@ -71,7 +71,7 @@ class VersionesController < ApplicationController
     end
 
     def set_redireccion
-      @redireccion = proyecto_path(@objeto.proyecto, html_options: {tab: 'versiones'})
+      @redireccion = '/proyectos/proyecto_activo'
     end
 
     # Only allow a list of trusted parameters through.

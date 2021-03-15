@@ -267,8 +267,9 @@ module ProcesaCarga
 			end
 		else
 			# LO ENCONTRÖ HAY QUE VER SI ESTÁ EN ALGUNA DE MIS CARPETAS
-			activo = Perfil.find(session[:perfil_activo]['id'])
-			if c.carpetas.ids.intersection(activo.carpetas.ids).empty?
+#			activo = Perfil.find(session[:perfil_activo]['id'])
+			proyecto_activo = session[:proyecto_activo]
+			if c.carpetas.ids.intersection(proyecto_activo.carpetas.ids).empty?
 				'sin carpeta'
 			else
 				c.year.blank? ? 'remplazar_carga' : 'saltar'

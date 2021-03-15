@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :datos
   resources :asociaciones
   resources :relaciones
   resources :contactos
@@ -68,6 +69,8 @@ Rails.application.routes.draw do
   resources :proyectos do
     match :nuevo, via: :post, on: :collection
     match :nuevo_tema_proyecto, via: :post, on: :collection
+    match :asigna_tema_proyecto, via: :post, on: :collection
+    match :elimina_tema_proyecto, via: :post, on: :collection
     match :activo, via: :get, on: :member
     match :proyecto_activo, via: :get, on: :collection
     resources :versiones
@@ -99,7 +102,6 @@ Rails.application.routes.draw do
     match :cargar_tabla, via: :get, on: :member
   end
   resources :temas do
-    match :nuevo, via: :post, on: :collection
     match :remueve_tema, via: :get, on: :member
   end
   resources :tema_ayudas do

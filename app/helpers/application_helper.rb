@@ -281,8 +281,10 @@ module ApplicationHelper
 	## ------------------------------------------------------- FORM
 
 	def detail_partial(controller)
-		if Rails.configuration.detail_types_controller[:dependencias].include?(controller)
+		if Rails.configuration.detail_types_controller[:help].include?(controller)
 			"0help/#{controller.singularize}/detail"
+		elsif Rails.configuration.detail_types_controller[:data].include?(controller)
+			"0data/#{controller.singularize}/detail"
 		elsif Rails.configuration.detail_types_controller[:modelo].include?(controller)
 			"#{controller}/detail"
 		else

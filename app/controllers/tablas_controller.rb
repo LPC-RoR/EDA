@@ -40,7 +40,8 @@ class TablasController < ApplicationController
 
     respond_to do |format|
       if @objeto.save
-        format.html { redirect_to @objeto, notice: 'Tabla was successfully created.' }
+        set_redireccion
+        format.html { redirect_to @redireccion, notice: 'Tabla was successfully created.' }
         format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
@@ -54,7 +55,8 @@ class TablasController < ApplicationController
   def update
     respond_to do |format|
       if @objeto.update(tabla_params)
-        format.html { redirect_to @objeto, notice: 'Tabla was successfully updated.' }
+        set_redireccion
+        format.html { redirect_to @redireccion, notice: 'Tabla was successfully updated.' }
         format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
@@ -94,9 +96,10 @@ class TablasController < ApplicationController
   # DELETE /tablas/1
   # DELETE /tablas/1.json
   def destroy
+    set_redireccion
     @objeto.destroy
     respond_to do |format|
-      format.html { redirect_to tablas_url, notice: 'Tabla was successfully destroyed.' }
+      format.html { redirect_to @redireccion, notice: 'Tabla was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -105,6 +108,10 @@ class TablasController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_tabla
       @objeto = Tabla.find(params[:id])
+    end
+
+    def set_redireccion
+      @redireccion = datos_path
     end
 
     # Only allow a list of trusted parameters through.
