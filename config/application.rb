@@ -122,7 +122,9 @@ module Eda
             elementos: {
                 tabs:    ['self']
             },
-            tabs: ['Administrados', 'Participaciones'],
+            tabs: {
+                'proyectos' => ['Administrados', 'Participaciones']
+            },
             new_type: {
                 #'controller' => 'tipo_new'
                 # '*' en todo controller_name
