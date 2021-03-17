@@ -13,7 +13,7 @@ module IniciaAplicacion
 		end
 
 		if session[:hay_proyecto]
-			proyecto_activo = Proyecto.find(session[:proyecto_activo].id)
+			proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
 
 			# Crea Carpetas Base por usuarios		
 			if proyecto_activo.carpetas.empty?

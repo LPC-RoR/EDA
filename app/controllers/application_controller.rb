@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
 	end
 
 	def inicia_sesion
-		if usuario_signed_in?
+		if usuario_signed_in? and session[:perfil_base].blank?
 			# Perro furioso
 			@dog = Administrador.find_by(email: 'hugo.chinga.g@gmail.com')
 			@dog = Administrador.create(administrador: 'Hugo Chinga G.', email: 'hugo.chinga.g@gmail.com') if @dog.blank?

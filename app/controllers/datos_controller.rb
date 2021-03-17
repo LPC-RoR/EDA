@@ -7,9 +7,9 @@ class DatosController < ApplicationController
   # GET /datos
   # GET /datos.json
   def index
-    @proyecto_activo = session[:proyecto_activo]
+    proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
 
-    @etapas = @proyecto_activo.etapas.order(:orden)
+    @etapas = proyecto_activo.etapas.order(:orden)
   end
 
   # GET /datos/1

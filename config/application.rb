@@ -1,6 +1,6 @@
 require_relative 'boot'
 
-require 'rails/all'
+require 'rails/all' 
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -18,7 +18,6 @@ module Eda
 
     # +++ HCH activa locala :es
     config.i18n.default_locale = :es
-
 
     ## ------------------------------------------------- CAPITAN
 
@@ -45,87 +44,46 @@ module Eda
         adjuntos:    false
     }
 
-    ## ------------------------------------------------- COLORES ESTRUCTURA
-    # En 'app' los controladores son los que NO son de los otros tipos
-    config.colors = {
+    ## ------------------------------------------------- APARIENCIA APLICACION
+
+    config.look_app = {
+        'aplicacion' => {
+            favicon: true,
+            banner: false,
+            nombre: 'Eda',
+            home_link: 'http://www.edasoft.cl',
+            imagen_portada: false,
+            titulo_size: '1',
+            titulo_color: 'primary',
+            detalle_size: '6',
+            detalle_color: 'primary',
+            foot_size: 'quarter'
+        },
         'navbar' => {
-            color: 'primary'
+            color: 'primary',
+            logo: true
         },
-        'app' => {
-            color: 'primary'
-        },
-        'help' => {
-            color: 'secondary',
-            controllers: ['tema_ayudas', 'tutoriales', 'pasos', 'mensajes']
-        },
-        'data' => {
-            color: 'info',
-            controllers: ['etapas', 'tablas', 'lineas', 'especificaciones', 'observaciones', 'archivos', 'imagenes']
+        'look_elementos' => {
+            'app' => {
+                color: 'primary'
+            },
+            'help' => {
+                color: 'secondary',
+                controllers: ['tema_ayudas', 'tutoriales', 'pasos', 'mensajes']
+            },
+            'data' => {
+                color: 'info',
+                controllers: ['etapas', 'tablas', 'lineas', 'especificaciones', 'observaciones', 'archivos', 'imagenes']
+            }
         }
-    }
-
-    ## ------------------------------------------------- CONFIGURACION HOME
-
-    config.home = {
-        favicon: true,
-        home: 'http://www.edasoft.cl',
-        nombre: 'Eda',
-        imagen_portada: false,
-        titulo_size: '1',
-        titulo_color: 'primary',
-        detalle_size: '6',
-        detalle_color: 'primary',
-        foot_size: 'quarter'
     }
 
     ## ------------------------------------------------- MENU
 
-    config.menu_con_logo = true
-    config.logo_sobre_el_menu = false
-
-    # controladores que NO despliegan MENU
-    # se usa en nomenu?
-    config.x.menu.exceptions_controllers = ['confirmations', 'mailer', 'passwords', 'registrations', 'sessions', 'unlocks']    
-
-    ## Menu principal de la aplicación
-    # [0] : Item del menú
-    # [1] : Link del ítem
-    # [2] : Tipo de ítem {'admin', 'usuario', 'anonimo', 'excluir'}
-    # se usa directamente en 0p/navbar/_navbar.html.erb
-    config.menu = [
-        ["Publicaciones",   "/publicaciones",             'usuario'],
-        ["Ingresos",        "/ingresos",                  'usuario'],
-        ["Proyecto Activo", "/proyectos/proyecto_activo", 'usuario'],
-        ["Proyectos",       "/proyectos",                 'usuario'],
-#        ["Carpetas",        "/carpetas",        'usuario'],
-#        ["Temas",           "/temas",                     'usuario'],
-#        ["Textos",          "/textos",                    'usuario'],
-        ['Datos',           '/datos',                     'usuario'],
-        ["Cargas",          "/cargas",                    'usuario'],
-        ["Administradores", "/administradores",             'admin'],
-        ["Temas Ayuda",     "/tema_ayudas",                 'admin'] 
-    ]
-
-    config.menu_con_contacto = true
-    config.menu_con_ayuda = true
-
-    ## ------------------------------------------------- FRAMES
-    config.frames = {
-        'publicaciones' => {
-            'index' => {
-                titulo: 'Publicaciones',
-                selector: 'Carpetas',
-                action_type: 'tabla'
-            }
-
-        },
-        'ingresos' => {
-            'index' => {
-                titulo: 'Ingresos',
-                action_type: 'tabla',
-                tabs: ['ingreso', 'duplicado', 'papelera', 'publicada']
-            }
-        }
+    config.menu = {
+        nomenu_controllers: ['confirmations', 'mailer', 'passwords', 'registrations', 'sessions', 'unlocks'],
+        add_contacto: true,
+        add_ayuda: true
     }
 
     ## ------------------------------------------------- TABLA
@@ -146,8 +104,12 @@ module Eda
         'publicaciones' => {
             elementos: {
                 titulo:  ['self'],
+                tabs:    ['ingresos'],
                 paginas: ['*'],
                 nuevo:   ['self', 'ingresos']
+            },
+            tabs: {
+                'ingresos' => ['ingreso', 'duplicado', 'papelera', 'publicada']
             }
         },
         'textos'        => {
@@ -220,7 +182,7 @@ module Eda
         'ingresos' => 'publicaciones'
     }
 
-    config.sortable_tables = []
+    config.sortable_tables = {}
 
     ## ------------------------------------------------- TABLA | BTNS
 
@@ -285,7 +247,7 @@ module Eda
     config.detail_types_controller = {
         help: ['mejoras', 'mensajes', 'observaciones', 'tema_ayudas', 'tutoriales', 'pasos'],
         data: ['especificaciones', 'tablas'],
-        modelo: []
+        modelo: ['publicaciones']
     }
 
     # estan condiciones se aplican a FORM y SHOW

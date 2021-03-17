@@ -6,6 +6,8 @@ module ProcesaCarga
 
 		if carga.estado == 'ingreso'
 
+			proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
+
 			## ABRE ARCHIVO
 	 	    @file = File.open("#{Rails.root}/public/#{carga.archivo_carga.url}")
 		    # Lee el archivo
@@ -83,8 +85,8 @@ module ProcesaCarga
 	        	pub.origen = 'carga' if ['remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
 	        	pub.save if ['remplazar_carga', 'remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
 
-	        	unless pub.proyectos.ids.include?(session[:proyecto_activo].id)
-	        		pub.proyectos << session[:proyecto_activo]
+	        	unless pub.proyectos.ids.include?(proyecto_activo.id)
+	        		pub.proyectos << proyecto_activo
 	        	end
 
 	        	# procesa AUTORES
@@ -101,14 +103,14 @@ module ProcesaCarga
 				end
 
 				## CARPETAS {'Carga', 'Ingreso', 'Duplicados', 'Revisar', 'Excluidas', 'Postergadas', 'Revisadas'}
-				cpt = (unicidad == 'colision_titulo' ? session[:proyecto_activo].carpetas.find_by(carpeta: 'Duplicados') : session[:proyecto_activo].carpetas.find_by(carpeta: 'Carga'))
+				cpt = (unicidad == 'colision_titulo' ? proyecto_activo.carpetas.find_by(carpeta: 'Duplicados') : proyecto_activo.carpetas.find_by(carpeta: 'Carga'))
 
 	        	# Uso la condicion que que no este en las carpetas del Investigador hay que cubrir
 	        	# 1. Publicacion ya revisada por mi puesta en una carpeta distinta a REVISA
 	        	# 2. Publicacion existente ingresada por otro usuario fuera de mis carpetas
 #	        	activo = Perfil.find(session[:perfil_activo]['id'])
 	        	unless unicidad == 'saltar'
-					if pub.carpetas.empty? or pub.carpetas.ids.intersection(session[:proyecto_activo].carpetas.ids).empty?
+					if pub.carpetas.empty? or pub.carpetas.ids.intersection(proyecto_activo.carpetas.ids).empty?
 						pub.cargas << carga 
 						pub.carpetas << cpt
 					end
@@ -268,7 +270,7 @@ module ProcesaCarga
 		else
 			# LO ENCONTRÖ HAY QUE VER SI ESTÁ EN ALGUNA DE MIS CARPETAS
 #			activo = Perfil.find(session[:perfil_activo]['id'])
-			proyecto_activo = session[:proyecto_activo]
+			proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
 			if c.carpetas.ids.intersection(proyecto_activo.carpetas.ids).empty?
 				'sin carpeta'
 			else

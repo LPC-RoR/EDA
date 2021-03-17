@@ -31,7 +31,8 @@ class CarpetasController < ApplicationController
 
   # GET /carpetas/new
   def new
-    @objeto = Carpeta.new(perfil_id: session[:perfil_activo]['id'], proyecto_id: session[:proyecto_activo].id)
+    proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
+    @objeto = Carpeta.new(perfil_id: session[:perfil_activo]['id'], proyecto_id: proyecto_activo.id)
   end
 
   # GET /carpetas/1/edit

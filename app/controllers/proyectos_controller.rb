@@ -24,7 +24,7 @@ class ProyectosController < ApplicationController
   def proyecto_activo
     @activo = Perfil.find(session[:perfil_activo]['id'])
 
-    @objeto = Proyecto.find(session[:proyecto_activo].id)
+    @objeto = Proyecto.find(session[:proyecto_activo]['id'])
 
     @temas_seleccion = Tema.where(id: (@activo.temas.ids - @objeto.temas.ids)).order(:tema)
     @temas_proyecto = @objeto.temas.order(:tema)

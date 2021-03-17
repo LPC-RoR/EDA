@@ -10,7 +10,6 @@ class CargasController < ApplicationController
   # GET /cargas
   # GET /cargas.json
   def index
-    @activo = Perfil.find(session[:perfil_activo]['id'])
     proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
 
     @coleccion = {}

@@ -26,7 +26,8 @@ class EtapasController < ApplicationController
   end
   # GET /etapas/new
   def new
-    @objeto = Etapa.new(proyecto_id: session[:proyecto_activo].id)
+    proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
+    @objeto = Etapa.new(proyecto_id: proyecto_activo.id)
   end
 
   # GET /etapas/1/edit

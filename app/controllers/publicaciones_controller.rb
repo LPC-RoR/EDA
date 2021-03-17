@@ -15,24 +15,21 @@ class PublicacionesController < ApplicationController
   # GET /publicaciones
   # GET /publicaciones.json
   def index
-    @activo = Perfil.find(session[:perfil_activo]['id'])
-    @proyecto_activo = Proyecto.find(session[:proyecto_activo].id)
+    proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
 
-    # BI FRAME
-    @frame_selector = @proyecto_activo.carpetas.all.map {|c| [c.carpeta, c.publicaciones.count]}
-    # carpeta
+    @list_selector = proyecto_activo.carpetas.all.map {|car| [car.carpeta, car.publicaciones.count]}
+
     if params[:html_options].blank?
-      @carpeta = @proyecto_activo.carpetas.first
+      carpeta = proyecto_activo.carpetas.first
     else
-      @carpeta = params[:html_options]['sel'].blank? ? @proyecto_activo.carpetas.first : @proyecto_activo.carpetas.find_by(carpeta: params[:html_options]['sel'])
+      carpeta = params[:html_options]['sel'].blank? ? proyecto_activo.carpetas.first : proyecto_activo.carpetas.find_by(carpeta: params[:html_options]['sel'])
     end
-    @sel = @carpeta.carpeta
-    # opciones para los links
+
+    @sel = carpeta.carpeta
     @options = {'sel' => @sel}
 
     @coleccion = {}
-    @coleccion[controller_name] = @carpeta.publicaciones.page(params[:page])
-
+    @coleccion[controller_name] = carpeta.publicaciones.page(params[:page])
   end
 
   # GET /publicaciones/1
@@ -50,28 +47,28 @@ class PublicacionesController < ApplicationController
     end
 
     # *********************** CARPETAS ******************************
-    @activo = Perfil.find(session[:perfil_activo]['id'])
+    proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
 
-    @temas_seleccion = session[:proyecto_activo].temas
+    @temas_seleccion = proyecto_activo.temas
 
     ## AMBOS
-    @ids_carpetas_base = session[:proyecto_activo].carpetas.map {|c| c.id if Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
-    @ids_carpetas_tema = session[:proyecto_activo].carpetas.map {|c| c.id unless Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
+    @ids_carpetas_base = proyecto_activo.carpetas.map {|c| c.id if Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
+    @ids_carpetas_tema = proyecto_activo.carpetas.map {|c| c.id unless Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
 
-    # ids de las carpetas del @activo
+    # ids de las carpetas del 'proyecto_activo'
     ids_activo = @ids_carpetas_base | @ids_carpetas_tema
 
     # ids de la publicación que son del perfil
     ids_publicacion = @objeto.carpetas.ids & ids_activo
 
-    id_carpeta_carga      = session[:proyecto_activo].carpetas.find_by(carpeta: 'Carga').id
-    id_carpeta_ingreso    = session[:proyecto_activo].carpetas.find_by(carpeta: 'Ingreso').id
-    id_carpeta_duplicados = session[:proyecto_activo].carpetas.find_by(carpeta: 'Duplicados').id
+    id_carpeta_carga      = proyecto_activo.carpetas.find_by(carpeta: 'Carga').id
+    id_carpeta_ingreso    = proyecto_activo.carpetas.find_by(carpeta: 'Ingreso').id
+    id_carpeta_duplicados = proyecto_activo.carpetas.find_by(carpeta: 'Duplicados').id
 
-    @id_carpeta_revisadas  = session[:proyecto_activo].carpetas.find_by(carpeta: 'Revisadas').id
+    @id_carpeta_revisadas  = proyecto_activo.carpetas.find_by(carpeta: 'Revisadas').id
 
-    ids_tres   = session[:proyecto_activo].carpetas.where(carpeta: ['Carga', 'Ingreso', 'Duplicados']).ids
-    ids_cuatro = session[:proyecto_activo].carpetas.where(carpeta: ['Carga', 'Ingreso', 'Duplicados', 'Revisadas']).ids
+    ids_tres   = proyecto_activo.carpetas.where(carpeta: ['Carga', 'Ingreso', 'Duplicados']).ids
+    ids_cuatro = proyecto_activo.carpetas.where(carpeta: ['Carga', 'Ingreso', 'Duplicados', 'Revisadas']).ids
 
     ids_todas = @ids_carpetas_base | @ids_carpetas_tema
 
@@ -94,14 +91,14 @@ class PublicacionesController < ApplicationController
     # ***************************************** @show_colection[Modelo]
     @coleccion = {}
     @coleccion['textos']   = @objeto.textos
-    @coleccion['temas']    = session[:proyecto_activo].temas
+    @coleccion['temas']    = proyecto_activo.temas
     @coleccion['carpetas'] = @objeto.carpetas
 
   end
 
   # GET /publicaciones/new
   def new
-    proyecto_activo = session[:proyecto_activo]
+    proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
     @objeto = proyecto_activo.publicaciones.new(origen: 'ingreso', estado: 'ingreso')
   end
 
@@ -165,8 +162,8 @@ class PublicacionesController < ApplicationController
   end
 
   def estado
-    @activo = Perfil.find(session[:perfil_activo]['id'])
     @publicacion = Publicacion.find(params[:publicacion_id])
+    proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
 
     if params[:estado] == 'eliminado'
       @publicacion.delete
@@ -177,7 +174,7 @@ class PublicacionesController < ApplicationController
         @publicacion.unicidad = 'unico'
         @publicacion.save
         # Hay que asegurarse que sacamos la publicación Sólo de nuestras carpetas
-        carpetas_ids = @publicacion.carpetas.ids.intersection(@activo.carpetas.ids)
+        carpetas_ids = @publicacion.carpetas.ids.intersection(proyecto_activo.carpetas.ids)
         carpetas_ids.each do |car_id|
           carpeta_a_limpiar = Carpeta.find(car_id)
           @publicacion.carpetas.delete(carpeta_a_limpiar)
@@ -214,7 +211,7 @@ class PublicacionesController < ApplicationController
       @publicacion.estado = 'publicada'
       @publicacion.save
 
-      carpeta_ingreso = @activo.carpetas.find_by(carpeta: 'Ingreso')
+      carpeta_ingreso = proyecto_activo.carpetas.find_by(carpeta: 'Ingreso')
       carpeta_ingreso.publicaciones << @publicacion
     end
 
