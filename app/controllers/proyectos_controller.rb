@@ -4,6 +4,8 @@ class ProyectosController < ApplicationController
   before_action :carga_temas_ayuda
   before_action :set_proyecto, only: [:show, :edit, :update, :destroy, :activo]
 
+  include IniciaAplicacion
+
   # GET /proyectos
   # GET /proyectos.json
   def index
@@ -43,6 +45,7 @@ class ProyectosController < ApplicationController
   # GET /proyectos/1
   # GET /proyectos/1.json
   def show
+    # Se usa proyecto_activo
   end
 
   # GET /proyectos/new
@@ -52,22 +55,22 @@ class ProyectosController < ApplicationController
 
   def nuevo
     unless params[:nuevo_proyecto][:proyecto].blank?
-      @activo = Perfil.find(session[:perfil_activo]['id'])
+      activo = Perfil.find(session[:perfil_activo]['id'])
 
       case params[:tab]
       when 'Administrados'
-        @texto_sha1 = session[:perfil_activo]['email']+params[:nuevo_proyecto][:proyecto]
-        @sha1 = Digest::SHA1.hexdigest(@texto_sha1)
-        @activo.proyectos.create(proyecto: params[:nuevo_proyecto][:proyecto], sha1: @sha1)
+        texto_sha1 = session[:perfil_activo]['email']+params[:nuevo_proyecto][:proyecto]
+        sha1 = Digest::SHA1.hexdigest(texto_sha1.strip)
+        activo.proyectos.create(proyecto: params[:nuevo_proyecto][:proyecto], sha1: sha1)
       when 'Participaciones'
-        @sha1 = params[:nuevo_proyecto][:proyecto]
-        @proyecto = Proyecto.find_by(sha1: @sha1)
-        unless @proyecto.blank?
-          @perfil.asociaciones << @proyecto
+        sha1 = params[:nuevo_proyecto][:proyecto]
+        proyecto = Proyecto.find_by(sha1: sha1)
+        unless proyecto.blank?
+          activo.colaboraciones << proyecto
         end
       end
     end
-    redirect_to "/proyectos?tab=#{params[:tab]}"
+    redirect_to proyectos_path(html_options: {tab: params[:tab]})
   end
 
   def nuevo_tema_proyecto
@@ -147,6 +150,7 @@ class ProyectosController < ApplicationController
     end
     @objeto.activo = true
     @objeto.save
+    inicia_app
     redirect_to proyectos_path
   end
 

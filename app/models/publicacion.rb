@@ -13,9 +13,9 @@ class Publicacion < ApplicationRecord
 
 	# Campos qeu se despliegan en la tabla
 	TABLA_FIELDS = [
-		['title',         'show'], 
-		['doc_type',    'normal'], 
-		['year',        'normal']
+		['title',       'show'], 
+		['d_type',    'normal'], 
+		['year',      'normal']
 	]
 
  	FORM_FIELDS = [
@@ -108,6 +108,10 @@ class Publicacion < ApplicationRecord
 		when 'Generic'
 			"#{autores} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} #{self.journal} #{self.pages}#{" pp" if self.pages.present?} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
 		end
+	end
+
+	def d_type
+		self.doc_type
 	end
 
 end

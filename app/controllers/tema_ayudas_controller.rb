@@ -6,7 +6,21 @@ class TemaAyudasController < ApplicationController
   # GET /tema_ayudas
   # GET /tema_ayudas.json
   def index
+    @tabs = TemaAyuda::TIPO
+
+    if params[:html_options].blank?
+      @tab = @tabs[0]
+    else
+      @tab = params[:html_options]['tab'].blank? ? @tabs[0] : params[:html_options]['tab']
+    end
+    @options = {'tab' => @tab}
+
     @coleccion = {}
+    @coleccion['tema_ayudas'] = TemaAyuda.where(tipo: @tab).order(:orden)
+
+
+
+
     @coleccion['tema_inicio'] = TemaAyuda.where(tipo: 'inicio').order(:orden)
     @coleccion['tema_tutorial'] = TemaAyuda.where(tipo: 'tema').order(:orden)
 
@@ -91,7 +105,7 @@ class TemaAyudasController < ApplicationController
     end
 
     def set_redireccion
-      @redireccion = tema_ayudas_path
+      @redireccion = tema_ayudas_path(html_options: {tab: @objeto.tipo})
     end
 
     # Only allow a list of trusted parameters through.

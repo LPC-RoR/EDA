@@ -65,7 +65,9 @@ Rails.application.routes.draw do
   end
   resources :origenes
   resources :pasos
-  resources :perfiles
+  resources :perfiles do
+    match :desvincular, via: :get, on: :member
+  end
   resources :procesos
   resources :proyectos do
     match :nuevo, via: :post, on: :collection

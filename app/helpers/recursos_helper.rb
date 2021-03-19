@@ -59,6 +59,8 @@ module RecursosHelper
 			controller_name == 'proyectos'
 		when 'Tabla'
 			controller_name == 'datos'
+		when 'Perfil'
+			false
 		end
 	end
 
@@ -78,6 +80,8 @@ module RecursosHelper
 			objeto.archivo.present? and objeto.encabezados.empty?
 		when 'Proyecto'
 			objeto.activo.blank? or objeto.activo == false
+		when 'Perfil'
+			controller_name == 'proyectos'
 		end
 	end
 

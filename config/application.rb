@@ -47,31 +47,51 @@ module Eda
     ## ------------------------------------------------- APARIENCIA APLICACION
 
     config.look_app = {
-        'aplicacion' => {
+        aplicacion: {
             favicon: true,
             banner: false,
-            nombre: 'Eda',
+            nombre_aplicacion: 'Eda',
             home_link: 'http://www.edasoft.cl',
-            imagen_portada: false,
             titulo_size: '1',
             titulo_color: 'primary',
             detalle_size: '6',
             detalle_color: 'primary',
-            foot_size: 'quarter'
+            portada: {
+                active: false,
+                size: nil,
+                clase: 'mx-auto d-block'
+            },
+            init: {
+                size: 'half',
+                clase: 'mx-auto d-block',
+                titulo_size: 1,
+                titulo_color: 'primary',
+                detalle_size: 6,
+                detalle_color: 'primary'
+            },
+            foot: {
+                active: true,
+                size: 'quarter',
+                clase: 'mx-auto d-block'
+            },
+            help: {
+                size: 'quarter',
+                clase: 'mx-auto d-block'
+            }
         },
-        'navbar' => {
+        navbar: {
             color: 'primary',
             logo: true
         },
-        'look_elementos' => {
-            'app' => {
+        look_elementos: {
+            app: {
                 color: 'primary'
             },
-            'help' => {
+            help: {
                 color: 'secondary',
                 controllers: ['tema_ayudas', 'tutoriales', 'pasos', 'mensajes']
             },
-            'data' => {
+            data: {
                 color: 'info',
                 controllers: ['etapas', 'tablas', 'lineas', 'especificaciones', 'observaciones', 'archivos', 'imagenes']
             }
@@ -88,15 +108,21 @@ module Eda
 
     ## ------------------------------------------------- TABLA
 
-    config.x.tables.bt_fields = {
-        'Modelo' => {
-            'field' => ['field_type', 'bt_object']
+    config.tables = {
+        bt_fields: {
+            'Clasificacion' => {
+                'texto' => 'texto'
+            },
+            'Proyecto' => {
+                'email' => 'administrador'
+            }
         },
-        'Clasificacion' => {
-            'texto' => ['bt_field', 'texto']
+        alias: {
+            'ingresos' => 'publicaciones'
         },
-        'Proyecto' => {
-            'email' => ['bt_field', 'administrador']
+        sortable: {},
+        exceptions: {
+
         }
     }
 
@@ -136,36 +162,6 @@ module Eda
                 nuevo: ['proyectos']
             }
         },
-        'etapas' => {
-            elementos: {
-                nuevo: ['proyectos']
-            }
-        },
-        'tablas' => {
-            elementos: {
-                nuevo: ['etapas']
-            }
-        },
-        'especificaciones' => {
-            elementos: {
-                nuevo: ['etapas']
-            }
-        },
-        'archivos' => {
-            elementos: {
-                nuevo: ['lineas']
-            }
-        },
-        'imagenes' => {
-            elementos: {
-                nuevo: ['lineas']
-            }
-        },
-        'tutoriales' => {
-            elementos: {
-                nuevo: ['tema_ayudas']
-            }
-        },
         'carpetas' => {
             elementos: {
                 titulo: ['publicaciones', 'proyectos'],
@@ -179,12 +175,6 @@ module Eda
             }
         }
     }
-
-    config.alias_controllers = {
-        'ingresos' => 'publicaciones'
-    }
-
-    config.sortable_tables = {}
 
     ## ------------------------------------------------- TABLA | BTNS
 
@@ -233,13 +223,19 @@ module Eda
         'Proyecto'      => {
             conditions: ['crud', 'x'],
             x_btns: [
-                    ['Activo', '/activo', false]
+                ['Activo', '/activo', false]
             ]
         },
         'Tabla' => {
             conditions: ['crud', 'x'],
             x_btns: [
                 ['Cargar', '/cargar_tabla', true]
+            ]
+        },
+        'Perfil' => {
+            conditions: ['crud', 'x'],
+            x_btns: [
+                ['Desvincular', '/desvincular', true]
             ]
         }
     }

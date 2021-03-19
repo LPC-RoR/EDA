@@ -5,72 +5,38 @@ module ApplicationHelper
 
 	## ------------------------------------------------------- HOME
 
-	def favicon?
-		Rails.configuration.look_app['aplicacion'][:favicon]
+	def config_aplicacion(clave)
+		Rails.configuration.look_app[:aplicacion][clave]
 	end
 
-	def banner?
-		Rails.configuration.look_app['aplicacion'][:banner]
+	def config_portada(clave)
+		Rails.configuration.look_app[:aplicacion][:portada][clave]
 	end
 
-	def nombre
-		Rails.configuration.look_app['aplicacion'][:nombre]
+	def config_init(clave)
+		Rails.configuration.look_app[:aplicacion][:init][clave]
 	end
 
-	def home_link
-		Rails.configuration.look_app['aplicacion'][:home_link]
+	def config_foot(clave)
+		Rails.configuration.look_app[:aplicacion][:foot][clave]
 	end
 
-	def imagen_portada?
-		Rails.configuration.look_app['aplicacion'][:imagen_portada]
-	end
-
-	def t_size
-		Rails.configuration.look_app['aplicacion'][:titulo_size]
-	end
-
-	def t_color
-		Rails.configuration.look_app['aplicacion'][:titulo_color]
-	end
-
-	def d_size
-		Rails.configuration.look_app['aplicacion'][:detalle_size]
-	end
-
-	def d_color
-		Rails.configuration.look_app['aplicacion'][:detalle_color]
-	end
-
-	def foot_size
-		Rails.configuration.look_app['aplicacion'][:foot_size]
-	end
-
-	def navbar_color
-		Rails.configuration.look_app['navbar'][:color]
-	end
-
-	def logo_navbar
-		Rails.configuration.look_app['navbar'][:logo]
+	def config_navbar(clave)
+		Rails.configuration.look_app[:navbar][clave]
 	end
 
 	def c_color(controller)
-		if Rails.configuration.look_app['look_elementos']['help'][:controllers].include?(controller)
-			Rails.configuration.look_app['look_elementos']['help'][:color]
-		elsif Rails.configuration.look_app['look_elementos']['data'][:controllers].include?(controller)
-			Rails.configuration.look_app['look_elementos']['data'][:color]
+		if Rails.configuration.look_app[:look_elementos][:help][:controllers].include?(controller)
+			Rails.configuration.look_app[:look_elementos][:help][:color]
+		elsif Rails.configuration.look_app[:look_elementos][:data][:controllers].include?(controller)
+			Rails.configuration.look_app[:look_elementos][:data][:color]
 		else
-			Rails.configuration.look_app['look_elementos']['app'][:color]
+			Rails.configuration.look_app[:look_elementos][:app][:color]
 		end
 	end
 
-	## ------------------------------------------------------- MENU AYUDA HOME
-
-	def foot_image
-		TemaAyuda.where(tipo: 'foot').any? ? TemaAyuda.where(tipo: 'foot').first.ilustracion.send(foot_size).url : nil
-	end
-
-	def portada_image
-		TemaAyuda.where(tipo: 'portada').any? ? TemaAyuda.where(tipo: 'portada').first.ilustracion.url : nil
+	def objeto_tema_ayuda(tipo)
+		TemaAyuda.where(tipo: tipo).any? ? TemaAyuda.where(tipo: tipo).first : nil
 	end
 
 	## ------------------------------------------------------- MENU
@@ -112,7 +78,7 @@ module ApplicationHelper
 
 	# valida el uso de alias en las tablas
 	def alias_tabla(controlador)
-		Rails.configuration.alias_controllers[controlador].present? ? Rails.configuration.alias_controllers[controlador] : controlador
+		Rails.configuration.tables[:alias][controlador].present? ? Rails.configuration.tables[:alias][controlador] : controlador
 	end
 
 	# Maneja comportamiento por defecto y excepciones de TABLA
@@ -180,23 +146,6 @@ module ApplicationHelper
 		end
 	end
 
-	# Obtiene el campo para despleagar en una TABLA
-	# Resuelve BT_FIELDS y d_<campo> si es necesario 
-	def get_field(name, objeto)
-		if objeto.class::column_names.include?(name) or (name.split('_')[0] == 'd') or (name.split('_')[0] == 'm')
-			objeto.send(name)
-		elsif Rails.configuration.x.tables.bt_fields[objeto.class.name].present?
-			if Rails.configuration.x.tables.bt_fields[objeto.class.name][name][0] == 'bt_field'
-				obj_base = objeto.send(Rails.configuration.x.tables.bt_fields[objeto.class.name][name][1])
-				(obj_base.blank? ? ' objeto NO encotrado ' : obj_base.send(name))
-			else
-				objeto.send(name)
-			end
-		else
-			'FieldNotFound'
-		end
-	end
-
 	# Obtiene los campos a desplegar en la tabla desde el objeto
 	def m_tabla_fields(objeto)
 		objeto.class::TABLA_FIELDS
@@ -215,8 +164,8 @@ module ApplicationHelper
 	end
 
 	def sortable?(controller, field)
-		if Rails.configuration.sortable_tables[controller].present?
-			Rails.configuration.sortable_tables[controller].include?(field) ? true : false
+		if Rails.configuration.tables[:sortable][controller].present?
+			Rails.configuration.tables[:sortable][controller].include?(field) ? true : false
 		else
 			false
 		end
@@ -293,6 +242,32 @@ module ApplicationHelper
 		end
 	end
 
+	## -------------------------------------------------------- TABLA & SHOW
+
+	# Obtiene el campo para despleagar en una TABLA
+	# Resuelve BT_FIELDS y d_<campo> si es necesario 
+	def get_field(label, objeto)
+		puts "********************** get_field"
+		puts label
+		puts objeto.class.name
+		if objeto.class::column_names.include?(label) or (label.split('_')[0] == 'd') or (label.split('_')[0] == 'm')
+			objeto.send(label)
+		elsif Rails.configuration.tables[:bt_fields][objeto.class.name].present?
+			puts "********************************** bt_field"
+			puts Rails.configuration.tables[:bt_fields][objeto.class.name][label]
+			puts "*********************************** antes"
+			puts objeto.send(Rails.configuration.tables[:bt_fields][objeto.class.name][label]).class.name
+			puts "*********************************** despues"
+			if Rails.configuration.tables[:bt_fields][objeto.class.name][label].present?
+				objeto.send(Rails.configuration.tables[:bt_fields][objeto.class.name][label]).send(label)
+			else
+				objeto.send(label)
+			end
+		else
+			'FieldNotFound'
+		end
+	end
+
 	## ------------------------------------------------------- SHOW
 
 	def status?(objeto)
@@ -343,24 +318,6 @@ module ApplicationHelper
 	# "_show.html.erb"
 	def has_many_tabs(controller)
 		controller.classify.constantize.reflect_on_all_associations(:has_many).map {|a| a.name.to_s} - hidden_childs(controller)
-	end
-
-	# manejo de f_tabla para manejar tablas asociadas
-	# /show/_detalle.html.erb
-	def f_tabla_field(objeto, label)
-		if Rails.configuration.x.tables.bt_fields[objeto.class.name].present?
-			if Rails.configuration.x.tables.bt_fields[objeto.class.name][label].present?
-				if Rails.configuration.x.tables.bt_fields[objeto.class.name][label][0] == 'bt_field'
-					objeto.send(Rails.configuration.x.tables.bt_fields[objeto.class.name][label][1]).send(label)
-				else
-					'Objeto NO encontrado'
-				end
-			else
-				'Objeto NO encontrado'
-			end
-		else
-			'Objeto NO encontrado'
-		end
 	end
 
 	## ------------------------------------------------------- GENERAL
