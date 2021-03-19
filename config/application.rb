@@ -81,7 +81,10 @@ module Eda
         },
         navbar: {
             color: 'primary',
-            logo: true
+            logo: true,
+            nomenu_controllers: ['confirmations', 'mailer', 'passwords', 'registrations', 'sessions', 'unlocks'],
+            item_contacto: true,
+            item_ayuda: true
         },
         look_elementos: {
             app: {
@@ -98,14 +101,6 @@ module Eda
         }
     }
 
-    ## ------------------------------------------------- MENU
-
-    config.menu = {
-        nomenu_controllers: ['confirmations', 'mailer', 'passwords', 'registrations', 'sessions', 'unlocks'],
-        add_contacto: true,
-        add_ayuda: true
-    }
-
     ## ------------------------------------------------- TABLA
 
     config.tables = {
@@ -120,10 +115,7 @@ module Eda
         alias: {
             'ingresos' => 'publicaciones'
         },
-        sortable: {},
-        exceptions: {
-
-        }
+        sortable: {}
     }
 
     config.x.tables.exceptions = {
@@ -242,16 +234,14 @@ module Eda
 
     ## ------------------------------------------------- FORM
 
-    config.detail_types_controller = {
-        help: ['mejoras', 'mensajes', 'observaciones', 'tema_ayudas', 'tutoriales', 'pasos'],
-        data: ['especificaciones', 'tablas'],
-        modelo: ['publicaciones']
-    }
-
-    # estan condiciones se aplican a FORM y SHOW
-    config.x.form.exceptions = {
-        'Publicacion' => {
-            conditional_fields: [
+    config.form = {
+        detail_types_controller: {
+            help: ['mejoras', 'mensajes', 'observaciones', 'tema_ayudas', 'tutoriales', 'pasos'],
+            data: ['especificaciones', 'tablas'],
+            modelo: ['publicaciones']
+        },
+        conditional_fields: {
+            'Publicacion' => [
                 'd_quote',
                 'm_quote',
                 'd_author',
@@ -269,54 +259,34 @@ module Eda
                 'editor',
                 'academic_degree',
                 'ciudad_pais'
-            ]
-        },
-        'Mensaje' => {
-            conditional_fields: ['email']
+            ],
+            'Mensaje' => ['email']
         }
     }
 
     ## ------------------------------------------------- SHOW
 
-    # show_colecctions : tablas dentro del SHOW
-    # [ [controlador, tipo de vinculo {has_many, perfil, base}, paginacion?] ]
-    config.x.show.exceptions = {
-        'Publicacion' => {
-            elementos: [:clasifica, :detalle, :inline_form, 'show_title', :tabla]
-        },
-        'Proyecto'     => {
-            elementos: [:clasifica, :tabla]
-        },
-        'Etapa' => {
-            elementos: [:clasifica, :tabla]
-        },
-        'Tabla' => {
-            elementos: [:clasifica, :tabla]
-        },
-        'Linea' => {
-            elementos: [:clasifica, :tabla, 'show_title']
-        }
-    }
-
-    config.x.show.links = {
-        links:     ['Publicacion'],
-        bt_links:  ['Publicacion'],
-        hmt_links: ['Publicacion'],
-        bt_objects: {
+    config.show = {
+        titulo: [],
+        show_title: ['Publicacion', 'Linea'],
+        partial_links: [],
+        detalle: [],
+        inline_form: [],
+        tabla: [],
+        links: ['Publicacion'],
+        bt_links: {
             'Publicacion' => ['revista']
         },
-        hmt_collections: {
+        hmt_links: {
             'Publicacion' => ['investigadores']
+        },
+        status: [],
+        hidden: {
+            'textos'         => ['clasificaciones', 'citas'],
+            'carpetas'       => ['clasificaciones'],
+            'investigadores' => ['autores'],
+            'temas'          => ['textos', 'herencias'],
         }
-    }
-
-    config.x.show.hidden = {
-        'publicaciones'  => ['citas', 'autores', 'investigadores', 'procesos', 'cargas', 'clasificaciones', 'carpetas', 'evaluaciones'],
-        'textos'         => ['clasificaciones', 'citas'],
-        'carpetas'       => ['clasificaciones'],
-        'investigadores' => ['autores'],
-        'temas'          => ['textos', 'herencias'],
-        'proyectos'      => ['coautores', 'herencias']
     }
 
   end

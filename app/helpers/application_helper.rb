@@ -43,15 +43,7 @@ module ApplicationHelper
 
 	# Obtiene los controladores que no despliegan menu
 	def nomenu?(controller)
-		Rails.configuration.menu[:nomenu_controllers].include?(controller)
-	end
-
-	def menu_con_ayuda
-		Rails.configuration.menu[:add_ayuda]
-	end
-
-	def menu_con_contacto
-		Rails.configuration.menu[:add_contacto]
+		config_navbar(:nomenu_controllers).include?(controller)
 	end
 
 	def item_active(link)
@@ -213,8 +205,8 @@ module ApplicationHelper
 
 	# Manejo de campos condicionales FORM y SHOW
 	def filtro_conditional_field?(objeto, field)
-		if Rails.configuration.x.form.exceptions[objeto.class.name].present?
-			Rails.configuration.x.form.exceptions[objeto.class.name][:conditional_fields].include?(field) ? get_field_condition(objeto, field) : true
+		if Rails.configuration.form[:conditional_fields][objeto.class.name].present?
+			Rails.configuration.form[:conditional_fields][objeto.class.name].include?(field) ? get_field_condition(objeto, field) : true
 		else
 			true
 		end
@@ -223,11 +215,11 @@ module ApplicationHelper
 	## ------------------------------------------------------- FORM
 
 	def detail_partial(controller)
-		if Rails.configuration.detail_types_controller[:help].include?(controller)
+		if Rails.configuration.form[:detail_types_controller][:help].include?(controller)
 			"0help/#{controller.singularize}/detail"
-		elsif Rails.configuration.detail_types_controller[:data].include?(controller)
+		elsif Rails.configuration.form[:detail_types_controller][:data].include?(controller)
 			"0data/#{controller.singularize}/detail"
-		elsif Rails.configuration.detail_types_controller[:modelo].include?(controller)
+		elsif Rails.configuration.form[:detail_types_controller][:modelo].include?(controller)
 			"#{controller}/detail"
 		else
 			'0p/form/detail'
@@ -247,17 +239,9 @@ module ApplicationHelper
 	# Obtiene el campo para despleagar en una TABLA
 	# Resuelve BT_FIELDS y d_<campo> si es necesario 
 	def get_field(label, objeto)
-		puts "********************** get_field"
-		puts label
-		puts objeto.class.name
 		if objeto.class::column_names.include?(label) or (label.split('_')[0] == 'd') or (label.split('_')[0] == 'm')
 			objeto.send(label)
 		elsif Rails.configuration.tables[:bt_fields][objeto.class.name].present?
-			puts "********************************** bt_field"
-			puts Rails.configuration.tables[:bt_fields][objeto.class.name][label]
-			puts "*********************************** antes"
-			puts objeto.send(Rails.configuration.tables[:bt_fields][objeto.class.name][label]).class.name
-			puts "*********************************** despues"
 			if Rails.configuration.tables[:bt_fields][objeto.class.name][label].present?
 				objeto.send(Rails.configuration.tables[:bt_fields][objeto.class.name][label]).send(label)
 			else
@@ -270,48 +254,29 @@ module ApplicationHelper
 
 	## ------------------------------------------------------- SHOW
 
+	def config_show(clave)
+		Rails.configuration.show[clave]
+	end
+
 	def status?(objeto)
-		if Rails.configuration.x.show.exceptions[objeto.class.name].present?
-		Rails.configuration.x.show.exceptions[objeto.class.name][:elementos].include?(:status)
-		else
-			false
-		end
+		config_show(:status).include?(objeto.class.name)
 	end
 
 	# Maneja comportamiento por defecto y excepciones de SHOW
 	def in_show?(objeto, label)
-		excepcion = false
-		# Pregunta si el Modelo TIENE personalizacion
-		if Rails.configuration.x.show.exceptions[objeto.class.name].present?
-			# Pregunta si LABEL tiene personalizacion
-			excepcion = Rails.configuration.x.show.exceptions[objeto.class.name][:elementos].present? ? Rails.configuration.x.show.exceptions[objeto.class.name][:elementos].include?(label) : false
-		end 
-
-		de = Rails.configuration.s_default[label]
-		(excepcion ? (not de) : de)
+		defecto = Rails.configuration.s_default[label]
+		(config_show(label).include?(objeto.class.name) ? (not defecto) : defecto)
 	end
 
 	# SHOW_TITLE con manejo de excepciones
 	# Se usa dentro de la aplicación también
 	def show_title(objeto)
-		if Rails.configuration.x.show.exceptions[objeto.class.name].present?
-			if Rails.configuration.x.show.exceptions[objeto.class.name][:elementos].present?
-				if Rails.configuration.x.show.exceptions[objeto.class.name][:elementos].include?('show_title')
-					objeto_title(objeto)
-				else
-					objeto.send(objeto.class.name.tableize.singularize)
-				end
-			else
-				objeto.send(objeto.class.name.tableize.singularize)
-			end
-		else
-			objeto.send(objeto.class.name.tableize.singularize)
-		end
+		Rails.configuration.show[:show_title].include?(objeto.class.name) ? objeto_title(objeto) : objeto.send(objeto.class.name.tableize.singularize)
 	end
 
 	# método de apoyo usado en el método has_many_tabs (arriba)
 	def hidden_childs(controller)
-		Rails.configuration.x.show.hidden[controller].present? ? Rails.configuration.x.show.hidden[controller] : []
+		config_show(:hidden)[controller].present? ? config_show(:hidden)[controller] : []
 	end
 
 	# Toma las relaciones has_many y les descuenta las HIDDEN_CHILDS

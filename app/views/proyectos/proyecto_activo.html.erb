@@ -1,1 +1,49 @@
-<%= render partial: '0p/show/show' %>
+<%= render partial: '0p/general/o_titulo', locals: {o: @objeto, a: action_name, size: '5'} %>
+<!-- DETALLE + PERFILES -->
+<div class='row'>
+	<div class='col-md-4'>
+		<%= render partial: '0p/general/titulo', locals: {c: nil, a: nil, titulo: 'Detalle', size: '5'} %>
+		<%= render partial: '0p/show/detalle', locals: {c: controller_name, o: @objeto} %>
+		</br>
+		<%= render partial: '0p/general/titulo', locals: {c: nil, a: nil, titulo: 'Integrantes', size: '5'} %>
+		<%= render partial: '0p/tabla/tabla', locals: {c: alias_tabla('perfiles'), a: 'index'} %>
+		</br>
+		<%= render partial: '0p/general/titulo', locals: {c: nil, a: nil, titulo: 'Versiones', size: '5'} %>
+		<%= render partial: '0p/tabla/tabla', locals: {c: alias_tabla('versiones'), a: 'index'} %>
+	</div>
+	<div class='col-md-4'>
+		<%= render partial: '0p/general/titulo', locals: {c: nil, a: nil, titulo: 'Carpetas', size: '5'} %>
+		<%= render partial: '0p/tabla/solo_tabla', locals: {c: alias_tabla('carpetas'), a: 'index'} unless @coleccion['carpetas'].empty? %>
+		<%= render partial: '0p/tabla/btn_nuevo', locals: {c: 'carpetas'} %>
+		</br></br>
+	</div>
+	<div class='col-md-4'>
+		<%= render partial: '0p/general/titulo', locals: {c: nil, a: nil, titulo: 'Temas', size: '5'} %>
+		<%= form_for :nuevo_tema, url: "/proyectos/nuevo_tema_proyecto?proyecto_id=#{@objeto.id}" do |form| %>
+			<div class='form-inline'>
+				<%= form.text_field(:tema, size: 30, class: 'form-control' ) %>
+				<%= form.submit "+ Tema"  %>
+			</div>
+		<% end  %>
+		<% unless @temas_proyecto.empty? %>
+			<%= form_for :tema_base, url: "/proyectos/elimina_tema_proyecto?proyecto_id=#{@objeto.id}" do |form| %>
+				<div class='form-inline'>
+					<%= form.select :tema_id, @temas_seleccion.collect { |p| [p.tema, p.id] }, include_blank: false, prompt: "Seleccione Tema" %>
+					<%= form.submit '- Tema'  %>
+				</div>
+			<% end  %>
+		<% end  %>
+		<% unless @temas_seleccion.empty? %>
+			<%= form_for :tema_base, url: "/proyectos/asigna_tema_proyecto?proyecto_id=#{@objeto.id}" do |form| %>
+				<div class='form-inline'>
+					<%= form.select :tema_id, @temas_seleccion.collect { |p| [p.tema, p.id] }, include_blank: false, prompt: "Seleccione Tema" %>
+					<%= form.submit '<< Tema'  %>
+				</div>
+			<% end  %>
+		<% end  %>
+		<%= render partial: '0p/tabla/tabla', locals: {c: alias_tabla('temas'), a: 'index'} unless @coleccion['temas'].empty? %>
+		</br></br>
+		<%= render partial: '0p/general/titulo', locals: {c: 'etapas', a: nil, titulo: 'Etapas', size: '5'} %>
+		<%= render partial: '0p/tabla/tabla', locals: {c: alias_tabla('etapas'), a: 'index'} %>
+	</div>
+</div>
