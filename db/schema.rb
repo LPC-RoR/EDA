@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_14_015639) do
+ActiveRecord::Schema.define(version: 2021_03_20_040242) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,7 +60,6 @@ ActiveRecord::Schema.define(version: 2021_03_14_015639) do
     t.string "estado"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "perfil_id"
     t.string "status"
     t.integer "n_procesados"
     t.integer "n_nuevos"
@@ -69,7 +68,6 @@ ActiveRecord::Schema.define(version: 2021_03_14_015639) do
     t.integer "n_existentes"
     t.string "archivo_carga"
     t.integer "proyecto_id"
-    t.index ["perfil_id"], name: "index_cargas_on_perfil_id"
     t.index ["proyecto_id"], name: "index_cargas_on_proyecto_id"
   end
 
@@ -77,10 +75,8 @@ ActiveRecord::Schema.define(version: 2021_03_14_015639) do
     t.string "carpeta"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "perfil_id"
     t.integer "proyecto_id"
     t.index ["carpeta"], name: "index_carpetas_on_carpeta"
-    t.index ["perfil_id"], name: "index_carpetas_on_perfil_id"
     t.index ["proyecto_id"], name: "index_carpetas_on_proyecto_id"
   end
 
@@ -210,10 +206,10 @@ ActiveRecord::Schema.define(version: 2021_03_14_015639) do
 
   create_table "herencias", force: :cascade do |t|
     t.integer "tema_id"
-    t.integer "proyecto_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["proyecto_id"], name: "index_herencias_on_proyecto_id"
+    t.integer "carpeta_id"
+    t.index ["carpeta_id"], name: "index_herencias_on_carpeta_id"
     t.index ["tema_id"], name: "index_herencias_on_tema_id"
   end
 
@@ -398,11 +394,9 @@ ActiveRecord::Schema.define(version: 2021_03_14_015639) do
     t.string "unicidad"
     t.string "journal"
     t.string "doc_type"
-    t.integer "perfil_id"
     t.index ["doc_type"], name: "index_publicaciones_on_doc_type"
     t.index ["estado"], name: "index_publicaciones_on_estado"
     t.index ["origen"], name: "index_publicaciones_on_origen"
-    t.index ["perfil_id"], name: "index_publicaciones_on_perfil_id"
     t.index ["registro_id"], name: "index_publicaciones_on_registro_id"
     t.index ["revista_id"], name: "index_publicaciones_on_revista_id"
     t.index ["t_sha1"], name: "index_publicaciones_on_t_sha1"
@@ -469,8 +463,6 @@ ActiveRecord::Schema.define(version: 2021_03_14_015639) do
     t.string "tema"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "perfil_id"
-    t.index ["perfil_id"], name: "index_temas_on_perfil_id"
     t.index ["tema"], name: "index_temas_on_tema"
   end
 

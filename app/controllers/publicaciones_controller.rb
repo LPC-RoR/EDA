@@ -49,7 +49,7 @@ class PublicacionesController < ApplicationController
     # *********************** CARPETAS ******************************
     proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
 
-    @temas_seleccion = proyecto_activo.temas
+#    @temas_seleccion = proyecto_activo.temas
 
     ## AMBOS
     @ids_carpetas_base = proyecto_activo.carpetas.map {|c| c.id if Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
@@ -91,7 +91,7 @@ class PublicacionesController < ApplicationController
     # ***************************************** @show_colection[Modelo]
     @coleccion = {}
     @coleccion['textos']   = @objeto.textos
-    @coleccion['temas']    = proyecto_activo.temas
+#    @coleccion['temas']    = proyecto_activo.temas
     @coleccion['carpetas'] = @objeto.carpetas
 
   end

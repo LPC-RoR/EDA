@@ -24,9 +24,6 @@ class Proyecto < ApplicationRecord
 	has_many :coautores
 	has_many :perfiles, through: :coautores
 
-	has_many :herencias
-	has_many :temas, through: :herencias
-
 	has_many :asociaciones
 	has_many :publicaciones, through: :asociaciones
 

@@ -49,7 +49,7 @@ class CargasController < ApplicationController
 
   # GET /cargas/new
   def new
-    @objeto = Carga.new(estado: 'ingreso', perfil_id: session[:perfil_activo]['id'], proyecto_id: session[:proyecto_activo]['id'])
+    @objeto = Carga.new(estado: 'ingreso', proyecto_id: session[:proyecto_activo]['id'])
   end
 
   # GET /cargas/1/edit
@@ -111,6 +111,6 @@ class CargasController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def carga_params
-      params.require(:carga).permit(:archivo, :nota, :estado, :perfil_id, :archivo_carga, :archivo_carga_cache, :proyecto_id)
+      params.require(:carga).permit(:archivo, :nota, :estado, :archivo_carga, :archivo_carga_cache, :proyecto_id)
     end
 end

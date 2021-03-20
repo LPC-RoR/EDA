@@ -12,10 +12,12 @@ class Carpeta < ApplicationRecord
 		['perfil_id',   'hidden']
 	]
 
-	belongs_to :perfil, optional: true
 	belongs_to :proyecto
 
 	has_many :clasificaciones
 	has_many :publicaciones, through: :clasificaciones
+
+	has_many :herencias
+	has_many :temas, through: :herencias
 
 end

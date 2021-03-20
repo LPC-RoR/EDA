@@ -10,12 +10,10 @@ class Tema < ApplicationRecord
 		['perfil_id',       'hidden']
 	]
 
-	belongs_to :perfil
-
 	has_many :clasificaciones
 	has_many :textos, through: :clasificaciones
 
 	has_many :herencias
-	has_many :proyectos, through: :herencias
+	has_many :carpetas, through: :herencias
 
 end

@@ -41,11 +41,9 @@ module ProcesaCarga
 		    	# llenado desde hash para los registros vacíos o por corregir
 		    	if ['remplazar_carga', 'remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
 			        Publicacion::NOMBRES_BIB.each do |bib|
-			        	if bib == 'Type'
-				        	pub.write_attribute('doc_type', hash_articulo[bib])
-			        	else
-				        	pub.write_attribute(bib.downcase.split('-').join('_'), hash_articulo[bib])
-			        	end
+			        	nombre_campo = ( bib == 'Type' ? 'doc_type' : bib.downcase.split('-').join('_') )
+			        	valor_campo = ( bib == 'Abstract' ? hash_articulo[bib] : ( hash_articulo[bib].blank? ? '' : hash_articulo[bib].gsub('\\', '') ) )
+			        	pub.write_attribute( nombre_campo, valor_campo )
 			        end
 			        pub.origen = 'WOS_bib'
 			        pub.t_sha1 = Digest::SHA1.hexdigest(pub.title)
@@ -69,14 +67,16 @@ module ProcesaCarga
 		    	# LLENAR IDIOMA + REVISTA
 		    	if ['remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
 			        # Agrega IDIOMA -> REVISTA
-			        idio = Idioma.find_by(idioma: hash_articulo['Language'])
+			        idioma = ( hash_articulo['Language'].blank? ? '' : hash_articulo['Language'].gsub('\\', '') )
+			        idio = Idioma.find_by(idioma: idioma)
 			        if idio.blank?
-			        	idio = Idioma.create(idioma: hash_articulo['Language'])
+			        	idio = Idioma.create(idioma: idioma)
 			        end
 
-			        rev = Revista.find_by(revista: hash_articulo['Journal'])
+			        revista = ( hash_articulo['Journal'].blank? ? '' : hash_articulo['Journal'].gsub('\\', '') )
+			        rev = Revista.find_by(revista: revista)
 			        if rev.blank?
-			        	rev = Revista.create(revista: hash_articulo['Journal'], idioma_id: idio.id)
+			        	rev = Revista.create(revista: revista, idioma_id: idio.id)
 			        end
 			        rev.publicaciones << pub
 		    	end
@@ -85,8 +85,10 @@ module ProcesaCarga
 	        	pub.origen = 'carga' if ['remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
 	        	pub.save if ['remplazar_carga', 'remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
 
+	        	unless unicidad == 'saltar'
 	        	unless pub.proyectos.ids.include?(proyecto_activo.id)
 	        		pub.proyectos << proyecto_activo
+	        	end
 	        	end
 
 	        	# procesa AUTORES
@@ -111,8 +113,8 @@ module ProcesaCarga
 #	        	activo = Perfil.find(session[:perfil_activo]['id'])
 	        	unless unicidad == 'saltar'
 					if pub.carpetas.empty? or pub.carpetas.ids.intersection(proyecto_activo.carpetas.ids).empty?
-						pub.cargas << carga 
-						pub.carpetas << cpt
+						pub.cargas << carga unless pub.cargas.ids.include?(carga)
+						pub.carpetas << cpt unless pub.carpetas.ids.include?(cpt.id)
 					end
 				end
 
@@ -254,9 +256,8 @@ module ProcesaCarga
 	# 1. Verifica por DOI
 	# 2. Verifica por Nombre de la publicación
 	def unicidad_publicacion_carga(hash_articulo)
-		# VERIFICA CARGA
-		c = Publicacion.find_by(unique_id: hash_articulo['Unique-ID']) 
-		if c.blank?
+		publicacion = Publicacion.find_by(unique_id: hash_articulo['Unique-ID']) 
+		if publicacion.blank?
 			# NO ENCONTRADO EN CARGA buscamos por DOI
 			i = Publicacion.find_by(doi: hash_articulo['DOI'])
 			if i.blank? or hash_articulo['DOI'].blank?
@@ -268,13 +269,11 @@ module ProcesaCarga
 				'remplazar_doi'
 			end
 		else
-			# LO ENCONTRÖ HAY QUE VER SI ESTÁ EN ALGUNA DE MIS CARPETAS
-#			activo = Perfil.find(session[:perfil_activo]['id'])
 			proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
-			if c.carpetas.ids.intersection(proyecto_activo.carpetas.ids).empty?
+			if publicacion.carpetas.ids.intersection(proyecto_activo.carpetas.ids).empty?
 				'sin carpeta'
 			else
-				c.year.blank? ? 'remplazar_carga' : 'saltar'
+				publicacion.year.blank? ? 'remplazar_carga' : 'saltar'
 			end
 		end
 	end

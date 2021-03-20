@@ -104,6 +104,39 @@ module Eda
     ## ------------------------------------------------- TABLA
 
     config.tables = {
+        exceptions: {
+            titulo: {
+                'publicaciones' => ['self'],
+                'carpetas' => ['publicaciones', 'proyectos'],
+                'temas' => ['publicaciones']
+            },
+            estados: {},
+            tabs: {
+                'publicaciones' => ['ingresos'],
+                'proyectos' => ['self']
+            },
+            paginas: {
+                'publicaciones' => ['*']
+            },
+            nuevo: {
+                'publicaciones' => ['self', 'ingresos'],
+                'textos' => ['self'],
+                'versiones' => ['proyectos'],
+                'carpetas' => ['publicaciones', 'proyectos'],
+                'temas' => ['publicaciones']
+            },
+            inline_form: {
+                'proyectos' => ['*']
+            }
+        },
+        tabs: {
+            'publicaciones' => {
+                'ingresos' => ['ingreso', 'duplicado', 'papelera', 'publicada']
+            },
+            'proyectos' => {
+                'proyectos' => ['Administrados', 'Participaciones']
+            }
+        },
         bt_fields: {
             'Clasificacion' => {
                 'texto' => 'texto'
@@ -116,56 +149,6 @@ module Eda
             'ingresos' => 'publicaciones'
         },
         sortable: {}
-    }
-
-    config.x.tables.exceptions = {
-        'publicaciones' => {
-            elementos: {
-                titulo:  ['self'],
-                tabs:    ['ingresos'],
-                paginas: ['*'],
-                nuevo:   ['self', 'ingresos']
-            },
-            tabs: {
-                'ingresos' => ['ingreso', 'duplicado', 'papelera', 'publicada']
-            }
-        },
-        'textos'        => {
-            elementos: {
-                nuevo:    ['self']
-            }
-
-        },
-        'proyectos'     => {
-            elementos: {
-                tabs:    ['self']
-            },
-            tabs: {
-                'proyectos' => ['Administrados', 'Participaciones']
-            },
-            new_type: {
-                #'controller' => 'tipo_new'
-                # '*' en todo controller_name
-                '*' => 'inline'
-            }
-        },
-        'versiones' => {
-            elementos: {
-                nuevo: ['proyectos']
-            }
-        },
-        'carpetas' => {
-            elementos: {
-                titulo: ['publicaciones', 'proyectos'],
-                nuevo: ['publicaciones', 'proyectos']
-            }
-        },
-        'temas' => {
-            elementos: {
-                titulo: ['publicaciones'],
-                nuevo: ['publicaciones']
-            }
-        }
     }
 
     ## ------------------------------------------------- TABLA | BTNS

@@ -1,4 +1,4 @@
 class Herencia < ApplicationRecord
-	belongs_to :proyecto
+	belongs_to :carpeta
 	belongs_to :tema
 end

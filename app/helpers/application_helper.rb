@@ -68,6 +68,14 @@ module ApplicationHelper
 
 	## ------------------------------------------------------- TABLA
 
+	def config_exceptions_table(clave)
+		Rails.configuration.tables[:exceptions][clave]
+	end
+
+	def config_tables(clave)
+		Rails.configuration.tables[clave]
+	end
+
 	# valida el uso de alias en las tablas
 	def alias_tabla(controlador)
 		Rails.configuration.tables[:alias][controlador].present? ? Rails.configuration.tables[:alias][controlador] : controlador
@@ -76,35 +84,32 @@ module ApplicationHelper
 	# Maneja comportamiento por defecto y excepciones de TABLA
 	def in_t?(controlador, label)
 		excepcion = false
-		# Pregunta si el Controlador TIENE personalizacion
-		if Rails.configuration.x.tables.exceptions[controlador].present?
-			if Rails.configuration.x.tables.exceptions[controlador][:elementos][label].present?
-				elementos_label = Rails.configuration.x.tables.exceptions[controlador][:elementos][label]
-				# self  = true : está en el mismo controlador, con accion 'index' y se marcó 'self' como excepción
-				excepcion_self       = (controller_name == controlador and action_name == 'index' and elementos_label.include?('self'))
-				# *     = true
-				excepcion_todo       = (elementos_label.include?('*'))
-				# label = true
-				excepcion_controller = (elementos_label.include?(controller_name))
 
-				excepcion = (excepcion_self or excepcion_todo or excepcion_controller)
-
-			end 
-		end 
+		if config_exceptions_table(label)[controlador].present?
+			elementos = config_exceptions_table(label)[controlador]
+			excepcion_self       = (controller_name == controlador and action_name == 'index' and elementos.include?('self'))
+			excepcion_todo       = (elementos.include?('*'))
+			excepcion_controller = (elementos.include?(controller_name))
+			excepcion = (excepcion_self or excepcion_todo or excepcion_controller)
+		end
 		de = (controller_name == controlador and action_name == 'index') ? Rails.configuration.t_default[label]['self'] : Rails.configuration.t_default[label]['show']
 
 		(excepcion ? (not de) : de)
 	end
 
+	def c_tabs(controller)
+		if config_tables(:tabs)[controller].present?
+			config_tables(:tabs)[controller][controller_name].present? ? config_tables(:tabs)[controller][controller_name] : []
+		else
+			[]
+		end
+	end
+
 	def inline_form?(controlador)
-		if Rails.configuration.x.tables.exceptions[controlador].present?
-			if Rails.configuration.x.tables.exceptions[controlador][:new_type].present?
-				inline_todos       = Rails.configuration.x.tables.exceptions[controlador][:new_type]['*'] == 'inline'
-				inline_controller  = Rails.configuration.x.tables.exceptions[controlador][:new_type][controlador] == 'inline'
-				inline_todos or inline_controller
-			else
-				false
-			end
+		if config_exceptions_table(:inline_form)[controlador].present?
+			inline_todos      = config_exceptions_table(:inline_form)[controlador].include?('*')
+			inline_controller = config_exceptions_table(:inline_form)[controlador].include?(controller_name)
+			inline_todos or inline_controller
 		else
 			false
 		end
@@ -112,28 +117,16 @@ module ApplicationHelper
 
 	# Objtiene LINK DEL BOTON NEWf
 	def get_new_link(controller)
-		# CONTROLA EXCEPCIONES
-		if Rails.configuration.x.tables.exceptions[controller].present?
-			if Rails.configuration.x.tables.exceptions[controller][:new_type].present?
-				if Rails.configuration.x.tables.exceptions[controller][:new_type]['*'].present?
-					tipo_new = Rails.configuration.x.tables.exceptions[controller][:new_type]['*']
-				elsif Rails.configuration.x.tables.exceptions[controller][:new_type]['self'].present? and controller_name == controller
-					tipo_new = Rails.configuration.x.tables.exceptions[controller][:new_type]['self']
-				elsif Rails.configuration.x.tables.exceptions[controller][:new_type][controller_name].present?
-					tipo_new = Rails.configuration.x.tables.exceptions[controller][:new_type][controller_name]
-				else
-					tipo_new = 'normal'
-				end
-			else
+		if config_exceptions_table(:inline_form)[controller].present?
+			unless config_exceptions_table(:inline_form)[controller].include?('*') or (config_exceptions_table(:inline_form)[controller].include?('self') and controller == controller_name) or config_exceptions_table(:inline_form)[controller].include?(controller_name)
 				tipo_new = 'normal'
+			else				
+				tipo_new = 'inline_form'
 			end
 		else
 			tipo_new = 'normal'
 		end
-
-		# GENERA EL LINK
-		case tipo_new
-		when 'normal'
+		if tipo_new == 'normal'
 			(alias_tabla(controller_name) == controller or @objeto.blank?) ? "/#{controller}/new" : "/#{@objeto.class.name.tableize}/#{@objeto.id}/#{controller}/new"
 		end
 	end
@@ -141,12 +134,6 @@ module ApplicationHelper
 	# Obtiene los campos a desplegar en la tabla desde el objeto
 	def m_tabla_fields(objeto)
 		objeto.class::TABLA_FIELDS
-	end
-
-	# Obtiene los TABS de un modelo usando el controlador
-	# "-tabla.html.erb"
-	def c_tabs(controller)
-		Rails.configuration.x.tables.exceptions[controller][:tabs][controller_name]
 	end
 
 	# Obtiene los estados de un modelo usando el controlador
