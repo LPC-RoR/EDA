@@ -1,2 +1,24 @@
 <%= render partial: '0p/general/o_titulo', locals: {o: @objeto, a: action_name, size: '5'} %>
-<%= render partial: '0p/tabla/tabla', locals: {c: 'clasificaciones', a: 'index'} %>
+
+<% @coleccion['clasificaciones'].each do |clasificacion| %>
+	<table class="table table-striped table-sm  thead-dark">
+		<tbody>
+			<tr>
+				<td><%= clasificacion.clasificacion %></td>
+				<td><%= render partial: '0p/tabla/btns', locals: {a: 'index', objeto: clasificacion} %></td>
+			</tr>
+		</tbody>
+	</table>
+	<% if clasificacion.texto.present? %>
+		<h6 class='text-info'><%= "\"#{clasificacion.texto.texto}\""  %></h6>
+		<% clasificacion.texto.publicaciones.each do |publicacion| %>
+			<h6><%= "| #{publicacion.doc_type} |" %></h6>
+			<h6><%= sanitize publicacion.m_quote %></h6>
+			<% unless publicacion.doi.blank? %>
+				<small><%= link_to "https://doi.org/#{publicacion.doi}", "https://doi.org/#{publicacion.doi}", target: :blank %></small>
+			<% end %>
+		<% end %>
+	<% else %>
+		<h6 class='text-warning'>Texto no encontrado</h3>
+	<% end %>
+<% end %>

@@ -6,8 +6,7 @@ class Tema < ApplicationRecord
 
 	# -------------------- FORM  -----------------------
  	FORM_FIELDS = [
-		['tema',             'entry'],
-		['perfil_id',       'hidden']
+		['tema',             'entry']
 	]
 
 	has_many :clasificaciones

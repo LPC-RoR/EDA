@@ -120,7 +120,7 @@ Rails.application.routes.draw do
     match :nuevo, via: :post, on: :collection
     match :agregar_tema, via: :post, on: :collection
     match :eliminar_tema, via: :post, on: :collection
-    match :remueve_texto, via: :get, on: :member
+    match :desasignar, via: :get, on: :member
   end
   resources :tutoriales do
     resources :pasos

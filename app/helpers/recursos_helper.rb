@@ -103,7 +103,7 @@ module RecursosHelper
 		when 'Carga'
 			[['Proceso', '/procesa_carga', false]]
 		when 'Texto'
-			[['Eliminar', '/remueve_texto', true]]
+			[['Desasignar', '/desasignar', true]]
 		when 'Clasificacion'
 			[
                 ['referencia',     '/clasifica?clasificacion=referencia'    , true],

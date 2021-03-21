@@ -2,7 +2,7 @@ class TextosController < ApplicationController
   before_action :authenticate_usuario!
   before_action :inicia_sesion
   before_action :carga_temas_ayuda
-  before_action :set_texto, only: [:show, :edit, :update, :destroy, :remueve_texto]
+  before_action :set_texto, only: [:show, :edit, :update, :destroy, :desasignar]
 
   # GET /textos
   # GET /textos.json
@@ -126,7 +126,7 @@ class TextosController < ApplicationController
     end
   end
 
-  def remueve_texto
+  def desasignar
     publicacion = Publicacion.find(params[:objeto_id])
     publicacion.textos.delete(@objeto)
 

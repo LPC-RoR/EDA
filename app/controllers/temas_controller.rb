@@ -10,7 +10,7 @@ class TemasController < ApplicationController
     proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
 
     carpetas = proyecto_activo.carpetas_personalizadas
-    @list_selector = carpetas.map {|car| [car.carpeta, car.publicaciones.count]}
+    @list_selector = carpetas.map {|car| [car.carpeta, car.temas.count]}
     @carpeta = params[:html_options].blank? ? carpetas.first : (params[:html_options]['sel'].blank? ? carpetas.first : carpetas.find_by(carpeta: params[:html_options]['sel']))
 
     @sel = @carpeta.carpeta
@@ -114,11 +114,11 @@ class TemasController < ApplicationController
     end
 
     def set_redireccion
-      @redireccion = publicaciones_path
+      @redireccion = temas_path
     end
 
     # Only allow a list of trusted parameters through.
     def tema_params
-      params.require(:tema).permit(:tema, :perfil_id)
+      params.require(:tema).permit(:tema)
     end
 end
