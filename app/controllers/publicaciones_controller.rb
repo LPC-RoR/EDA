@@ -42,10 +42,8 @@ class PublicacionesController < ApplicationController
     proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
 
     if @objeto.en_seleccion?
-      # publicaciones por seleccionar -> primer destino
       @carpetas_seleccion = proyecto_activo.carpetas_primer_destino
     elsif @objeto.primer_destino?
-      # Publicaciones en primer destino -> Carpetas de Seleccion + Origen
       @carpetas_seleccion = proyecto_activo.carpetas_seleccionados_menos_activa_mas_origen(@objeto)
     elsif @objeto.en_proceso?
       @carpetas_seleccion = proyecto_activo.carpetas_todas_menos_activa_mas_origen(@objeto)

@@ -84,22 +84,17 @@ class CarpetasController < ApplicationController
     end
   end
 
-  def asigna
+  def asigna 
     proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
     publicacion = Publicacion.find(params[:publicacion_id])
 
     unless params[:carpeta_base][:carpeta_id].blank?
       carpeta     = Carpeta.find(params[:carpeta_base][:carpeta_id])
 
-      ids_carpetas_base = proyecto_activo.carpetas.map {|c| c.id if Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
-      ids_carpetas_tema = proyecto_activo.carpetas.map {|c| c.id unless Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
-      ids_activo = (ids_carpetas_base | ids_carpetas_tema)
-      ids_publicacion = publicacion.carpetas.ids & ids_activo
+      ids_carpetas_base = proyecto_activo.carpetas_seleccion.ids
 
-      if ids_carpetas_base.include?(params[:carpeta_base][:carpeta_id].to_i)
-        publicacion.carpetas.each do |cpta|
-          publicacion.carpetas.delete(cpta)
-        end
+      if ids_carpetas_base.include?(params[:carpeta_base][:carpeta_id].to_i) or (publicacion.carpetas.count == 1 and publicacion.carpetas.first.carpeta == 'Aceptadas')
+        publicacion.carpetas.delete_all
       end
       publicacion.carpetas << carpeta
     end

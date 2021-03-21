@@ -112,7 +112,7 @@ class Publicacion < ApplicationRecord
 
 	def evaluable
 		# 1.- Esta en la carpeta 'Aceptadas'
-		self.carpetas.map {|car| car.carpeta}.include?('Aceptadas')
+		self.carpetas.map {|car| car.carpeta}.include?('Aceptadas') or (self.carpetas.map {|car| car.carpeta} & Carpeta::NOT_MODIFY).empty?
 	end
 
 	def duplicados
@@ -124,7 +124,8 @@ class Publicacion < ApplicationRecord
 	end
 
 	def en_seleccion?
-		self.carpetas.count == 1 and self.carpetas.first.carpeta != 'Aceptadas'
+		nombres_carpetas = self.carpetas.map {|car| car.carpeta}
+		self.carpetas.count == 1 and (['Carga', 'Ingreso', 'Duplicadas'] & nombres_carpetas).any?
 	end
 
 	def primer_destino?
@@ -136,7 +137,8 @@ class Publicacion < ApplicationRecord
 	end
 
 	def procesada?
-		self.carpetas.count > 1
+		nombres_carpetas = self.carpetas.map {|car| car.carpeta}
+		(Carpeta::NOT_MODIFY & nombres_carpetas).empty?
 	end
 
 end

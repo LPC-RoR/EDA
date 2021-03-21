@@ -77,8 +77,10 @@ class Proyecto < ApplicationRecord
 	end
 
 	def carpetas_de_proceso(publicacion)
-		personalizadas = self.carpetas.where.not(carpeta: Carpeta::NOT_MODIFY)
-		personalizadas.where.not(id: publicacion.carpetas.ids)
+		ids_personalizadas = self.carpetas.where.not(carpeta: Carpeta::NOT_MODIFY).ids
+		id_aceptadas = self.carpetas.find_by(carpeta: 'Aceptadas')
+		ids_personalizadas << id_aceptadas
+		Carpeta.where(id: (ids_personalizadas - publicacion.carpetas.ids))
 	end
 
 	def temas_seleccion
