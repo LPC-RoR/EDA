@@ -7,10 +7,17 @@ class TemasController < ApplicationController
   # GET /temas
   # GET /temas.json
   def index
-    @activo = Perfil.find(session[:perfil_activo]['id'])
+    proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
+
+    carpetas = proyecto_activo.carpetas_personalizadas
+    @list_selector = carpetas.map {|car| [car.carpeta, car.publicaciones.count]}
+    @carpeta = params[:html_options].blank? ? carpetas.first : (params[:html_options]['sel'].blank? ? carpetas.first : carpetas.find_by(carpeta: params[:html_options]['sel']))
+
+    @sel = @carpeta.carpeta
+    @options = {'sel' => @sel}
 
     @coleccion = {}
-    @coleccion[controller_name] = @activo.temas
+    @coleccion[controller_name] = @carpeta.temas.order(:tema)
   end
 
   # GET /temas/1

@@ -1,6 +1,6 @@
 class Proyecto < ApplicationRecord
 	TABLA_FIELDS = [
-		['proyecto', 'normal'], 
+		['proyecto', 'show'], 
 		['sha1',     'normal']
 	]
 
@@ -30,6 +30,10 @@ class Proyecto < ApplicationRecord
 	# Usada para List Selector
 	def carpetas_seleccion
 		self.carpetas.where(carpeta: Carpeta::NOT_MODIFY)
+	end
+
+	def carpetas_personalizadas
+		self.carpetas.where.not(carpeta: Carpeta::NOT_MODIFY)
 	end
 
 	# Usada para List Selector
@@ -75,11 +79,6 @@ class Proyecto < ApplicationRecord
 	def carpetas_de_proceso(publicacion)
 		personalizadas = self.carpetas.where.not(carpeta: Carpeta::NOT_MODIFY)
 		personalizadas.where.not(id: publicacion.carpetas.ids)
-	end
-
-	def carpetas_eliminacion
-		ids_eliminacion = self.carpetas.where.not(carpeta: Carpeta::NOT_MODIFY).map {|carpeta| carpeta.id if carpeta.publicaciones.empty?}.compact
-		Carpeta.where(id: ids_eliminacion)
 	end
 
 	def temas_seleccion

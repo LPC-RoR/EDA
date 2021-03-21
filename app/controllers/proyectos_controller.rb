@@ -23,29 +23,16 @@ class ProyectosController < ApplicationController
 
   end
 
-  def proyecto_activo
-    @activo = Perfil.find(session[:perfil_activo]['id'])
-
-    @objeto = Proyecto.find(session[:proyecto_activo]['id'])
-
-    @temas_seleccion = Tema.where(id: (@activo.temas.ids - @objeto.temas.ids)).order(:tema)
-    @temas_proyecto = @objeto.temas.order(:tema)
-
-    # tenemos que cubrir todos los casos
-    # 1. has_many : }
-    @coleccion = {}
-    @coleccion['perfiles']  = @objeto.perfiles
-    @coleccion['versiones'] = @objeto.versiones
-    @coleccion['temas']     = @objeto.temas
-    @coleccion['etapas']    = @objeto.etapas
-    @coleccion['carpetas']  = @objeto.carpetas
-
-  end
-
   # GET /proyectos/1
   # GET /proyectos/1.json
   def show
-    # Se usa proyecto_activo
+    if @objeto.id == session[:proyecto_activo]['id']
+      @coleccion = {}
+      @coleccion['perfiles']  = @objeto.perfiles
+      @coleccion['versiones'] = @objeto.versiones
+    else
+      redirect_to proyectos_path
+    end
   end
 
   # GET /proyectos/new

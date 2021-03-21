@@ -21,7 +21,8 @@ Rails.application.routes.draw do
     match :seleccion, via: :get, on: :collection
     match :asigna, via: :post, on: :collection
     match :elimina, via: :post, on: :collection
-    match :remueve_carpeta, via: :get, on: :member
+    match :desasigna_carpeta, via: :get, on: :member
+    match :elimina_carpeta, via: :get, on: :member
   end
   resources :citas
   resources :clasificaciones do
@@ -77,7 +78,6 @@ Rails.application.routes.draw do
     match :asigna_tema_proyecto, via: :post, on: :collection
     match :elimina_tema_proyecto, via: :post, on: :collection
     match :activo, via: :get, on: :member
-    match :proyecto_activo, via: :get, on: :collection
     resources :versiones
     resources :etapas
     resources :carpetas

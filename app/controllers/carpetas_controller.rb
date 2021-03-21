@@ -2,7 +2,7 @@ class CarpetasController < ApplicationController
   before_action :inicia_sesion
   before_action :authenticate_usuario!
   before_action :carga_temas_ayuda
-  before_action :set_carpeta, only: [:show, :edit, :update, :destroy, :remueve_carpeta]
+  before_action :set_carpeta, only: [:show, :edit, :update, :destroy, :desasigna_carpeta, :elimina_carpeta]
 
   # GET /carpetas
   # GET /carpetas.json
@@ -108,6 +108,13 @@ class CarpetasController < ApplicationController
     
   end
 
+  def desasigna_carpeta
+    publicacion = Publicacion.find(params[:objeto_id])
+    @objeto.publicaciones.delete(publicacion)
+
+    redirect_to publicacion
+  end
+
   # DELETE /carpetas/1
   # DELETE /carpetas/1.json
   def destroy
@@ -120,21 +127,12 @@ class CarpetasController < ApplicationController
   end
 
   # Elimina carpetas del proyecto, la borrq sólo si no tiene publicaciones
-  def elimina
-    publicacion = Publicacion.find(params[:publicacion_id])
-    unless params[:carpeta_base][:carpeta_id].blank?
-      carpeta = Carpeta.find(params[:carpeta_base][:carpeta_id])
-      if carpeta.publicaciones.empty?
-        carpeta.delete
-      end
-    end
-    redirect_to publicacion
-  end
-
-  def remueve_carpeta
+  def elimina_carpeta
     publicacion = Publicacion.find(params[:objeto_id])
-    @objeto.publicaciones.delete(publicacion)
-
+    if @objeto.temas.empty?
+      @objeto.publicaciones.delete_all
+      @objeto.delete
+    end
     redirect_to publicacion
   end
 

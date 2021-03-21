@@ -16,20 +16,11 @@
 			<%= render partial: '/carpetas/inline_nuevo' %>
 		<% end %>
 
-		<% if @carpetas_eliminacion.any? %>
-			<%= form_for :carpeta_base, url: "/carpetas/elimina?publicacion_id=#{@objeto.id}" do |form| %>
-				<div class='form-inline'>
-					<%= form.select :carpeta_id, @carpetas_eliminacion.collect { |cpta| [cpta.carpeta, cpta.id] }, include_blank: false, prompt: "Seleccione Carpeta" %>
-					<%= form.submit '- Carpeta'  %>
-				</div>
-			<% end  %>
-		<% end %>
-
 		<% if @carpetas_seleccion.any? %>
 			<%= form_for :carpeta_base, url: "/carpetas/asigna?publicacion_id=#{@objeto.id}" do |form| %>
 				<div class='form-inline'>
 					<%= form.select :carpeta_id, @carpetas_seleccion.collect { |cpta| [cpta.carpeta, cpta.id] }, include_blank: false, prompt: "Seleccione Carpeta" %>
-					<%= form.submit '<< Carpeta'  %>
+					<%= form.submit 'Asignar'  %>
 				</div>
 			<% end  %>
 		<% end %>

@@ -10,10 +10,9 @@ module RecursosHelper
 	    [
 	        ["Publicaciones",   "/publicaciones",             'usuario'],
 	        ["Ingresos",        "/ingresos",                  'usuario'],
-	        ["Proyecto Activo", "/proyectos/proyecto_activo", 'usuario'],
 	        ["Proyectos",       "/proyectos",                 'usuario'],
 #	        ["Carpetas",        "/carpetas",        'usuario'],
-#	        ["Temas",           "/temas",                     'usuario'],
+	        ["Temas",           "/temas",                     'usuario'],
 #	        ["Textos",          "/textos",                    'usuario'],
 	        ['Datos',           '/datos',                     'usuario'],
 	        ["Cargas",          "/cargas",                    'usuario'],
@@ -69,7 +68,12 @@ module RecursosHelper
 	def x_conditions(objeto, btn)
 		case objeto.class.name
 		when 'Carpeta'
-			controller_name == 'publicaciones' and (not Carpeta::NOT_MODIFY.include?(objeto.carpeta)) and action_name == 'show'
+			case btn
+			when 'Desasignar'
+				controller_name == 'publicaciones' and (not Carpeta::NOT_MODIFY.include?(objeto.carpeta)) and action_name == 'show'
+			when 'Eliminar'
+				controller_name == 'publicaciones' and (not Carpeta::NOT_MODIFY.include?(objeto.carpeta)) and action_name == 'show' and objeto.temas.empty?
+			end
 		when 'Carga'
 			objeto.estado == 'ingreso'
 		when 'Texto'
@@ -77,7 +81,7 @@ module RecursosHelper
 		when 'Clasificacion'
 			objeto.clasificacion != btn
 		when 'Tema'
-			controller_name == 'proyectos' and objeto.perfil.id == session[:perfil_activo]['id'].to_i
+			controller_name == 'proyectos'
 		when 'Proyecto'
 			objeto.activo.blank? or objeto.activo == false
 		when 'Perfil'
@@ -92,7 +96,10 @@ module RecursosHelper
 	def x_btns(objeto)
 		case objeto.class.name
 		when 'Carpeta'
-			[['Eliminar', '/remueve_carpeta', true]]
+			[
+				['Desasignar', '/desasigna_carpeta', true],
+				['Eliminar', '/elimina_carpeta', true]
+			]
 		when 'Carga'
 			[['Proceso', '/procesa_carga', false]]
 		when 'Texto'
@@ -115,6 +122,15 @@ module RecursosHelper
         else
         	[]
 		end		
+	end
+
+	def show_link_condition(objeto)
+		case objeto.class.name
+		when 'Proyecto'
+			objeto.id == session[:proyecto_activo]['id']
+		else
+			true
+		end
 	end
 
 	## ------------------------------------------------------- FORM & SHOW

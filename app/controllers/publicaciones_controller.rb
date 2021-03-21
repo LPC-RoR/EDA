@@ -53,8 +53,6 @@ class PublicacionesController < ApplicationController
       @carpetas_seleccion = proyecto_activo.carpetas_de_proceso(@objeto)
     end
 
-    @carpetas_eliminacion = proyecto_activo.carpetas_eliminacion
-
     @carpetas_creacion_temas = proyecto_activo.carpetas.where.not(carpeta: Carpeta::NOT_MODIFY)
 
     # ***************************************** @show_colection[Modelo]
