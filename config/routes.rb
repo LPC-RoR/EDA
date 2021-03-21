@@ -110,6 +110,7 @@ Rails.application.routes.draw do
   end
   resources :temas do
     match :remueve_tema, via: :get, on: :member
+    match :nuevo, via: :post, on: :collection
   end
   resources :tema_ayudas do
     match :nuevo, via: :post, on: :collection

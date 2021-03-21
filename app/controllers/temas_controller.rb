@@ -38,6 +38,18 @@ class TemasController < ApplicationController
     @objeto = Tema.new(perfil_id: session[:perfil_activo]['id'])
   end
 
+  def nuevo
+    publicacion = Publicacion.find(params[:publicacion_id])
+
+    unless params[:tema_base][:carpeta_id].blank? or params[:tema_base][:tema].blank?
+      carpeta = Carpeta.find(params[:tema_base][:carpeta_id])
+      unless carpeta.temas.map {|tema| tema.tema.downcase}.include?(params[:tema_base][:tema])
+        carpeta.temas.create(tema: params[:tema_base][:tema])
+      end
+    end
+    redirect_to publicacion
+  end
+
   # GET /temas/1/edit
   def edit
   end

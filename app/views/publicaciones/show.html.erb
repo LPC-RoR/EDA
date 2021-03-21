@@ -77,23 +77,34 @@
 		<small><%= @objeto.abstract %></small>
 
 		</br></br>
-		<!-- TEMAS y TEXTOS -->
-		<%# unless ['ingreso', 'papelera', 'duplicado'].include?(@objeto.estado) %>
-			<%#= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: '+ Texto', size: '5'} %>
-			<%# if @temas_seleccion.any? %>
-				<%#= form_for :texto_base, url: "/textos/nuevo?publicacion_id=#{@objeto.id}" do |form| %>
-					<%#= form.select :tema_id, @temas_seleccion.collect { |tm| [tm.tema, tm.id] }, include_blank: false, prompt: "Seleccione Tema" %>
+		<% if @objeto.evaluable %>
+			<%= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: 'Gestion de Temas y Textos', size: '5'} %>
+			<% unless @carpetas_creacion_temas.empty? %>
+				<%= form_for :tema_base, url: "/temas/nuevo?publicacion_id=#{@objeto.id}" do |form| %>
+					<%= form.select :carpeta_id, @carpetas_creacion_temas.collect { |car| [car.carpeta, car.id] }, include_blank: false, prompt: "Seleccione Carpeta" %>
 					<%#= form.select :clasificacion, Clasificacion::CLASIFICACION, include_blank: false, prompt: "Seleccione Clasificacion" %>
 					<div class='form-inline'>
-						<%#= form.text_field(:texto, size: 80, class: 'form-control' ) %>
-						<%#= form.submit '+ Texto'  %>
+						<%= form.text_field(:tema, size: 80, class: 'form-control' ) %>
+						<%= form.submit '+ Tema'  %>
 					</div>
-				<%# end  %>
-			<%# end %>
+				<% end  %>
+			<% end %>
+
+			<% unless @temas_seleccion.empty? %>
+				<%= form_for :texto_base, url: "/textos/nuevo?publicacion_id=#{@objeto.id}" do |form| %>
+					<%= form.select :tema_id, @temas_seleccion.collect { |tm| [tm.carpeta_tema(session[:proyecto_activo]['id']), tm.id] }, include_blank: false, prompt: "Seleccione Tema" %>
+					<%= form.select :clasificacion, Clasificacion::CLASIFICACION, include_blank: false, prompt: "Seleccione Clasificacion" %>
+					<div class='form-inline'>
+						<%= form.text_field(:texto, size: 80, class: 'form-control' ) %>
+						<%= form.submit '+ Texto'  %>
+					</div>
+				<% end  %>
+			<% end %>
 			</br>
-			<%#= render partial: '0p/tabla/tabla', locals: {c: 'textos', a: 'index'} unless @coleccion['textos'].empty? %>
+			<%= render partial: '0p/tabla/tabla', locals: {c: 'textos', a: 'index'} unless @coleccion['textos'].empty? %>
 			</br>
-		<%# end %>
+
+		<% end %>
 
 	</div>
 

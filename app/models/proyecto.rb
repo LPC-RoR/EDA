@@ -82,4 +82,17 @@ class Proyecto < ApplicationRecord
 		Carpeta.where(id: ids_eliminacion)
 	end
 
+	def temas_seleccion
+		ids_temas = []
+		carpetas = self.carpetas.where.not(carpeta: Carpeta::NOT_MODIFY)
+		if carpetas.empty?
+			Tema.where(tema: 'COLECCION VACÍA')
+		else
+			carpetas.each do |carpeta|
+				ids_temas = ids_temas.union(carpeta.temas.empty? ? [] : carpeta.temas.ids)
+			end
+			Tema.where(id: ids_temas)
+		end
+	end
+
 end
