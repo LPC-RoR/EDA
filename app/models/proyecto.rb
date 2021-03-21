@@ -27,4 +27,59 @@ class Proyecto < ApplicationRecord
 	has_many :asociaciones
 	has_many :publicaciones, through: :asociaciones
 
+	# Usada para List Selector
+	def carpetas_seleccion
+		self.carpetas.where(carpeta: Carpeta::NOT_MODIFY)
+	end
+
+	# Usada para List Selector
+	def carpetas_proceso
+		aceptadas_id = self.carpetas.find_by(carpeta: 'Aceptadas').id
+		proceso_ids = self.carpetas.where.not(carpeta: Carpeta::NOT_MODIFY).ids
+		ids_proceso = [aceptadas_id]
+		
+		Carpeta.where(id: ids_proceso.union(proceso_ids))
+	end
+
+	# Usudas para @carpetas_seleccion : Gestión de Carpetas
+	def carpetas_origen
+		self.carpetas.where(carpeta: ['Carga', 'Ingreso', 'Duplicadas'])
+	end
+
+	# Usudas para @carpetas_seleccion : Gestión de Carpetas
+	def carpeta_origen(publicacion)
+		if publicacion.duplicados.any?
+			self.carpetas.find_by(carpeta: 'Duplicadas')
+		elsif publicacion.origen == 'carga'
+			self.carpetas.find_by(carpeta: 'Carga')
+		elsif publicacion.origen == 'ingreso'
+			self.carpetas.find_by(carpeta: 'Ingreso')
+		end
+	end
+
+	def carpetas_primer_destino
+		self.carpetas.where(carpeta: ['Postergadas', 'Excluidas', 'Aceptadas'])
+	end
+
+	def carpetas_seleccionados_menos_activa_mas_origen(publicacion)
+		nombre_carpetas = (['Postergadas', 'Excluidas', 'Aceptadas'] - [publicacion.carpetas.first.carpeta]) << carpeta_origen(publicacion).carpeta
+		self.carpetas_seleccion.where(carpeta: nombre_carpetas)
+	end
+
+	def carpetas_todas_menos_activa_mas_origen(publicacion)
+		carpetas_seleccion = ['Postergadas', 'Excluidas'] << carpeta_origen(publicacion).carpeta
+		carpetas_personalizadas = self.carpetas.where.not(carpeta: Carpeta::NOT_MODIFY).map {|car| car.carpeta}
+		self.carpetas.where(carpeta: carpetas_seleccion.union(carpetas_personalizadas))
+	end
+
+	def carpetas_de_proceso(publicacion)
+		personalizadas = self.carpetas.where.not(carpeta: Carpeta::NOT_MODIFY)
+		personalizadas.where.not(id: publicacion.carpetas.ids)
+	end
+
+	def carpetas_eliminacion
+		ids_eliminacion = self.carpetas.where.not(carpeta: Carpeta::NOT_MODIFY).map {|carpeta| carpeta.id if carpeta.publicaciones.empty?}.compact
+		Carpeta.where(id: ids_eliminacion)
+	end
+
 end

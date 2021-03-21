@@ -11,22 +11,21 @@ class PublicacionesController < ApplicationController
   after_action :procesa_journal, only: [:update, :create]
   after_action :procesa_estado, only: [:update, :create]
   after_action :procesa_doi, only: [:update, :create]
+  after_action :asigna_proyecto_activo, only: [:create]
 
   # GET /publicaciones
   # GET /publicaciones.json
   def index
     proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
 
-    @list_selector = proyecto_activo.carpetas.all.map {|car| [car.carpeta, car.publicaciones.count]}
-
-    if params[:html_options].blank?
-      carpeta = proyecto_activo.carpetas.first
-    else
-      carpeta = params[:html_options]['sel'].blank? ? proyecto_activo.carpetas.first : proyecto_activo.carpetas.find_by(carpeta: params[:html_options]['sel'])
-    end
+    @tab = params[:html_options].blank? ? 'Selección' : (params[:html_options]['tab'].blank? ? 'Selección' : params[:html_options]['tab'])
+    carpetas = (@tab == 'Selección' ? proyecto_activo.carpetas_seleccion : proyecto_activo.carpetas_proceso)
+    @list_selector = carpetas.map {|car| [car.carpeta, car.publicaciones.count]}
+    carpeta = params[:html_options].blank? ? carpetas.first : (params[:html_options]['sel'].blank? ? carpetas.first : carpetas.find_by(carpeta: params[:html_options]['sel']))
+    carpeta = carpetas.first if carpeta.blank?
 
     @sel = carpeta.carpeta
-    @options = {'sel' => @sel}
+    @options = {'sel' => @sel, 'tab' => @tab}
 
     @coleccion = {}
     @coleccion[controller_name] = carpeta.publicaciones.page(params[:page])
@@ -37,56 +36,24 @@ class PublicacionesController < ApplicationController
   def show
     # ********************** DUPLICADOS *****************************
 
-    @duplicados_doi_ids = @objeto.doi.present? ? (Publicacion.where(doi: @objeto.doi).ids - [@objeto.id]) : []
-    @duplicados_t_sha1_ids = @objeto.title.present? ? (Publicacion.where(t_sha1: @objeto.t_sha1).ids - [@objeto.id]) : []
-
-    @duplicados_ids = @duplicados_doi_ids.union(@duplicados_t_sha1_ids)
-
-    unless @duplicados_ids.empty?
-      @duplicados = Publicacion.where(id: @duplicados_ids)
-    end
+    @duplicados = @objeto.duplicados
 
     # *********************** CARPETAS ******************************
     proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
 
-#    @temas_seleccion = proyecto_activo.temas
-
-    ## AMBOS
-    @ids_carpetas_base = proyecto_activo.carpetas.map {|c| c.id if Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
-    @ids_carpetas_tema = proyecto_activo.carpetas.map {|c| c.id unless Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
-
-    # ids de las carpetas del 'proyecto_activo'
-    ids_activo = @ids_carpetas_base | @ids_carpetas_tema
-
-    # ids de la publicación que son del perfil
-    ids_publicacion = @objeto.carpetas.ids & ids_activo
-
-    id_carpeta_carga      = proyecto_activo.carpetas.find_by(carpeta: 'Carga').id
-    id_carpeta_ingreso    = proyecto_activo.carpetas.find_by(carpeta: 'Ingreso').id
-    id_carpeta_duplicados = proyecto_activo.carpetas.find_by(carpeta: 'Duplicados').id
-
-    @id_carpeta_revisadas  = proyecto_activo.carpetas.find_by(carpeta: 'Revisadas').id
-
-    ids_tres   = proyecto_activo.carpetas.where(carpeta: ['Carga', 'Ingreso', 'Duplicados']).ids
-    ids_cuatro = proyecto_activo.carpetas.where(carpeta: ['Carga', 'Ingreso', 'Duplicados', 'Revisadas']).ids
-
-    ids_todas = @ids_carpetas_base | @ids_carpetas_tema
-
-    if ids_publicacion.empty?
-      ids_seleccion = (@ids_carpetas_base - ids_tres)
-    elsif ids_publicacion.include?(id_carpeta_duplicados)
-      ids_seleccion = @objeto.origen == 'ingreso' ? ['Ingreso'] : ['Carga']
-    elsif (ids_publicacion.include?(id_carpeta_ingreso) or ids_publicacion.include?(id_carpeta_carga))
-      ids_seleccion = (@ids_carpetas_base - ids_tres)
-    elsif (ids_publicacion.include?(@id_carpeta_revisadas) and ((ids_publicacion & @ids_carpetas_tema).empty?))
-      ids_seleccion = ids_todas - ids_cuatro
-    elsif (@ids_carpetas_tema & ids_publicacion).any?
-      ids_seleccion = @ids_carpetas_tema - ids_publicacion
-    else
-      ids_seleccion = @ids_carpetas_base - (ids_tres | (@ids_carpetas_base & ids_publicacion))
+    if @objeto.en_seleccion?
+      # publicaciones por seleccionar -> primer destino
+      @carpetas_seleccion = proyecto_activo.carpetas_primer_destino
+    elsif @objeto.primer_destino?
+      # Publicaciones en primer destino -> Carpetas de Seleccion + Origen
+      @carpetas_seleccion = proyecto_activo.carpetas_seleccionados_menos_activa_mas_origen(@objeto)
+    elsif @objeto.en_proceso?
+      @carpetas_seleccion = proyecto_activo.carpetas_todas_menos_activa_mas_origen(@objeto)
+    elsif @objeto.procesada?
+      @carpetas_seleccion = proyecto_activo.carpetas_de_proceso(@objeto)
     end
 
-    @carpetas_seleccion = Carpeta.find(ids_seleccion)
+    @carpetas_eliminacion = proyecto_activo.carpetas_eliminacion
 
     # ***************************************** @show_colection[Modelo]
     @coleccion = {}
@@ -310,6 +277,11 @@ class PublicacionesController < ApplicationController
       end
     end
 
+    def asigna_proyecto_activo
+      proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
+      proyecto_activo.publicaciones << @objeto
+    end
+
     def set_publicacion
       @objeto = Publicacion.find(params[:id])
     end
@@ -320,6 +292,6 @@ class PublicacionesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def publicacion_params
-      params.require(:publicacion).permit(:unique_id, :origen, :title, :author, :doi, :year, :volume, :pages, :month, :publisher, :abstract, :link, :author_email, :issn, :eissn, :address, :affiliation, :article_number, :keywords, :keywords_plus, :research_areas, :web_of_science_categories, :da, :d_journal, :d_author, :d_doi, :registro_id, :revista_id, :equipo_id, :investigador_id, :academic_degree, :estado, :book, :doc_type, :editor, :ciudad_pais, :journal, :perfil_id)
+      params.require(:publicacion).permit(:unique_id, :origen, :title, :author, :doi, :year, :volume, :pages, :month, :publisher, :abstract, :link, :author_email, :issn, :eissn, :address, :affiliation, :article_number, :keywords, :keywords_plus, :research_areas, :web_of_science_categories, :da, :d_journal, :d_author, :d_doi, :registro_id, :revista_id, :equipo_id, :investigador_id, :academic_degree, :estado, :book, :doc_type, :editor, :ciudad_pais, :journal)
     end
 end

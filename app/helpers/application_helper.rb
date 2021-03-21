@@ -159,28 +159,6 @@ module ApplicationHelper
 
 	## ------------------------------------------------------- TABLA | BTNS
 
-	def btns?(objeto, tipo)
-		if Rails.configuration.x.btns.exceptions[objeto.class.name].present?
-			if Rails.configuration.x.btns.exceptions[objeto.class.name][:conditions].present?
-				case tipo
-				when 'crud'
-					Rails.configuration.x.btns.exceptions[objeto.class.name][:conditions].include?('crud') ? crud_conditions(objeto) : true
-				when 'x'
-					Rails.configuration.x.btns.exceptions[objeto.class.name][:conditions].include?('x')
-				end
-			else
-				tipo == 'crud' ? true : false
-			end
-		else
-			# por defecto 'crud' es true y 'x' es false
-			tipo == 'crud' ? true : false
-		end
-	end
-
-	def x_btns(objeto)
-		Rails.configuration.x.btns.exceptions[objeto.class.name][:x_btns]
-	end
-
 	# pregunta si tiene childs
 	# "_btns_e.html.erb"
 	def has_child?(objeto)

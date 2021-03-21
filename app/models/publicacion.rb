@@ -110,4 +110,33 @@ class Publicacion < ApplicationRecord
 		self.doc_type
 	end
 
+	def evaluable
+		# 1.- Esta en la carpeta 'Aceptadas'
+		self.carpetas.map {|car| car.carpeta}.include?('Aceptadas')
+	end
+
+	def duplicados
+	    duplicados_doi_ids = self.doi.present? ? (Publicacion.where(doi: self.doi).ids - [self.id]) : []
+	    duplicados_t_sha1_ids = self.title.present? ? (Publicacion.where(t_sha1: self.t_sha1).ids - [self.id]) : []
+	    duplicados_ids = duplicados_doi_ids.union(duplicados_t_sha1_ids)
+
+	    Publicacion.where(id: duplicados_ids)
+	end
+
+	def en_seleccion?
+		self.carpetas.count == 1 and self.carpetas.first.carpeta != 'Aceptadas'
+	end
+
+	def primer_destino?
+		self.carpetas.count == 1 and ['Postergadas', 'Excluidas'].include?(self.carpetas.first.carpeta)
+	end
+
+	def en_proceso?
+		self.carpetas.count == 1 and self.carpetas.first.carpeta == 'Aceptadas'
+	end
+
+	def procesada?
+		self.carpetas.count > 1
+	end
+
 end

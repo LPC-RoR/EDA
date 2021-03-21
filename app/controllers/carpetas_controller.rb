@@ -35,6 +35,19 @@ class CarpetasController < ApplicationController
     @objeto = Carpeta.new(perfil_id: session[:perfil_activo]['id'], proyecto_id: proyecto_activo.id)
   end
 
+  def nuevo
+    publicacion = Publicacion.find(params[:objeto_id])
+    unless params[:nueva_carpeta][:carpeta].blank?
+      proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
+
+      nombres_carpetas = proyecto_activo.carpetas.map {|car| car.carpeta.downcase}
+      unless nombres_carpetas.include?(params[:nueva_carpeta][:carpeta].downcase)
+        proyecto_activo.carpetas.create(carpeta: params[:nueva_carpeta][:carpeta])
+      end
+    end
+    redirect_to "/publicaciones/#{publicacion.id}?tab=Proceso"
+  end
+
   # GET /carpetas/1/edit
   def edit
   end
@@ -72,15 +85,14 @@ class CarpetasController < ApplicationController
   end
 
   def asigna
-    @activo = Perfil.find(session[:perfil_activo]['id'])
-
+    proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
     publicacion = Publicacion.find(params[:publicacion_id])
 
     unless params[:carpeta_base][:carpeta_id].blank?
       carpeta     = Carpeta.find(params[:carpeta_base][:carpeta_id])
 
-      ids_carpetas_base = @activo.carpetas.map {|c| c.id if Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
-      ids_carpetas_tema = @activo.carpetas.map {|c| c.id unless Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
+      ids_carpetas_base = proyecto_activo.carpetas.map {|c| c.id if Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
+      ids_carpetas_tema = proyecto_activo.carpetas.map {|c| c.id unless Carpeta::NOT_MODIFY.include?(c.carpeta)}.compact
       ids_activo = (ids_carpetas_base | ids_carpetas_tema)
       ids_publicacion = publicacion.carpetas.ids & ids_activo
 
@@ -105,6 +117,18 @@ class CarpetasController < ApplicationController
       format.html { redirect_to @redireccion, notice: 'Carpeta was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  # Elimina carpetas del proyecto, la borrq sólo si no tiene publicaciones
+  def elimina
+    publicacion = Publicacion.find(params[:publicacion_id])
+    unless params[:carpeta_base][:carpeta_id].blank?
+      carpeta = Carpeta.find(params[:carpeta_base][:carpeta_id])
+      if carpeta.publicaciones.empty?
+        carpeta.delete
+      end
+    end
+    redirect_to publicacion
   end
 
   def remueve_carpeta

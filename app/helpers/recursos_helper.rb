@@ -41,7 +41,7 @@ module RecursosHelper
 		end
 	end
 
-	def crud_conditions(objeto)
+	def crud_conditions(objeto, btn)
 		case objeto.class.name
 		when 'Carga'
 			objeto.estado == 'ingreso'
@@ -61,28 +61,60 @@ module RecursosHelper
 			controller_name == 'datos'
 		when 'Perfil'
 			false
+		else
+			true
 		end
 	end
 
 	def x_conditions(objeto, btn)
 		case objeto.class.name
+		when 'Carpeta'
+			controller_name == 'publicaciones' and (not Carpeta::NOT_MODIFY.include?(objeto.carpeta)) and action_name == 'show'
 		when 'Carga'
 			objeto.estado == 'ingreso'
 		when 'Texto'
 			controller_name == 'publicaciones'
-		when 'Carpeta'
-			controller_name == 'publicaciones' and (not Carpeta::NOT_MODIFY.include?(objeto.carpeta)) and action_name == 'show'
 		when 'Clasificacion'
 			objeto.clasificacion != btn
 		when 'Tema'
 			controller_name == 'proyectos' and objeto.perfil.id == session[:perfil_activo]['id'].to_i
-		when 'Tabla'
-			objeto.archivo.present? and objeto.encabezados.empty?
 		when 'Proyecto'
 			objeto.activo.blank? or objeto.activo == false
 		when 'Perfil'
 			controller_name == 'proyectos'
+		when 'Tabla'
+			objeto.archivo.present? and objeto.encabezados.empty?
+		else
+			true
 		end
+	end
+
+	def x_btns(objeto)
+		case objeto.class.name
+		when 'Carpeta'
+			[['Eliminar', '/remueve_carpeta', true]]
+		when 'Carga'
+			[['Proceso', '/procesa_carga', false]]
+		when 'Texto'
+			[['Eliminar', '/remueve_texto', true]]
+		when 'Clasificacion'
+			[
+                ['referencia',     '/clasifica?clasificacion=referencia'    , true],
+                ['complementario', '/clasifica?clasificacion=complementario', true],
+                ['controversial',  '/clasifica?clasificacion=controversial' , true],
+                ['revisar',        '/clasifica?clasificacion=revisar'       , true]
+            ]
+        when 'Tema'
+        	[['Eliminar', '/remueve_tema', true]]
+        when 'Proyecto'
+        	[['Activo', '/activo', false]]
+        when 'Perfil'
+        	[['Desvincular', '/desvincular', true]]
+        when 'Tabla'
+        	[['Cargar', '/cargar_tabla', true]]
+        else
+        	[]
+		end		
 	end
 
 	## ------------------------------------------------------- FORM & SHOW

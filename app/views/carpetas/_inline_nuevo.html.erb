@@ -1,0 +1,6 @@
+<%= form_for :nueva_carpeta, url: "/carpetas/nuevo?objeto_id=#{@objeto.id}" do |form| %>
+	<div class='form-inline'>
+		<%= form.text_field(:carpeta, size: 28, class: 'form-control' ) %>
+		<%= form.submit '+ Carpeta'  %>
+	</div>
+<% end  %>

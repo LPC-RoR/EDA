@@ -19,8 +19,7 @@ module Eda
     # +++ HCH activa locala :es
     config.i18n.default_locale = :es
 
-    ## ------------------------------------------------- CAPITAN
-
+    ## ------------------------------------------------- 0p
     ## ------------------------------------------------- STANDARD
 
     ## comportamiento por defecto de los elementos de una tabla
@@ -112,7 +111,7 @@ module Eda
             },
             estados: {},
             tabs: {
-                'publicaciones' => ['ingresos'],
+                'publicaciones' => ['ingresos', 'publicaciones'],
                 'proyectos' => ['self']
             },
             paginas: {
@@ -131,7 +130,8 @@ module Eda
         },
         tabs: {
             'publicaciones' => {
-                'ingresos' => ['ingreso', 'duplicado', 'papelera', 'publicada']
+                'ingresos' => ['ingreso', 'duplicado', 'papelera', 'publicada'],
+                'publicaciones' => ['Selección', 'Proceso']
             },
             'proyectos' => {
                 'proyectos' => ['Administrados', 'Participaciones']
@@ -149,70 +149,6 @@ module Eda
             'ingresos' => 'publicaciones'
         },
         sortable: {}
-    }
-
-    ## ------------------------------------------------- TABLA | BTNS
-
-    ## x_btns
-    # [0] : Nombre del boton
-    # [1] : link base, a esta base se le agrega el instancia_id
-    # [2] : Si es true se agrega "objeto_id=#{@objeto.id}"
-
-    config.x.btns.exceptions = {
-        'Publicacion'   => {
-            conditions: ['crud']
-        },
-        'Carpeta'       => {
-            conditions: ['crud', 'x'],
-            x_btns: [
-                ['Eliminar', '/remueve_carpeta', true]
-            ]
-        },
-        'Carga'         => {
-            conditions: ['x', 'crud'],
-            x_btns: [   
-                ['Proceso', '/procesa_carga', false]
-            ]
-        },
-        'Texto'         => {
-            conditions: ['x', 'crud'],
-            x_btns: [
-                ['Eliminar', '/remueve_texto', true]
-            ],
-        },
-        'Clasificacion' => {
-            conditions: ['x', 'crud'],
-            x_btns: [
-                ['referencia',     '/clasifica?clasificacion=referencia'    , true],
-                ['complementario', '/clasifica?clasificacion=complementario', true],
-                ['controversial',  '/clasifica?clasificacion=controversial' , true],
-                ['revisar',        '/clasifica?clasificacion=revisar'       , true]
-            ]
-        },
-        'Tema'          =>{
-            conditions: ['crud', 'x'],
-            x_btns: [
-                ['Eliminar', '/remueve_tema', true]
-            ]
-        },
-        'Proyecto'      => {
-            conditions: ['crud', 'x'],
-            x_btns: [
-                ['Activo', '/activo', false]
-            ]
-        },
-        'Tabla' => {
-            conditions: ['crud', 'x'],
-            x_btns: [
-                ['Cargar', '/cargar_tabla', true]
-            ]
-        },
-        'Perfil' => {
-            conditions: ['crud', 'x'],
-            x_btns: [
-                ['Desvincular', '/desvincular', true]
-            ]
-        }
     }
 
     ## ------------------------------------------------- FORM

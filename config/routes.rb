@@ -17,8 +17,10 @@ Rails.application.routes.draw do
     match :procesa_carga, via: :get, on: :member
   end
   resources :carpetas do
+    match :nuevo, via: :post, on: :collection
     match :seleccion, via: :get, on: :collection
     match :asigna, via: :post, on: :collection
+    match :elimina, via: :post, on: :collection
     match :remueve_carpeta, via: :get, on: :member
   end
   resources :citas
