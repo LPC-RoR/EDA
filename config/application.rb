@@ -112,7 +112,8 @@ module Eda
             estados: {},
             tabs: {
                 'publicaciones' => ['ingresos', 'publicaciones'],
-                'proyectos' => ['self']
+                'proyectos' => ['self'],
+                'clasificaciones' => ['temas']
             },
             paginas: {
                 'publicaciones' => ['*']
@@ -135,6 +136,9 @@ module Eda
             },
             'proyectos' => {
                 'proyectos' => ['Administrados', 'Participaciones']
+            },
+            'clasificaciones' => {
+                'temas' => ['referencia', 'complementario', 'controversial', 'revisar']
             }
         },
         bt_fields: {

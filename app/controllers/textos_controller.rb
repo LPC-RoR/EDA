@@ -127,11 +127,15 @@ class TextosController < ApplicationController
   end
 
   def remueve_texto
-    @publicacion = Publicacion.find(params[:objeto_id])
-    @publicacion.textos.delete(@objeto)
-    @objeto.delete if @objeto.publicaciones.count == 0
+    publicacion = Publicacion.find(params[:objeto_id])
+    publicacion.textos.delete(@objeto)
 
-    redirect_to @publicacion
+    if @objeto.publicaciones.count == 0
+      @objeto.temas.delete_all
+      @objeto.delete 
+    end
+
+    redirect_to publicacion
   end
 
   private

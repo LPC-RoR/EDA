@@ -208,7 +208,11 @@ module ApplicationHelper
 			objeto.send(label)
 		elsif Rails.configuration.tables[:bt_fields][objeto.class.name].present?
 			if Rails.configuration.tables[:bt_fields][objeto.class.name][label].present?
-				objeto.send(Rails.configuration.tables[:bt_fields][objeto.class.name][label]).send(label)
+				if objeto.send(Rails.configuration.tables[:bt_fields][objeto.class.name][label]).present?
+					objeto.send(Rails.configuration.tables[:bt_fields][objeto.class.name][label]).send(label)
+				else
+					'Objeto NO Encontrado'
+				end
 			else
 				objeto.send(label)
 			end

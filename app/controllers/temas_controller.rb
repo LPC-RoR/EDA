@@ -24,20 +24,16 @@ class TemasController < ApplicationController
   # GET /temas/1.json
   def show
     if params[:html_options].blank?
-      @tab = 'clasificaciones'
+      @tab = 'referencia'
     else
-      @tab = params[:html_options][:tab].blank? ? 'clasificaciones' : params[:html_options][:tab]
+      @tab = params[:html_options][:tab].blank? ? 'referencia' : params[:html_options][:tab]
     end
     @options = { 'tab' => @tab }
 #    @estado = params[:estado].blank? ? @tab.classify.constantize::ESTADOS[0] : params[:estado]
     # tenemos que cubrir todos los casos
     # 1. has_many : }
     @coleccion = {}
-    if @tab == 'clasificaciones'
-      @coleccion[@tab] = @objeto.send(@tab).order(:clasificacion) #.where(estado: @estado)
-    else
-      @coleccion[@tab] = @objeto.send(@tab) #.where(estado: @estado)
-    end
+    @coleccion['clasificaciones'] = @objeto.clasificaciones.where(clasificacion: @tab)
   end
 
   # GET /temas/new
