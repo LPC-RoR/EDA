@@ -17,15 +17,6 @@ class TemaAyudasController < ApplicationController
 
     @coleccion = {}
     @coleccion['tema_ayudas'] = TemaAyuda.where(tipo: @tab).order(:orden)
-
-
-
-
-    @coleccion['tema_inicio'] = TemaAyuda.where(tipo: 'inicio').order(:orden)
-    @coleccion['tema_tutorial'] = TemaAyuda.where(tipo: 'tema').order(:orden)
-
-    @coleccion['tema_foot'] = TemaAyuda.where(tipo: 'foot').order(:orden)
-    @coleccion['tema_portada'] = TemaAyuda.where(tipo: 'portada').order(:orden)
   end
 
   # GET /tema_ayudas/1
