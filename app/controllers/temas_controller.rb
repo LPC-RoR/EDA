@@ -2,7 +2,7 @@ class TemasController < ApplicationController
   before_action :authenticate_usuario!
   before_action :inicia_sesion
   before_action :carga_temas_ayuda
-  before_action :set_tema, only: [:show, :edit, :update, :destroy, :remueve_tema]
+  before_action :set_tema, only: [:show, :edit, :update, :destroy, :desasignar, :eliminar]
 
   # GET /temas
   # GET /temas.json
@@ -11,13 +11,14 @@ class TemasController < ApplicationController
 
     carpetas = proyecto_activo.carpetas_personalizadas
     @list_selector = carpetas.map {|car| [car.carpeta, car.temas.count]}
-    @carpeta = params[:html_options].blank? ? carpetas.first : (params[:html_options]['sel'].blank? ? carpetas.first : carpetas.find_by(carpeta: params[:html_options]['sel']))
+    # @objeto es la carpeta activa
+    @objeto = params[:html_options].blank? ? carpetas.first : (params[:html_options]['sel'].blank? ? carpetas.first : carpetas.find_by(carpeta: params[:html_options]['sel']))
 
-    @sel = @carpeta.carpeta
+    @sel = @objeto.carpeta
     @options = {'sel' => @sel}
 
     @coleccion = {}
-    @coleccion[controller_name] = @carpeta.temas.order(:tema)
+    @coleccion[controller_name] = @objeto.temas.order(:tema)
   end
 
   # GET /temas/1
@@ -42,15 +43,27 @@ class TemasController < ApplicationController
   end
 
   def nuevo
-    publicacion = Publicacion.find(params[:publicacion_id])
-
-    unless params[:tema_base][:carpeta_id].blank? or params[:tema_base][:tema].blank?
-      carpeta = Carpeta.find(params[:tema_base][:carpeta_id])
-      unless carpeta.temas.map {|tema| tema.tema.downcase}.include?(params[:tema_base][:tema])
-        carpeta.temas.create(tema: params[:tema_base][:tema])
+    unless params[:tema_base][:tema].blank?
+      case params[:class_name]
+      when 'Publicacion'
+        publicacion = Publicacion.find(params[:objeto_id])
+        unless params[:tema_base][:carpeta_id].blank?
+          carpeta = Carpeta.find(params[:tema_base][:carpeta_id])
+        end
+      when 'Carpeta'
+        carpeta = Carpeta.find(params[:objeto_id])
       end
     end
-    redirect_to publicacion
+
+    unless carpeta.blank?
+      unless carpeta.temas.map {|tema| tema.tema.downcase}.include?(params[:tema_base][:tema].strip)
+        carpeta.temas.create(tema: params[:tema_base][:tema].strip)
+      end
+    end
+
+    redirect_to temas_path if params[:class_name] == 'Carpeta'
+    redirect_to publicacion if params[:class_name] == 'Publicacion'
+
   end
 
   # GET /temas/1/edit
@@ -89,6 +102,13 @@ class TemasController < ApplicationController
     end
   end
 
+  def desasignar
+    carpeta = Carpeta.find(params[:objeto_id])
+    @objeto.carpetas.delete(carpeta)
+
+    redirect_to temas_path
+  end
+
   # DELETE /temas/1
   # DELETE /temas/1.json
   def destroy
@@ -100,11 +120,12 @@ class TemasController < ApplicationController
     end
   end
 
-  def remueve_tema
-    proyecto = Proyecto.find(params[:objeto_id])
-    @objeto.proyectos.delete(proyecto)
+  def eliminar
+    if @objeto.textos.empty?
+      @objeto.delete
+    end
 
-    redirect_to proyecto
+    redirect_to temas_path
   end
 
   private

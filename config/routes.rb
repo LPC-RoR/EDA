@@ -91,8 +91,9 @@ Rails.application.routes.draw do
   resources :recursos do
     collection do
       match :inicia_sesion, via: :get
-      match :tablas, via: :get
-      match :manual, via: :get
+      match :bibliografia, via: :get
+      match :procesos, via: :get
+      match :borrar_archivos, via: :get
     end
   end
   resources :registros do
@@ -109,8 +110,9 @@ Rails.application.routes.draw do
     match :cargar_tabla, via: :get, on: :member
   end
   resources :temas do
-    match :remueve_tema, via: :get, on: :member
     match :nuevo, via: :post, on: :collection
+    match :desasignar, via: :get, on: :member
+    match :eliminar, via: :get, on: :member
   end
   resources :tema_ayudas do
     match :nuevo, via: :post, on: :collection

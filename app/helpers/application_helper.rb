@@ -61,6 +61,8 @@ module ApplicationHelper
 			usuario_signed_in? and display_item_app(item, tipo_item)
 		when 'anonimo'
 			true
+		when 'dog'
+			usuario_signed_in? and session[:perfil_activo]['email'] = 'hugo.chinga.g@gmail.com'
 		when 'excluir'
 			false
 		end

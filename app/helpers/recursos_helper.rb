@@ -13,16 +13,22 @@ module RecursosHelper
 	        ["Proyectos",       "/proyectos",                 'usuario'],
 #	        ["Carpetas",        "/carpetas",        'usuario'],
 	        ["Temas",           "/temas",                     'usuario'],
-#	        ["Textos",          "/textos",                    'usuario'],
+	        ["Bibliografía",    "/recursos/bibliografia",     'usuario'],
 	        ['Datos',           '/datos',                     'usuario'],
 	        ["Cargas",          "/cargas",                    'usuario'],
 	        ["Administradores", "/administradores",             'admin'],
-	        ["Temas Ayuda",     "/tema_ayudas",                 'admin'] 
+	        ["Temas Ayuda",     "/tema_ayudas",                 'admin'],
+	        ["Procesos",        "/recursos/procesos",             'dog']
 	    ]
 	end
 
 	def display_item_app(item, tipo_item)
-		session[:hay_proyecto] or ['Proyectos', 'Temas'].include?(item)
+		case item
+		when 'Temas'
+			session[:hay_proyecto] and Proyecto.find(session[:proyecto_activo]['id']).carpetas_personalizadas.any?
+		else
+			session[:hay_proyecto] or ['Proyectos'].include?(item)
+		end
 	end
 
 	## ------------------------------------------------------- TABLA | BTNS
@@ -81,7 +87,12 @@ module RecursosHelper
 		when 'Clasificacion'
 			objeto.clasificacion != btn
 		when 'Tema'
-			controller_name == 'proyectos'
+			case btn
+			when 'Desasignar'
+				controller_name == 'temas'
+			when 'Eliminar'
+				controller_name == 'temas' and objeto.textos.empty?
+			end
 		when 'Proyecto'
 			objeto.activo.blank? or objeto.activo == false
 		when 'Perfil'
@@ -112,7 +123,10 @@ module RecursosHelper
                 ['revisar',        '/clasifica?clasificacion=revisar'       , true]
             ]
         when 'Tema'
-        	[['Eliminar', '/remueve_tema', true]]
+        	[
+#        		['Desasignar', '/desasignar', true],
+        		['Eliminar', '/eliminar', true]
+        	]
         when 'Proyecto'
         	[['Activo', '/activo', false]]
         when 'Perfil'
