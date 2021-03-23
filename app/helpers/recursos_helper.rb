@@ -60,7 +60,7 @@ module RecursosHelper
 			false
 		when 'Tema'
 			['publicaciones', 'temas'].include?(controller_name)
-		when Proyecto
+		when 'Proyecto'
 			controller_name == 'proyectos'
 		when 'Tabla'
 			controller_name == 'datos'
