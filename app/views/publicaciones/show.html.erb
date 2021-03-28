@@ -2,27 +2,21 @@
 
 <%= render partial: '0p/show/links', locals: {o: @objeto} %>
 
-<% (Publicacion::DOC_TYPES - [@objeto.doc_type]).each do |doc_type| %>
-	<%= render partial: '0p/tabla/btn', locals: {texto: "#{doc_type}", link: "/publicaciones/cambia_tipo?publicacion_id=#{@objeto.id}&doc_type=#{doc_type}", delete: false, clr: c_color(controller_name) }  %>
+<% if @objeto.origen == 'ingreso' %>
+	<% (Publicacion::DOC_TYPES - [@objeto.doc_type]).each do |doc_type| %>
+		<%= render partial: '0p/tabla/btn', locals: {texto: "#{doc_type}", link: "/publicaciones/cambia_tipo?publicacion_id=#{@objeto.id}&doc_type=#{doc_type}", delete: false, clr: c_color(controller_name) }  %>
+	<% end %>
+	</br></br>
 <% end %>
-</br></br>
+
 <!-- CARPETAS Y DESPLIEGUE DE CITA -->
 <div class='row'>
 	<div class= 'col-md-4'>
 
-		<%= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: 'Gestion de Carpetas', size: '5'} %>
+		<%= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: 'Carpetas', size: '5'} %>
 
 		<% if @objeto.evaluable %>
 			<%= render partial: '/carpetas/inline_nuevo' %>
-		<% end %>
-
-		<% if @carpetas_seleccion.any? %>
-			<%= form_for :carpeta_base, url: "/carpetas/asigna?publicacion_id=#{@objeto.id}" do |form| %>
-				<div class='form-inline'>
-					<%= form.select :carpeta_id, @carpetas_seleccion.collect { |cpta| [cpta.carpeta, cpta.id] }, include_blank: false, prompt: "Seleccione Carpeta" %>
-					<%= form.submit 'Asignar'  %>
-				</div>
-			<% end  %>
 		<% end %>
 
 		<%= render partial: '0p/tabla/solo_tabla', locals: {c: 'carpetas', a: 'index'} %>
@@ -50,6 +44,8 @@
 	</div>
 
 	<div class='col-md-8'>
+
+		<%= render partial: 'publicaciones/s_partials/gestion_btns' %>
 
 		<h6><%= "| #{@objeto.doc_type} |" %></h6>
 		<h6><%= sanitize @objeto.m_quote %></h6>

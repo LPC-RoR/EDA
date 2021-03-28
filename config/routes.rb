@@ -19,10 +19,10 @@ Rails.application.routes.draw do
   resources :carpetas do
     match :nuevo, via: :post, on: :collection
     match :seleccion, via: :get, on: :collection
-    match :asigna, via: :post, on: :collection
     match :elimina, via: :post, on: :collection
     match :desasigna_carpeta, via: :get, on: :member
     match :elimina_carpeta, via: :get, on: :member
+    match :btn_asigna, via: :get, on: :member
   end
   resources :citas
   resources :clasificaciones do

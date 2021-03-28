@@ -3,7 +3,6 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.7.1'
 
-# Agregar la gema 'pg
 gem 'pg'
 
 gem 'bootstrap', '~> 4.5.2'

@@ -2,7 +2,7 @@ class CarpetasController < ApplicationController
   before_action :inicia_sesion
   before_action :authenticate_usuario!
   before_action :carga_temas_ayuda
-  before_action :set_carpeta, only: [:show, :edit, :update, :destroy, :desasigna_carpeta, :elimina_carpeta]
+  before_action :set_carpeta, only: [:show, :edit, :update, :destroy, :desasigna_carpeta, :elimina_carpeta, :btn_asigna]
 
   # GET /carpetas
   # GET /carpetas.json
@@ -84,23 +84,18 @@ class CarpetasController < ApplicationController
     end
   end
 
-  def asigna 
+  def btn_asigna
     proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
     publicacion = Publicacion.find(params[:publicacion_id])
 
-    unless params[:carpeta_base][:carpeta_id].blank?
-      carpeta     = Carpeta.find(params[:carpeta_base][:carpeta_id])
+    ids_carpetas_base = proyecto_activo.carpetas_seleccion.ids
 
-      ids_carpetas_base = proyecto_activo.carpetas_seleccion.ids
-
-      if ids_carpetas_base.include?(params[:carpeta_base][:carpeta_id].to_i) or (publicacion.carpetas.count == 1 and publicacion.carpetas.first.carpeta == 'Aceptadas')
-        publicacion.carpetas.delete_all
-      end
-      publicacion.carpetas << carpeta
+    if ids_carpetas_base.include?(@objeto.id) or (publicacion.carpetas.count == 1 and publicacion.carpetas.first.carpeta == 'Aceptadas')
+      publicacion.carpetas.delete_all
     end
+    publicacion.carpetas << @objeto
 
     redirect_to publicacion
-    
   end
 
   def desasigna_carpeta
