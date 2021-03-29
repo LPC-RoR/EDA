@@ -62,7 +62,7 @@ module ApplicationHelper
 		when 'anonimo'
 			true
 		when 'dog'
-			usuario_signed_in? and session[:perfil_activo]['email'] = 'hugo.chinga.g@gmail.com'
+			usuario_signed_in? and session[:perfil_activo]['email'] == 'hugo.chinga.g@gmail.com'
 		when 'excluir'
 			false
 		end
