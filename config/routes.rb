@@ -59,10 +59,8 @@ Rails.application.routes.draw do
 
   resources :asociaciones
   resources :relaciones
-  resources :contactos
   resources :herencias
   resources :coautores
-  resources :configuraciones
 
   resources :archivos
   resources :autores
