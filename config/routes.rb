@@ -34,12 +34,32 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :datos
+  scope module: 'data' do
+    resources :datos
+    resources :etapas do
+      resources :tablas
+      resources :especificaciones
+    end
+    resources :tablas do 
+      resources :especificaciones
+      resources :observaciones
+      match :cargar_tabla, via: :get, on: :member
+    end
+    resources :especificaciones do
+      match :nuevo, via: :post, on: :collection
+    end
+    resources :lineas do
+      resources :archivos
+      resources :imagenes
+      resources :observaciones
+    end
+    resources :columnas
+    resources :encabezados
+  end
+
   resources :asociaciones
   resources :relaciones
   resources :contactos
-  resources :encabezados
-  resources :columnas
   resources :herencias
   resources :coautores
   resources :configuraciones
@@ -67,13 +87,6 @@ Rails.application.routes.draw do
   resources :equipos do
     match :nuevo, via: :post, on: :collection
   end
-  resources :especificaciones do
-    match :nuevo, via: :post, on: :collection
-  end
-  resources :etapas do
-    resources :tablas
-    resources :especificaciones
-  end
   resources :evaluaciones
   resources :idiomas do 
     resources :revistas
@@ -86,11 +99,6 @@ Rails.application.routes.draw do
   end
   resources :investigadores do
     match :perfil, via: :get, on: :member
-  end
-  resources :lineas do
-    resources :archivos
-    resources :imagenes
-    resources :observaciones
   end
   resources :origenes
   resources :procesos
@@ -117,11 +125,6 @@ Rails.application.routes.draw do
     end
   resources :revistas do
     resources :publicaciones
-  end
-  resources :tablas do 
-    resources :especificaciones
-    resources :observaciones
-    match :cargar_tabla, via: :get, on: :member
   end
   resources :temas do
     match :nuevo, via: :post, on: :collection

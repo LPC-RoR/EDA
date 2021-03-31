@@ -1,0 +1,55 @@
+<%= render partial: '0p/general/o_titulo', locals: {o: @objeto, a: action_name, size: '5'} if in_show?(@objeto, :titulo) %>
+
+<div class='row'>
+	<div class='col-md-6'>
+		<%= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: 'Especificaciones', size: '5'} %>
+
+		<%= render partial: "data/0data/especificacion/index" %>
+		<%= render partial: '0p/tabla/btn_nuevo', locals: {c: 'especificaciones'} %>
+
+	</div>
+	<div class='col-md-6'>
+		<%= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: 'Observaciones', size: '5'} %>
+
+		<%= render partial: "data/0data/observacion/index" %>
+		<%= render partial: '0p/tabla/btn_nuevo', locals: {c: 'observaciones'} %>
+
+	</div>
+</div>
+</br>
+
+<div class='row'>
+	<div class='col-md-12'>
+
+		<table class="table table-bordered table-sm  thead-dark">
+			<thead>
+				<tr>
+					<% @objeto.encabezados.order(:orden).each do |campo| %>
+						<td align='center'><small><i><%= campo.encabezado %></i></small></td>				
+					<% end %>
+				</tr>
+			</thead>
+			<tbody>
+				<% @objeto.lineas.order(:orden).each do |linea| %>
+					<tr>
+						<% linea.columnas.order(:orden).each do |columna| %>
+							<% if @objeto.encabezados.find_by(orden: columna.orden).tipo == 'valor' %>
+								<td align="right">
+							<% else %>
+								<td>
+							<% end %>
+							<small>
+								<% if (columna.orden == 1 and (@objeto.archivos == true or @objeto.imagenes == true)) %>
+									<%= link_to "[ #{columna.columna} ]", linea %>
+								<% else %>
+									<%= columna.columna %>
+								<% end %>
+							</small></td>
+						<% end %>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+
+	</div>
+</div>
