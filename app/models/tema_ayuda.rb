@@ -4,21 +4,21 @@ class TemaAyuda < ApplicationRecord
 
 	TIPO = ['portada', 'inicio', 'tema', 'admin', 'mensaje', 'foot']
 
-	TABLA_FIELDS = [
-		['orden',     'normal'],
-		['tema_ayuda',  'show'],
-		['tipo',      'normal'],
-		['activo', 'check_box']
+#	TABLA_FIELDS = [
+#		['orden',     'normal'],
+#		['tema_ayuda',  'show'],
+#		['tipo',      'normal'],
+#		['activo', 'check_box']
 #		['archivo', 'link_file']
-	]
+#	]
 
 	# -------------------- FORM  -----------------------
- 	FORM_FIELDS = [
-		['orden',       'entry'],
-		['tipo',        'entry'],
-		['tema_ayuda',  'entry'],
-		['detalle', 'text_area']
-	]
+# 	FORM_FIELDS = [
+#		['orden',       'entry'],
+#		['tipo',        'entry'],
+#		['tema_ayuda',  'entry'],
+#		['detalle', 'text_area']
+#	]
 
 	has_many :tutoriales
 

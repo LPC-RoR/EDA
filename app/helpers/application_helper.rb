@@ -35,6 +35,14 @@ module ApplicationHelper
 		end
 	end
 
+	def colors
+		Rails.configuration.look_parameters[:colors]
+	end
+
+	def image_sizes
+		Rails.configuration.look_parameters[:image_sizes]
+	end
+
 	def objeto_tema_ayuda(tipo)
 		TemaAyuda.where(tipo: tipo).any? ? TemaAyuda.where(tipo: tipo).first : nil
 	end

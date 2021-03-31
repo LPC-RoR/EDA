@@ -43,6 +43,11 @@ module Eda
         adjuntos:    false
     }
 
+    config.look_parameters = {
+        image_sizes: ['entire', 'half', 'quarter', 'thumb'],
+        colors: ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark', 'muted', 'white']
+    }
+
     ## ------------------------------------------------- APARIENCIA APLICACION
 
     config.look_app = {
