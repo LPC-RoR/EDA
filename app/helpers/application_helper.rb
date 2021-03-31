@@ -39,6 +39,16 @@ module ApplicationHelper
 		TemaAyuda.where(tipo: tipo).any? ? TemaAyuda.where(tipo: tipo).first : nil
 	end
 
+	def coleccion_tema_ayuda(tipo)
+		temas_ayuda_tipo = TemaAyuda.where(tipo: tipo)
+		if temas_ayuda_tipo.any?
+			temas_ayuda_activos = temas_ayuda_tipo.where(activo: true)
+			temas_ayuda_activos.any? ? temas_ayuda_activos.order(:orden) : nil
+		else
+			nil
+		end
+	end
+
 	## ------------------------------------------------------- MENU
 
 	# Obtiene los controladores que no despliegan menu
@@ -117,7 +127,7 @@ module ApplicationHelper
 		end
 	end
 
-	# Objtiene LINK DEL BOTON NEWf
+	# Objtiene LINK DEL BOTON NEW
 	def get_new_link(controller)
 		if config_exceptions_table(:inline_form)[controller].present?
 			unless config_exceptions_table(:inline_form)[controller].include?('*') or (config_exceptions_table(:inline_form)[controller].include?('self') and controller == controller_name) or config_exceptions_table(:inline_form)[controller].include?(controller_name)
@@ -181,13 +191,21 @@ module ApplicationHelper
 
 	## ------------------------------------------------------- FORM
 
+	def url_params(parametros)
+		params_options = "n_params=#{parametros.length}"
+		parametros.each_with_index do |obj, indice|
+			params_options = params_options+"&class_name#{indice+1}=#{obj.class.name}&obj_id#{indice+1}=#{obj.id}"
+		end
+		params_options
+	end
+
 	def detail_partial(controller)
 		if Rails.configuration.form[:detail_types_controller][:help].include?(controller)
-			"0help/#{controller.singularize}/detail"
+			"help/0help/#{controller.singularize}/detail"
 		elsif Rails.configuration.form[:detail_types_controller][:data].include?(controller)
 			"0data/#{controller.singularize}/detail"
 		elsif Rails.configuration.form[:detail_types_controller][:modelo].include?(controller)
-			"#{controller}/detail"
+			detail_controller_path(controller)
 		else
 			'0p/form/detail'
 		end

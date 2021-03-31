@@ -5,9 +5,10 @@ class TemaAyuda < ApplicationRecord
 	TIPO = ['portada', 'inicio', 'tema', 'admin', 'mensaje', 'foot']
 
 	TABLA_FIELDS = [
-		['orden',    'normal'],
-		['tema_ayuda', 'show'],
-		['tipo',     'normal']
+		['orden',     'normal'],
+		['tema_ayuda',  'show'],
+		['tipo',      'normal'],
+		['activo', 'check_box']
 #		['archivo', 'link_file']
 	]
 

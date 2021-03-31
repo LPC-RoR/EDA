@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Parent:</strong>
+  <%= @conversacion.parent_id %>
+</p>
+
+<p>
+  <strong>Child:</strong>
+  <%= @conversacion.child_id %>
+</p>
+
+<%= link_to 'Edit', edit_conversacion_path(@conversacion) %> |
+<%= link_to 'Back', conversaciones_path %>

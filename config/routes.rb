@@ -1,5 +1,39 @@
 Rails.application.routes.draw do
 
+  # SCOPE APLICACION
+  scope module: 'aplicacion' do
+    resources :administradores
+#    resources :mejoras
+    resources :observaciones do
+      match :nuevo, via: :post, on: :collection
+    end
+    resources :perfiles do
+      match :desvincular, via: :get, on: :member
+    end
+    resources :recursos do
+      collection do
+        match :home, via: :get
+        match :inicia_sesion, via: :get
+        match :bibliografia, via: :get
+        match :procesos, via: :get
+        match :borrar_archivos, via: :get
+      end
+    end
+  end
+
+  # SCOPE HELP
+  scope module: 'help' do
+#    resources :conversaciones
+    resources :mensajes
+    resources :pasos
+    resources :tema_ayudas do
+      resources :tutoriales
+    end
+    resources :tutoriales do
+      resources :pasos
+    end
+  end
+
   resources :datos
   resources :asociaciones
   resources :relaciones
@@ -8,7 +42,6 @@ Rails.application.routes.draw do
   resources :columnas
   resources :herencias
   resources :coautores
-  resources :administradores
   resources :configuraciones
 
   resources :archivos
@@ -59,18 +92,7 @@ Rails.application.routes.draw do
     resources :imagenes
     resources :observaciones
   end
-  resources :mensajes do
-    match :estado, via: :get, on: :member
-    match :respuesta, via: :post, on: :collection
-  end
-  resources :observaciones do
-    match :nuevo, via: :post, on: :collection
-  end
   resources :origenes
-  resources :pasos
-  resources :perfiles do
-    match :desvincular, via: :get, on: :member
-  end
   resources :procesos
   resources :proyectos do
     match :nuevo, via: :post, on: :collection
@@ -87,14 +109,6 @@ Rails.application.routes.draw do
     match :cambia_tipo, via: :get, on: :collection
     match :estado, via: :get, on: :collection
     resources :textos
-  end
-  resources :recursos do
-    collection do
-      match :inicia_sesion, via: :get
-      match :bibliografia, via: :get
-      match :procesos, via: :get
-      match :borrar_archivos, via: :get
-    end
   end
   resources :registros do
     resources :publicaciones
@@ -114,18 +128,11 @@ Rails.application.routes.draw do
     match :desasignar, via: :get, on: :member
     match :eliminar, via: :get, on: :member
   end
-  resources :tema_ayudas do
-    match :nuevo, via: :post, on: :collection
-    resources :tutoriales
-  end
   resources :textos do
     match :nuevo, via: :post, on: :collection
     match :agregar_tema, via: :post, on: :collection
     match :eliminar_tema, via: :post, on: :collection
     match :desasignar, via: :get, on: :member
-  end
-  resources :tutoriales do
-    resources :pasos
   end
   resources :versiones
 
@@ -140,6 +147,6 @@ Rails.application.routes.draw do
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
-  root 'recursos#home'
+  root 'aplicacion/recursos#home'
 
 end
