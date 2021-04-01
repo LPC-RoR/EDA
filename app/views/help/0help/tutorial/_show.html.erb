@@ -1,10 +1,11 @@
 <%= render partial: '0p/general/o_titulo', locals: {o: @objeto, a: action_name, size: '5'} if in_show?(@objeto, :titulo) %>
 <div class='row'>
-	<div class='col-md-6'>
+	<div class='col-md-1'>
+	</div>
+	<div class='col-md-10'>
 		<%= render partial: '0p/general/titulo', locals: {c: 'tema_ayudas', a: nil, titulo: 'Detalle', size: '5'}  %>
 		<%= sanitize @objeto.d_detalle %>
-	</div>
-	<div class='col-md-6'>
+
 		<%= render partial: '0p/general/titulo', locals: {c: 'tema_ayudas', a: nil, titulo: 'Paso a Paso', size: '5'}  %>
 
 		<% unless @coleccion['pasos'].empty? %>
@@ -19,5 +20,7 @@
 		<% end %>
 
 		<%= render partial: '0p/tabla/btn_nuevo', locals: {c: 'pasos'} if session[:es_administrador] %>
+	</div>
+	<div class='col-md-1'>
 	</div>
 </div>
