@@ -67,7 +67,7 @@ module RecursosHelper
 		when 'Perfil'
 			false
 		else
-			true
+			['TemaAyuda', 'Tutorial', 'Paso'].include?(objeto.class.name) ? (usuario_signed_in? ? session[:es_administrador] : false) : true
 		end
 	end
 
