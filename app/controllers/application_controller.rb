@@ -5,6 +5,12 @@ class ApplicationController < ActionController::Base
 	## TEMAS AYUDA
 	def carga_temas_ayuda
 		@temas_ayuda  = TemaAyuda.where(tipo: 'tema').order(:orden)
+		if @temas_ayuda.empty?
+			puts "***************************************************** temas_ayuda VACIO"
+		else
+			puts "***************************************************** temas_ayuda CON ELEMENTOS"
+			puts @temas_ayuda.count
+		end
 		@temas_admin  = TemaAyuda.where(tipo: 'admin').order(:orden)
 
 		@tutoriales_basicos = TemaAyuda.where(tipo: 'tema').order(:orden).first.tutoriales.order(:orden) unless TemaAyuda.where(tipo: 'tema').empty?

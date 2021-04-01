@@ -22,22 +22,22 @@ class Aplicacion::RecursosController < ApplicationController
   end
 
   def borrar_archivos
-  	Autor.delete_all
-  	Carga.delete_all
-  	Carpeta.delete_all
-  	Cita.delete_all
-  	Clasificacion.delete_all
-  	Departamento.delete_all
-  	Evaluacion.delete_all
-  	Idioma.delete_all
-  	Institucion.delete_all
-  	Investigador.delete_all
-  	Proceso.delete_all
-  	Publicacion.delete_all
-  	Registro.delete_all
-  	Revista.delete_all
-  	Texto.delete_all
-  	Tema.delete_all
+#  	Autor.delete_all
+#  	Carga.delete_all
+#  	Carpeta.delete_all
+#  	Cita.delete_all
+#  	Clasificacion.delete_all
+#  	Departamento.delete_all
+#  	Evaluacion.delete_all
+#  	Idioma.delete_all
+#  	Institucion.delete_all
+#  	Investigador.delete_all
+#  	Proceso.delete_all
+#  	Publicacion.delete_all
+#  	Registro.delete_all
+#  	Revista.delete_all
+#  	Texto.delete_all
+#  	Tema.delete_all
 
   	redirect_to root
   end
