@@ -2,6 +2,8 @@ Rails.application.routes.draw do
 
   # SCOPE APLICACION
   scope module: 'aplicacion' do
+    resources :archivos
+    resources :imagenes
     resources :administradores
 #    resources :mejoras
     resources :observaciones do
@@ -62,7 +64,6 @@ Rails.application.routes.draw do
   resources :herencias
   resources :coautores
 
-  resources :archivos
   resources :autores
   resources :cargas do
     match :procesa_carga, via: :get, on: :member
@@ -89,7 +90,6 @@ Rails.application.routes.draw do
   resources :idiomas do 
     resources :revistas
   end
-  resources :imagenes
   resources :ingresos
   resources :instituciones do
     resources :departamentos

@@ -12,7 +12,7 @@
 		<%= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: 'Observaciones', size: '5'} %>
 
 		<%= render partial: "data/0data/observacion/index" %>
-		<%= render partial: '0p/tabla/btn_nuevo', locals: {c: 'observaciones'} %>
+		<%= render partial: '0p/tabla/ext_btn_nuevo', locals: {o: @objeto, c: 'observaciones'} %>
 
 	</div>
 </div>
@@ -39,7 +39,8 @@
 								<td>
 							<% end %>
 							<small>
-								<% if (columna.orden == 1 and (@objeto.archivos == true or @objeto.imagenes == true)) %>
+								<%# if (columna.orden == 1 and (@objeto.archivos == true or @objeto.imagenes == true)) %>
+								<% if columna.orden == 1 %>
 									<%= link_to "[ #{columna.columna} ]", linea %>
 								<% else %>
 									<%= columna.columna %>

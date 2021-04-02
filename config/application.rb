@@ -96,7 +96,7 @@ module Eda
             },
             data: {
                 color: 'info',
-                controllers: ['etapas', 'tablas', 'lineas', 'especificaciones', 'observaciones', 'archivos', 'imagenes']
+                controllers: ['etapas', 'tablas', 'lineas', 'especificaciones', 'archivos', 'imagenes']
             }
         }
     }
@@ -159,11 +159,6 @@ module Eda
     ## ------------------------------------------------- FORM
 
     config.form = {
-        detail_types_controller: {
-            help: ['mejoras', 'mensajes', 'observaciones', 'tema_ayudas', 'tutoriales', 'pasos'],
-            data: ['especificaciones', 'tablas'],
-            modelo: ['publicaciones']
-        },
         conditional_fields: {
             'Publicacion' => [
                 'd_quote',

@@ -66,7 +66,6 @@ class Data::TablasController < ApplicationController
   end
 
   def cargar_tabla
-    etapa = Etapa.find(params[:objeto_id])
     xlsx = Roo::Spreadsheet.open("#{Rails.root}/public/#{@objeto.archivo.url}")
     linea_proceso = 1
     xlsx.each() do |linea_carga|

@@ -15,8 +15,12 @@ class Aplicacion::ObservacionesController < ApplicationController
 
   # GET /observaciones/new
   def new
-    padre = Linea.find(params[:linea_id]) unless params[:linea_id].blank?
-    padre = Tabla.find(params[:tabla_id]) unless params[:tabla_id].blank?
+    case params[:class_name]
+    when 'Tabla'
+      padre = Tabla.find(params[:objeto_id]) unless params[:objeto_id].blank?
+    when 'Linea'
+      padre = Linea.find(params[:objeto_id]) unless params[:objeto_id].blank?
+    end
 
     @objeto = padre.observaciones.new
   end

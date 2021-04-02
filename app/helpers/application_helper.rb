@@ -179,6 +179,13 @@ module ApplicationHelper
 
 	## ------------------------------------------------------- TABLA | BTNS
 
+	def link_x_btn(objeto, accion, objeto_ref)
+		ruta_raiz = "/#{objeto.class.name.tableize}/#{objeto.id}#{accion}"
+		ruta_objeto = (objeto_ref and @objeto.present?) ? "#{(!!accion.match(/\?+/) ? '&' : '?')}class_name=#{@objeto.class.name}&objeto_id=#{@objeto.id}" : ''
+#		"/#{objeto.class.name.tableize}/#{objeto.id}#{btn[1]}#{(!!btn[1].match(/\?+/) ? '&' : '?') if btn[2]}#{"class_name=#{@objeto.class.name}&objeto_id=#{@objeto.id if @objeto.present?}" if btn[2]}"
+		"#{ruta_raiz}#{ruta_objeto}"
+	end
+
 	# pregunta si tiene childs
 	# "_btns_e.html.erb"
 	def has_child?(objeto)
@@ -208,14 +215,14 @@ module ApplicationHelper
 	end
 
 	def detail_partial(controller)
-		if Rails.configuration.form[:detail_types_controller][:help].include?(controller)
+		if ['tema_ayudas', 'tutoriales', 'pasos', 'mensajes', 'mejoras'].include?(controller)
 			"help/0help/#{controller.singularize}/detail"
-		elsif Rails.configuration.form[:detail_types_controller][:data].include?(controller)
+		elsif ['etapas', 'tablas', 'lineas', 'especificaciones'].include?(controller)
 			"data/0data/#{controller.singularize}/detail"
-		elsif Rails.configuration.form[:detail_types_controller][:modelo].include?(controller)
-			detail_controller_path(controller)
+		elsif ['administradores', 'observaciones', 'perfiles'].include?(controller)
+			"aplicacion/#{controller}/detail"
 		else
-			'0p/form/detail'
+			detail_controller_path(controller)
 		end
 	end
 

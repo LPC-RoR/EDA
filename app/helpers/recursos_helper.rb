@@ -150,13 +150,11 @@ module RecursosHelper
 	## ------------------------------------------------------- FORM & SHOW
 
 	def detail_controller_path(controller)
-#		if ['documento_bases'].include?(controller)
-#			"documento/#{controller}/detail"
-#		elsif ['asignatura_bases', 'asignatura_nivel_bases'].include?(controller_name)
-#			"estructura/#{controller}/detail"
-#		else
+		if ['publicaciones'].include?(controller)
 			"#{controller}/detail"
-#		end
+		else
+			'0p/form/detail'
+		end
 	end
 
 	# apoyo de filtro_condicional_field? (abajo)
