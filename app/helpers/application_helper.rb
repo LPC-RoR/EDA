@@ -215,11 +215,11 @@ module ApplicationHelper
 	end
 
 	def detail_partial(controller)
-		if ['tema_ayudas', 'tutoriales', 'pasos', 'mensajes', 'mejoras'].include?(controller)
+		if ['tema_ayudas', 'tutoriales', 'pasos', 'mensajes'].include?(controller)
 			"help/0help/#{controller.singularize}/detail"
 		elsif ['etapas', 'tablas', 'lineas', 'especificaciones'].include?(controller)
 			"data/0data/#{controller.singularize}/detail"
-		elsif ['observaciones', 'perfiles'].include?(controller)
+		elsif ['observaciones', 'perfiles', 'mejoras'].include?(controller)
 			"aplicacion/#{controller}/detail"
 		else
 			detail_controller_path(controller)
