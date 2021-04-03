@@ -54,7 +54,7 @@ class Proyecto < ApplicationRecord
 	def carpeta_origen(publicacion)
 		if publicacion.duplicados.any?
 			self.carpetas.find_by(carpeta: 'Duplicadas')
-		elsif publicacion.origen == 'carga'
+		elsif ['carga', 'WOS_bib'].include?(publicacion.origen)
 			self.carpetas.find_by(carpeta: 'Carga')
 		elsif publicacion.origen == 'ingreso'
 			self.carpetas.find_by(carpeta: 'Ingreso')

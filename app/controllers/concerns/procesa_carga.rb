@@ -82,7 +82,7 @@ module ProcesaCarga
 		    	end
 
 		    	# origen = 'carga'
-	        	pub.origen = 'carga' if ['remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
+	        	pub.origen = 'carga' if ['remplazar_carga', 'remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
 	        	pub.save if ['remplazar_carga', 'remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
 
 	        	unless unicidad == 'saltar'
