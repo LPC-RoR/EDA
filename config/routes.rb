@@ -18,9 +18,11 @@ Rails.application.routes.draw do
         match :inicia_sesion, via: :get
         match :bibliografia, via: :get
         match :procesos, via: :get
+        match :administracion, via: :get
         match :borrar_archivos, via: :get
       end
     end
+    resources :licencias
   end
 
   # SCOPE HELP

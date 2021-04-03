@@ -124,7 +124,8 @@ module Eda
                 'textos' => ['self'],
                 'versiones' => ['proyectos'],
                 'carpetas' => ['publicaciones', 'proyectos'],
-                'temas' => ['publicaciones']
+                'temas' => ['publicaciones'],
+                'administradores' => ['recursos']
             },
             inline_form: {
                 'proyectos' => ['*']

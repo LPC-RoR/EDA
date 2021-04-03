@@ -1,0 +1,27 @@
+<%= form_with(model: licencia, local: true) do |form| %>
+  <% if licencia.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(licencia.errors.count, "error") %> prohibited this licencia from being saved:</h2>
+
+      <ul>
+      <% licencia.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :n_meses %>
+    <%= form.text_field :n_meses %>
+  </div>
+
+  <div class="field">
+    <%= form.label :perfil_id %>
+    <%= form.number_field :perfil_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>N meses:</strong>
+  <%= @licencia.n_meses %>
+</p>
+
+<p>
+  <strong>Perfil:</strong>
+  <%= @licencia.perfil_id %>
+</p>
+
+<%= link_to 'Edit', edit_licencia_path(@licencia) %> |
+<%= link_to 'Back', licencias_path %>

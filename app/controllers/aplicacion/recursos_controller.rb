@@ -21,6 +21,13 @@ class Aplicacion::RecursosController < ApplicationController
   	@coleccion['publicaciones'] = Publicacion.where(id: ids_publicaciones.uniq).order(:author)
   end
 
+  def administracion
+    @coleccion = {}
+    @coleccion['administradores'] = Administrador.all
+    @coleccion['perfiles'] = Perfil.all
+    
+  end
+
   def borrar_archivos
 #  	Autor.delete_all
 #  	Carga.delete_all

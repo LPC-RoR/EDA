@@ -7,6 +7,8 @@ class Perfil < ApplicationRecord
 
 	belongs_to :administrador, optional: true
 
+	has_many :licencias
+
 	has_many :coautores
 	has_many :colaboraciones, through: :coautores, source: :proyecto
 

@@ -219,7 +219,7 @@ module ApplicationHelper
 			"help/0help/#{controller.singularize}/detail"
 		elsif ['etapas', 'tablas', 'lineas', 'especificaciones'].include?(controller)
 			"data/0data/#{controller.singularize}/detail"
-		elsif ['administradores', 'observaciones', 'perfiles'].include?(controller)
+		elsif ['observaciones', 'perfiles'].include?(controller)
 			"aplicacion/#{controller}/detail"
 		else
 			detail_controller_path(controller)

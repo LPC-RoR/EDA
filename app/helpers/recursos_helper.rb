@@ -11,12 +11,11 @@ module RecursosHelper
 	        ["Publicaciones",   "/publicaciones",             'usuario'],
 	        ["Ingresos",        "/ingresos",                  'usuario'],
 	        ["Proyectos",       "/proyectos",                 'usuario'],
-#	        ["Carpetas",        "/carpetas",        'usuario'],
 	        ["Temas",           "/temas",                     'usuario'],
 	        ["Bibliografía",    "/recursos/bibliografia",     'usuario'],
 	        ['Datos',           '/datos',                     'usuario'],
 	        ["Cargas",          "/cargas",                    'usuario'],
-	        ["Administradores", "/administradores",             'admin'],
+	        ['Administración',  'recursos/administracion',      'admin'],
 	        ["Temas Ayuda",     "/tema_ayudas",                 'admin'],
 	        ["Procesos",        "/recursos/procesos",             'dog']
 	    ]
