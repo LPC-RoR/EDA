@@ -1,7 +1,5 @@
 <%= render partial: '0p/general/o_titulo', locals: {o: @objeto, a: action_name, size: '5'} if in_show?(@objeto, :titulo) %>
 <div class='row'>
-	<div class='col-md-1'>
-	</div>
 	<div class='col-md-10'>
 		<%= render partial: '0p/general/titulo', locals: {c: 'tema_ayudas', a: nil, titulo: 'Detalle', size: '5'}  %>
 		<%= sanitize @objeto.d_detalle %>
@@ -21,6 +19,10 @@
 
 		<%= render partial: '0p/tabla/btn_nuevo', locals: {c: 'pasos'} if session[:es_administrador] %>
 	</div>
-	<div class='col-md-1'>
+	<div class='col-md-2'>
+		<%= render partial: '0p/general/titulo', locals: {c: 'tema_ayudas', a: nil, titulo: 'Temas', size: '5'}  %>
+		<% @temas_ayuda.each do |tema_ayuda| %>
+			<%= link_to tema_ayuda.tema_ayuda, tema_ayuda %>
+		<% end %>
 	</div>
 </div>
