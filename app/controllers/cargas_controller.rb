@@ -111,6 +111,6 @@ class CargasController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def carga_params
-      params.require(:carga).permit(:archivo, :nota, :estado, :archivo_carga, :archivo_carga_cache, :proyecto_id)
+      params.require(:carga).permit(:archivo, :nota, :estado, :archivo_carga, :archivo_carga_cache, :proyecto_id, :refill)
     end
 end

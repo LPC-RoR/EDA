@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Formato:</strong>
+  <%= @formato.formato %>
+</p>
+
+<p>
+  <strong>Perfil:</strong>
+  <%= @formato.perfil_id %>
+</p>
+
+<%= link_to 'Edit', edit_formato_path(@formato) %> |
+<%= link_to 'Back', formatos_path %>

@@ -26,9 +26,15 @@ module ProcesaCarga
 		    	n_procesados += 1
 		    	@contador += 1
 
+		    	# Control de 'Type'
+		    	tipo_publicacion = TipoPublicacion.find_by(tipo_publicacion: hash_articulo['Type'])
+		    	if tipo_publicacion.blank?
+		    		TipoPublicacion.create(tipo_publicacion: hash_articulo['Type'], ejemplo: hash_articulo)
+		    	end
+
 		    	## UNICIDAD
 		    	# Luego evaluamos la unicidad del árticulo {}
-		    	unicidad = unicidad_publicacion_carga(hash_articulo)
+		    	unicidad = (carga.refill ? 'remplazar_carga' : unicidad_publicacion_carga(hash_articulo))
 
 		    	if ['remplazar_carga', 'sin carpeta'].include?(unicidad)
 		      		pub = Publicacion.find_by(unique_id: hash_articulo['Unique-ID'])
@@ -176,7 +182,7 @@ module ProcesaCarga
 				case c
 				when '='
 					estado = 'valor'
-				when '}'
+				when '}'	# Es difícil que en mediode una clave aparezca '}', sólo si es el primer caracter y muestra fin de registro
 					elementos << registro
 					registro = Hash.new
 					estado = 'inicio'
@@ -186,57 +192,32 @@ module ProcesaCarga
 			when 'valor'	# Esperando un '{' que anuncia el valor o el primer nivel del valor
 				case c
 				when '{'
+					n_llave = 0
+					slash = false
 					estado = 'nivel 1'
 				end
 			when 'nivel 1'
-				case c
-				when '{'
-					estado = 'valor 2'
+				if slash
+					slash = false
+					valor += (c == 'n' ? '\n' : c)
 				else
-					valor += c
-					n_llave = 0
-					estado = 'valor 1'
-				end
-			when 'valor 1'
-				case c
-				when '}'
-					if n_llave == 0
-						registro.store(clave.strip, valor.strip)
-						clave = ''
-						valor = ''
-						estado = 'cierre campo'
+					case c
+					when '{'
+						n_llave += 1
+					when '}'
+						if n_llave == 0
+							registro.store(clave.strip, valor.strip)
+							clave = ''
+							valor = ''
+							estado = 'cierre campo'
+						else
+							n_llave -= 1
+						end
+					when '\\'
+						slash = true
 					else
 						valor += c
-						n_llave -= 1
 					end
-				when '{'
-					valor += c
-					n_llave += 1
-				else
-					valor += c
-				end
-			when 'valor 2'
-				case c
-				when '}'
-					if n_llave == 0
-						estado = 'cierre nivel 2'
-					else
-						valor += c
-						n_llave -= 1
-					end
-				when '{'
-					valor += c
-					n_llave += 1
-				else
-					valor += c
-				end
-			when 'cierre nivel 2'
-				case c
-				when '}'
-					registro.store(clave.strip, valor.strip)
-					clave = ''
-					valor = ''
-					estado = 'cierre campo'
 				end
 			when 'cierre campo'
 				case c
@@ -273,7 +254,7 @@ module ProcesaCarga
 			if publicacion.carpetas.ids.intersection(proyecto_activo.carpetas.ids).empty?
 				'sin carpeta'
 			else
-				publicacion.year.blank? ? 'remplazar_carga' : 'saltar'
+				!!publicacion.doc_type.match(/Early Access/) ? 'remplazar_carga' : 'saltar'   
 			end
 		end
 	end

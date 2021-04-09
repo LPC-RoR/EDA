@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Campo:</strong>
+  <%= @campo.campo %>
+</p>
+
+<p>
+  <strong>Orden:</strong>
+  <%= @campo.orden %>
+</p>
+
+<p>
+  <strong>Cursiva:</strong>
+  <%= @campo.cursiva %>
+</p>
+
+<p>
+  <strong>Negrita:</strong>
+  <%= @campo.negrita %>
+</p>
+
+<%= link_to 'Edit', edit_campo_path(@campo) %> |
+<%= link_to 'Back', campos_path %>

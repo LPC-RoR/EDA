@@ -1,6 +1,6 @@
 class Publicacion < ApplicationRecord
 
-	NOMBRES_BIB = ["Author", "Title", "Type", "Year", "Volume", "Month", "Abstract", "Publisher", "Address", "Affiliation", "DOI", "Article-Number", "ISSN", "EISSN", "Keywords", "Keywords-Plus", "Research-Areas", "Web-of-Science-Categories", "Author-Email", "Unique-ID", "DA"]
+	NOMBRES_BIB = ["Author", "Title", "Type", "Year", "Volume", "Pages", "Month", "Number", "Note", "Series", "Meeting", "Note", "Abstract", "Publisher", "Editor", "Booktitle", "Address", "Affiliation", "DOI", "Article-Number", "ISSN", "EISSN", "Keywords", "Keywords-Plus", "Research-Areas", "Web-of-Science-Categories", "Author-Email", "Unique-ID", "DA"]
 
 	DOC_TYPES	 = ['Article', 'Book', 'Tesis', 'Memoir', 'Chapter', 'Generic']
 
@@ -103,6 +103,47 @@ class Publicacion < ApplicationRecord
 			"#{autores} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} En: #{"#{self.editor} (Ed.), " unless self.editor.blank?}#{self.book} (pp #{self.pages}). #{self.ciudad_pais}#{": " unless self.ciudad_pais.blank?}#{self.revista.revista}. #{"doi: " if self.doi.present?}#{self.doi}".strip
 		when 'Generic'
 			"#{autores} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} #{self.revista.revista} #{self.pages}#{" pp" if self.pages.present?} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
+		end
+	end
+
+	def author_year
+		"#{self.author} (#{self.year.blank? ? 'not yet published' : self.year})"
+	end
+
+	def journal
+		self.revista.revista
+	end
+
+	def labeled_doi
+		"doi: #{self.doi}"
+	end
+
+	def detail
+		series = (self.series.blank? ? '' : self.series)
+		volume = (self.volume.blank? ? '' : " #{self.volume}")
+		month = (self.month.blank? ? '' : " #{self.month}")
+		pages = (self.pages.blank? ? '' : " : #{self.pages}")
+		"#{series}#{volume}#{month}#{pages}"
+	end
+
+	def type_quote
+		tipo_publicacion = TipoPublicacion.find_by(tipo_publicacion: self.doc_type)
+		if tipo_publicacion.redireccion.present?
+			redireccion = tipo_publicacion.redireccion
+			tipo_publicacion = TipoPublicacion.find_by(tipo_publicacion: redireccion)
+		end
+		if tipo_publicacion.blank?
+			''
+		else
+			if tipo_publicacion.campos.empty?
+				tipo_publicacion = TipoPublicacion.find_by(tipo_publicacion: self.doc_type.split(';').first)
+			end
+			quote = ''
+			tipo_publicacion.campos.order(:orden).each do |campo|
+				espacio = (quote == '' or self.send(campo.campo).blank?) ? '' : ' '
+				quote += "#{espacio}#{'<i>' if campo.cursiva}#{'<b>' if campo.negrita}#{self.send(campo.campo)}#{'</b>' if campo.negrita}#{'</i>' if campo.cursiva}#{'.' if campo.dot and self.send(campo.campo).present?}"
+			end
+			quote
 		end
 	end
 

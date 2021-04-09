@@ -1,0 +1,29 @@
+<%= render partial: '0p/general/o_titulo', locals: {o: @objeto, a: action_name, size: '5'} %>
+<%= render partial: '0p/tabs/tabs', locals: {tabs: @tabs, tag: 'tab', active: @tab} %>
+
+<% if @tab == 'Campos' %>
+	<%= render partial: '0p/general/titulo', locals: {c: 'campos', a: nil, titulo: 'Campos', size: '5'} %>
+	<%= render partial: '0p/tabla/solo_tabla', locals: {c: 'campos', a: 'index'} %>
+	<%= render partial: '0p/tabla/btn_nuevo', locals: {c: 'campos'} %>
+<% else %>
+	<h4><%= @objeto.tipo_publicacion %></h4></br>
+	<h4><%= @objeto.redireccion %></h4></br>
+	<small><%#= @objeto.ejemplo %></small>
+
+	<table class="table table-striped table-sm  thead-dark">
+	  <tbody>
+		<% eval(@objeto.ejemplo).keys.each do |key| %>
+			<tr>
+				<td><small><%= key %></small></td>
+				<td><small><%= eval(@objeto.ejemplo)[key] %></small></td>
+			</tr>
+		<% end %> 
+
+	  </tbody>
+	</table>
+<% end %>
+
+
+
+
+

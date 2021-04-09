@@ -17,6 +17,7 @@ class Carga < ApplicationRecord
  	FORM_FIELDS = [
 		['nota',               'entry'],
 		['archivo_carga', 'file_field'],
+		['refill',         'check_box'],
 		['estado',            'hidden'],
 		['proyecto_id',       'hidden'],
 		['archivo',           'hidden']

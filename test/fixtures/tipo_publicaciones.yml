@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tipo_publicacion: MyString
+  redireccion: MyString
+  ejemplo: MyText
+
+two:
+  tipo_publicacion: MyString
+  redireccion: MyString
+  ejemplo: MyText

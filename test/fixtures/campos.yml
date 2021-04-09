@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  campo: MyString
+  orden: 1
+  cursiva: false
+  negrita: false
+
+two:
+  campo: MyString
+  orden: 1
+  cursiva: false
+  negrita: false

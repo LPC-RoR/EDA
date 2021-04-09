@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
 
+  resources :tipo_publicaciones do
+    resources :campos
+  end
+  resources :campos
+  resources :formatos
   # SCOPE APLICACION
   scope module: 'aplicacion' do
     resources :archivos

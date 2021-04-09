@@ -1,11 +1,15 @@
 <%= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: 'Administración', size: '5'} %>
 <div class='row'>
-	<div class='col-md-6'>
+	<div class='col-md-4'>
 		<%= render partial: '0p/general/titulo', locals: {c: 'administradores', a: nil, titulo: 'Administradores', size: '5'} %>
 		<%= render partial: '0p/tabla/tabla', locals: {c: 'administradores', a: 'index'} %>
 	</div>
-	<div class='col-md-6'>
+	<div class='col-md-4'>
 		<%= render partial: '0p/general/titulo', locals: {c: 'perfiles', a: nil, titulo: 'Perfiles Usuarios', size: '5'} %>
 		<%= render partial: '0p/tabla/tabla', locals: {c: 'perfiles', a: 'index'} %>
+	</div>
+	<div class='col-md-4'>
+		<%= render partial: '0p/general/titulo', locals: {c: 'tipo_publicaciones', a: nil, titulo: 'Tipos Publicación', size: '5'} %>
+		<%= render partial: '0p/tabla/tabla', locals: {c: 'tipo_publicaciones', a: 'index'} %>
 	</div>
 </div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_03_013909) do
+ActiveRecord::Schema.define(version: 2021_04_09_062839) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,24 @@ ActiveRecord::Schema.define(version: 2021_04_03_013909) do
     t.index ["publicacion_id"], name: "index_autores_on_publicacion_id"
   end
 
+  create_table "campos", force: :cascade do |t|
+    t.string "campo"
+    t.integer "orden"
+    t.boolean "cursiva"
+    t.boolean "negrita"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "tipo_publicacion_id"
+    t.integer "formato_id"
+    t.boolean "dot"
+    t.index ["cursiva"], name: "index_campos_on_cursiva"
+    t.index ["dot"], name: "index_campos_on_dot"
+    t.index ["formato_id"], name: "index_campos_on_formato_id"
+    t.index ["negrita"], name: "index_campos_on_negrita"
+    t.index ["orden"], name: "index_campos_on_orden"
+    t.index ["tipo_publicacion_id"], name: "index_campos_on_tipo_publicacion_id"
+  end
+
   create_table "cargas", force: :cascade do |t|
     t.string "archivo"
     t.string "nota"
@@ -68,6 +86,7 @@ ActiveRecord::Schema.define(version: 2021_04_03_013909) do
     t.integer "n_existentes"
     t.string "archivo_carga"
     t.integer "proyecto_id"
+    t.boolean "refill"
     t.index ["proyecto_id"], name: "index_cargas_on_proyecto_id"
   end
 
@@ -202,6 +221,14 @@ ActiveRecord::Schema.define(version: 2021_04_03_013909) do
     t.index ["aspecto"], name: "index_evaluaciones_on_aspecto"
     t.index ["perfil_id"], name: "index_evaluaciones_on_perfil_id"
     t.index ["publicacion_id"], name: "index_evaluaciones_on_publicacion_id"
+  end
+
+  create_table "formatos", force: :cascade do |t|
+    t.string "formato"
+    t.integer "perfil_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["perfil_id"], name: "index_formatos_on_perfil_id"
   end
 
   create_table "herencias", force: :cascade do |t|
@@ -402,6 +429,11 @@ ActiveRecord::Schema.define(version: 2021_04_03_013909) do
     t.string "unicidad"
     t.string "journal"
     t.string "doc_type"
+    t.string "booktitle"
+    t.string "series"
+    t.string "number"
+    t.string "note"
+    t.string "meeting"
     t.index ["doc_type"], name: "index_publicaciones_on_doc_type"
     t.index ["estado"], name: "index_publicaciones_on_estado"
     t.index ["origen"], name: "index_publicaciones_on_origen"
@@ -483,6 +515,15 @@ ActiveRecord::Schema.define(version: 2021_04_03_013909) do
     t.datetime "updated_at", null: false
     t.string "sha1", limit: 40
     t.index ["sha1"], name: "index_textos_on_sha1"
+  end
+
+  create_table "tipo_publicaciones", force: :cascade do |t|
+    t.string "tipo_publicacion"
+    t.string "redireccion"
+    t.text "ejemplo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "bib"
   end
 
   create_table "tutoriales", force: :cascade do |t|

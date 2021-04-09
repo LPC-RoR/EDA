@@ -48,6 +48,8 @@
 		<%= render partial: 'publicaciones/s_partials/gestion_btns' %>
 
 		<h6><%= "| #{@objeto.doc_type} |" %></h6>
+
+		<h6><%= sanitize @objeto.type_quote %></h6>
 		<h6><%= sanitize @objeto.m_quote %></h6>
 
 		<% unless @duplicados.empty? %>
