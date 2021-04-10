@@ -71,15 +71,34 @@ module ProcesaCarga
 		    	end
 
 		    	# LLENAR IDIOMA + REVISTA
-		    	if ['remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
+		    	# Agregamos 'remplazar_carga' para cubrir el refill, la reparación de registros
+		    	if ['remplazar_carga', 'remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
+		    		# REFILL
+		    		if hash_articulo['Language'].blank?
+		    			idio = Idioma.find_by(idioma: '')
+		    			unless idio.blank?
+		    				idio.idioma = 'sin información'
+		    				idio.save
+		    			end
+		    		end
 			        # Agrega IDIOMA -> REVISTA
-			        idioma = ( hash_articulo['Language'].blank? ? '' : hash_articulo['Language'].gsub('\\', '') )
+			        idioma = ( hash_articulo['Language'].blank? ? 'sin información' : hash_articulo['Language'].gsub('\\', '') )
 			        idio = Idioma.find_by(idioma: idioma)
 			        if idio.blank?
 			        	idio = Idioma.create(idioma: idioma)
 			        end
 
-			        revista = ( hash_articulo['Journal'].blank? ? '' : hash_articulo['Journal'].gsub('\\', '') )
+			        # REFILL
+			        if hash_articulo['Journal'].blank?
+			        	rev = Revista.find_by(revista: '')
+			        	unless rev.blank?
+			        		rev.publicaciones.delete(pub)
+			        		rev.delete if rev.publicaciones.empty?
+			        	end
+			        end 
+
+			        revista = ( hash_articulo['Journal'].blank? ? hash_articulo['Publisher'].gsub('\\', '') : hash_articulo['Journal'].gsub('\\', '') )
+			        revista = 'sin información' if revista.blank?
 			        rev = Revista.find_by(revista: revista)
 			        if rev.blank?
 			        	rev = Revista.create(revista: revista, idioma_id: idio.id)
@@ -353,5 +372,43 @@ module ProcesaCarga
 		else
 			autores.join(', ')+' & '+last
 		end
+	end
+
+	def proceso_d_journal(d_journal)
+		match_year = d_journal.strip.match(/(?<anterior>[^\(]*) \((?<year>\d{4})\) (?<siguiente>.*)/)
+		anterior = match_year[:anterior].strip
+		siguiente = match_year[:siguiente].strip
+
+		resultado = {}
+
+		if !!anterior.match(/\d+/)
+			# la revista tienen el volumen
+			match_journal_volume = anterior.strip.match(/(?<journal>\D*) (?<volume>\d*)/)
+
+			resultado[:journal] = match_journal_volume[:journal].strip
+			resultado[:volume] = match_journal_volume[:volume].strip
+			resultado[:pages] = siguiente
+		else
+			resultado[:journal] = anterior
+
+			if siguiente.split(':').length == 2
+				resultado[:volume] = siguiente.split(':')[0].strip
+				resultado[:pages] = siguiente.split(':')[1].strip
+			elsif siguiente.split(',').length == 2
+				resultado[:volume] = siguiente.split(',')[0].strip
+				resultado[:pages] = siguiente.split(',')[1].strip
+			else
+				resultado[:volume] = ''
+				resultado[:pages] = siguiente
+			end
+		end
+		resultado[:year] = match_year[:year]
+
+		resultado
+	end
+
+	def procesa_d_doi(d_doi)
+        primer_filtro_doi = d_doi.strip.delete_prefix('DOI').delete_prefix('doi:').strip
+        (!!primer_filtro_doi.match(/doi.org/) ? primer_filtro_doi.strip.split('doi.org/')[1] : primer_filtro_doi)
 	end
 end

@@ -4,6 +4,8 @@ class IngresosController < ApplicationController
   before_action :carga_temas_ayuda
   before_action :set_ingreso, only: [:show, :edit, :update, :destroy]
 
+  before_action :crea_publicacion, only: :create
+
   # GET /ingresos
   # GET /ingresos.json
   def index
@@ -27,7 +29,8 @@ class IngresosController < ApplicationController
 
   # GET /ingresos/new
   def new
-    @objeto = Ingreso.new
+    proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
+    @objeto = proyecto_activo.publicaciones.new(origen: 'ingreso', estado: 'ingreso')
   end
 
   # GET /ingresos/1/edit
@@ -76,6 +79,10 @@ class IngresosController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    def crea_publicacion
+      stop
+    end
+
     def set_ingreso
       @objeto = Ingreso.find(params[:id])
     end

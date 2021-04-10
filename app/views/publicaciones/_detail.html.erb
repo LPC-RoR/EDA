@@ -1,109 +1,80 @@
-<% if filtro_conditional_field?(@objeto, 'doc_type') or filtro_conditional_field?(@objeto, 'd_quote') %>
+<% unless params[:despliegue] %>
 	<div class='row'>
-		<div class='col-md-2'>
+		<div class='col-md-6'>
 			<small><%= form.label 'Tipo' %></small></br>
-			<%= form.select :doc_type, Publicacion::DOC_TYPES, include_blank: true %>
-		</div>
-		<div class='col-md-10'>
-			<h5><%= @objeto.d_quote %></h5>
+			<%= form.select :doc_type, Publicacion::DOC_TYPES, prompt: "Tipo de documento?" %></br>
+
+			<small><%= form.label 'Author (process)' %></small></br>
+			<%= form.text_field(:d_author, size: 74, class: 'form-control-sm', placeholder: 'Author (process)') %>
+
+			<small><%= form.label 'Journal (process)' %></small></br>
+			<%= form.text_field(:d_journal, size: 74, class: 'form-control-sm', placeholder: 'Journal (process)') %>
+
+			<small><%= form.label 'DOI (process)' %></small></br>
+			<%= form.text_field(:d_doi, size: 74, class: 'form-control-sm', placeholder: 'DOI (process)') %>
 		</div>
 	</div>
-<% end %>
+<% else %>
 
-<% if filtro_conditional_field?(@objeto, 'd_author') %>
-	<div class='row'>
-		<div class='col-md-12'>
-			<small><%= form.label 'Author (proceso)' %></small></br>
-			<%= form.text_field(:d_author, class: 'form-control') %>
-		</div>
-	</div>
-<% end %>
-
-<% if filtro_conditional_field?(@objeto, 'author') %>
-	<div class='row'>
-		<div class='col-md-12'>
-			<small><%= form.label 'Author' %></small></br>
-			<%= form.text_field(:author, class: 'form-control') %>
-		</div>
-	</div>
-<% end %>
-
-<% if filtro_conditional_field?(@objeto, 'year') or filtro_conditional_field?(@objeto, 'title') %>
-	<div class='row'>
-		<div class='col-md-2'>
-			<small><%= form.label 'Year' %></small></br>
-			<%= form.text_field(:year, class: 'form-control') %>
-		</div>
-		<div class='col-md-10'>
-			<small><%= form.label 'Title' %></small></br>
-			<%= form.text_field(:title, class: 'form-control') %>
-		</div>
-	</div>
-<% end %>
-
-<% if filtro_conditional_field?(@objeto, 'editor') or filtro_conditional_field?(@objeto, 'book') %>
 	<div class='row'>
 		<div class='col-md-6'>
-			<small><%= form.label 'Editor' %></small></br>
-			<%= form.text_field(:editor, class: 'form-control') %>
+			<small class='text-info'><%= form.label 'Tipo' %></small></br>
+			<%= form.text_field(:doc_type, size: 74, class: 'form-control-plaintext', readonly: true) %>
+
+			<small class='text-info'><%= form.label 'Author (process)' %></small></br>
+			<%= form.text_field(:d_author, size: 74, class: 'form-control-plaintext', readonly: true) %>
+
+			<small class='text-info'><%= form.label 'Journal (process)' %></small></br>
+			<%= form.text_field(:d_journal, size: 74, class: 'form-control-plaintext', readonly: true) %>
+
+			<small class='text-info'><%= form.label 'DOI (process)' %></small></br>
+			<%= form.text_field(:d_doi, size: 74, class: 'form-control-plaintext', readonly: true) %>
+
+			<!-- INGRESO -->
+			<div class='inline-form'>
+				<small class='text-info'><%= form.label 'Author | Year' %></small></br>
+				<%= form.text_field(:author, size: 64, class: 'form-control-sm') %>
+				<%= form.text_field(:year, size: 5, class: 'form-control-sm') %>
+			</div>
+
+			<small class='text-info'><%= form.label 'Title' %></small></br>
+			<%= form.text_field(:title, size: 74, class: 'form-control-sm') %>
+
+			<small class='text-info'><%= form.label 'Journal' %></small></br>
+			<%= form.text_field(:journal, size: 74, class: 'form-control-sm') %>
+
 		</div>
 		<div class='col-md-6'>
-			<small><%= form.label 'Book' %></small></br>
-			<%= form.text_field(:book, class: 'form-control') %>
+			<!-- INGRESO -->
+			<div class='inline-form'>
+				<small class='text-info'><%= form.label 'Editor | Book Title' %></small></br>
+				<%= form.text_field(:editor, size: 34, class: 'form-control-sm') %>
+				<%= form.text_field(:booktitle, size: 35, class: 'form-control-sm') %>
+			</div>
+
+			<div class='inline-form'>
+				<small class='text-info'><%= form.label 'Publisher | Ciudad, País' %></small></br>
+				<%= form.text_field(:publisher, size: 34, class: 'form-control-sm') %>
+				<%= form.text_field(:ciudad_pais, size: 35, class: 'form-control-sm') %>
+			</div>
+
+			<small class='text-info'><%= form.label 'Academic degree' %></small></br>
+			<%= form.text_field(:academic_degree, size: 74, class: 'form-control-sm') %>
+
+			<div class='inline-form'>
+				<small class='text-info'><%= form.label 'Volume | Pages | DOI' %></small></br>
+				<%= form.text_field(:volume, size: 9, class: 'form-control-sm') %>
+				<%= form.text_field(:pages, size: 10, class: 'form-control-sm') %>
+				<%= form.text_field(:doi, size: 45, class: 'form-control-sm') %>
+			</div>
+
+			<small class='text-info'><%= form.label :abstract %></small></br>
+		  	<%= form.text_area :abstract, size: '66x6' %></br>
 		</div>
 	</div>
+
 <% end %>
-
-<% if filtro_conditional_field?(@objeto, 'd_journal') or filtro_conditional_field?(@objeto, 'journal') %>
-	<div class='row'>
-		<div class='col-md-6'>
-			<small><%= form.label 'Journal (proceso)' %></small></br>
-			<%= form.text_field(:d_journal, class: 'form-control') %>
-		</div>
-		<div class='col-md-6'>
-			<small><%= form.label 'Journal' %></small></br>
-			<%= form.text_field(:journal, class: 'form-control') %>
-		</div>
-	</div>
-<%	 end %>
-
-<% if filtro_conditional_field?(@objeto, 'academic_degree') or filtro_conditional_field?(@objeto, 'ciudad_pais') %>
-	<div class='row'>
-		<div class='col-md-6'>
-			<small><%= form.label 'Academic degree' %></small></br>
-			<%= form.text_field(:academic_degree, class: 'form-control') %>
-		</div>
-		<div class='col-md-6'>
-			<small><%= form.label 'Ciudad, País' %></small></br>
-			<%= form.text_field(:ciudad_pais, class: 'form-control') %>
-		</div>
-	</div>
-<% end %>
-
-<div class='row'>
-	<div class='col-md-2'>
-		<small><%= form.label 'Volume' %></small></br>
-		<%= form.text_field(:volume, class: 'form-control') %>
-	</div>
-	<div class='col-md-2'>
-		<small><%= form.label 'Pages' %></small></br>
-		<%= form.text_field(:pages, class: 'form-control') %>
-	</div>
-	<div class='col-md-4'>
-		<small><%= form.label 'DOI (proceso)' %></small></br>
-		<%= form.text_field(:d_doi, class: 'form-control') %>
-	</div>
-	<div class='col-md-4'>
-		<small><%= form.label 'DOI' %></small></br>
-		<%= form.text_field(:doi, class: 'form-control') %>
-	</div>
-</div>
-<div class='row'>
-	<div class='col-md-12'>
-		<small><%= form.label :abstract %></small></br>
-	  	<%= form.text_area :abstract, size: '100x6' %></br>
- 	</div>
-</div>
 
 <%= form.hidden_field :estado %>
 <%= form.hidden_field :origen %>
+

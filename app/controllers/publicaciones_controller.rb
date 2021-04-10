@@ -6,6 +6,7 @@ class PublicacionesController < ApplicationController
   before_action :inicia_sesion
   before_action :carga_temas_ayuda
   before_action :set_publicacion, only: [:show, :edit, :update, :destroy, :cambia_evaluacion]
+  before_action :pre_proceso, only: :create
 
   after_action :procesa_author, only: [:update, :create]
   after_action :procesa_journal, only: [:update, :create]
@@ -66,7 +67,7 @@ class PublicacionesController < ApplicationController
   # GET /publicaciones/new
   def new
     proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
-    @objeto = proyecto_activo.publicaciones.new(origen: 'ingreso', estado: 'ingreso')
+    @objeto = proyecto_activo.publicaciones.new(origen: 'ingreso', estado: 'ingreso', doc_type: params[:doc_type], d_author: params[:d_author], author: params[:author], d_journal: params[:d_journal], journal: params[:journal], volume: params[:volume], pages: params[:pages], year: params[:year], d_doi: params[:d_doi], doi: params[:doi])
   end
 
   # GET /publicaciones/1/edit
@@ -198,6 +199,27 @@ class PublicacionesController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    def pre_proceso
+      if params[:publicacion][:doc_type].blank?
+        redirect_to new_publicacion_path
+      elsif params[:title].blank?
+        d_author = params[:publicacion][:d_author]
+        author = limpia_autor_ingreso(params[:publicacion][:d_author])
+
+        d_journal = params[:publicacion][:d_journal]
+        proceso_dj = proceso_d_journal(params[:publicacion][:d_journal])
+        journal    = proceso_dj[:journal]
+        volume     = proceso_dj[:volume]
+        pages      = proceso_dj[:pages]
+        year       = proceso_dj[:year]
+        d_doi      = params[:publicacion][:d_doi]
+        doi        = procesa_d_doi(params[:publicacion][:d_doi])
+
+        redirect_to new_publicacion_path(despliegue: true, doc_type: params[:publicacion][:doc_type], d_author: d_author, author: author, d_journal: d_journal, journal: journal, volume: volume, pages: pages, year: year, d_doi: d_doi, doi: doi)
+      end
+#      Stop
+    end
+
     def procesa_author
       if @objeto.d_author.present?
         @objeto.author = limpia_autor_ingreso(@objeto.d_author)
@@ -218,30 +240,13 @@ class PublicacionesController < ApplicationController
     def procesa_journal
       # Puede estar el volumen antes o despues del año
       if @objeto.d_journal.present?
-        match_year = @objeto.d_journal.strip.match(/(?<anterior>[^\(]*) \((?<year>\d{4})\) (?<siguiente>.*)/)
-        anterior = match_year[:anterior].strip
-        siguiente = match_year[:siguiente].strip
-        if !!anterior.match(/\d+/)
-          # la revista tienen el volumen
-          match_journal_volume = anterior.strip.match(/(?<journal>\D*) (?<volume>\d*)/)
-          @objeto.journal = match_journal_volume[:journal].strip
-          @objeto.volume = match_journal_volume[:volume].strip
-          @objeto.pages = siguiente
-        else
-          @objeto.journal = anterior
 
-          if siguiente.split(':').length == 2
-            @objeto.volume = siguiente.split(':')[0].strip
-            @objeto.pages = siguiente.split(':')[1].strip
-          elsif siguiente.split(',').length == 2
-            @objeto.volume = siguiente.split(',')[0].strip
-            @objeto.pages = siguiente.split(',')[1].strip
-          else
-            @objeto.volume = ''
-            @objeto.pages = siguiente
-          end
-        end
-        @objeto.year = match_year[:year]
+        proceso_d_journal = procesa_d_journal(@objeto.d_journal)
+
+        @objeto.journal = proceso_d_journal[:journal]
+        @objeto.volume  = proceso_d_journal[:volume]
+        @objeto.pages   = proceso_d_journal[:pages]
+        @objeto.year    = proceso_d_journal[:year]
 
         @objeto.save
       end
@@ -271,8 +276,7 @@ class PublicacionesController < ApplicationController
 
     def procesa_doi
       if @objeto.d_doi.present?
-        primer_filtro_doi = @objeto.d_doi.strip.delete_prefix('DOI').delete_prefix('doi:').strip
-        @objeto.doi = !!primer_filtro_doi.match(/doi.org/) ? primer_filtro_doi.strip.split('doi.org/')[1] : primer_filtro_doi
+        @objeto.doi = procesa_d_doi(@objeto.d_doi)
         @objeto.save
       end
     end

@@ -110,7 +110,7 @@ class Publicacion < ApplicationRecord
 		"#{self.author} (#{self.year.blank? ? 'not yet published' : self.year})"
 	end
 
-	def journal
+	def q_journal
 		self.revista.revista
 	end
 

@@ -1,0 +1,8 @@
+<%= form_for :pre_form, url: "/publicaciones/new?publicacion_id=#{@objeto.id}" do |form| %>
+	<%= form.select :tema_id, @temas_seleccion.collect { |tm| [tm.carpeta_tema(session[:proyecto_activo]['id']), tm.id] }, include_blank: false, prompt: "Seleccione Tema" %>
+	<%= form.select :clasificacion, Clasificacion::CLASIFICACION, include_blank: false, prompt: "Seleccione Clasificacion" %>
+	<div class='form-inline'>
+		<%= form.text_field(:texto, size: 80, class: 'form-control' ) %>
+		<%= form.submit '+ Texto'  %>
+	</div>
+<% end  %>
