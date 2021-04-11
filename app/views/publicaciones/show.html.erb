@@ -13,9 +13,8 @@
 		<% end %>
 		<%= render partial: '0p/tabla/solo_tabla', locals: {c: 'carpetas', a: 'index'} %>
 
-		<%= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: 'Etiquetas', size: '5'} %>
-
 		<% if @objeto.evaluable %>
+			<%= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: 'Etiquetas', size: '5'} %>
 			<%= render partial: '/etiquetas/inline_nuevo' %>
 			<%= render partial: '0p/tabla/solo_tabla', locals: {c: 'etiquetas', a: 'index'} %>
 		<% end %>

@@ -1,14 +1,2 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Etiqueta:</strong>
-  <%= @etiqueta.etiqueta %>
-</p>
-
-<p>
-  <strong>Proyecto:</strong>
-  <%= @etiqueta.proyecto_id %>
-</p>
-
-<%= link_to 'Edit', edit_etiqueta_path(@etiqueta) %> |
-<%= link_to 'Back', etiquetas_path %>
+<%= render partial: '0p/general/o_titulo', locals: {o: @objeto, a: action_name, size: '5'} %>
+<%= render partial: '0p/tabla/solo_tabla', locals: {c: 'publicaciones', a: 'index'} %>

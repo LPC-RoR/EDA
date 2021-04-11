@@ -1,4 +1,7 @@
 class EtiquetasController < ApplicationController
+  before_action :inicia_sesion
+  before_action :authenticate_usuario!
+  before_action :carga_temas_ayuda
   before_action :set_etiqueta, only: [:show, :edit, :update, :destroy, :asignar, :desasignar]
 
   # GET /etiquetas
@@ -10,6 +13,8 @@ class EtiquetasController < ApplicationController
   # GET /etiquetas/1
   # GET /etiquetas/1.json
   def show
+    @coleccion = {}
+    @coleccion['publicaciones'] = @objeto.publicaciones.page(params[:page])
   end
 
   # GET /etiquetas/new
