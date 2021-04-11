@@ -98,7 +98,7 @@ class Publicacion < ApplicationRecord
 	end
 
 	def labeled_doi
-		"doi: #{self.doi}"
+		"#{'doi: ' if self.doi.present?}#{self.doi}#{'.' if self.doi.present?}"
 	end
 
 	def detail
