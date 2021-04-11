@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_09_062839) do
+ActiveRecord::Schema.define(version: 2021_04_11_031914) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -209,6 +209,23 @@ ActiveRecord::Schema.define(version: 2021_04_09_062839) do
     t.datetime "updated_at", null: false
     t.index ["orden"], name: "index_etapas_on_orden"
     t.index ["proyecto_id"], name: "index_etapas_on_proyecto_id"
+  end
+
+  create_table "etiquetas", force: :cascade do |t|
+    t.string "etiqueta"
+    t.integer "proyecto_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["proyecto_id"], name: "index_etiquetas_on_proyecto_id"
+  end
+
+  create_table "etq_contadores", force: :cascade do |t|
+    t.integer "etiqueta_id"
+    t.integer "publicacion_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["etiqueta_id"], name: "index_etq_contadores_on_etiqueta_id"
+    t.index ["publicacion_id"], name: "index_etq_contadores_on_publicacion_id"
   end
 
   create_table "evaluaciones", force: :cascade do |t|

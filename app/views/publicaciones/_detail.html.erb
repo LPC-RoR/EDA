@@ -1,8 +1,8 @@
-<% unless params[:despliegue] %>
+<% unless params[:despliegue] or action_name != 'new' %>
 	<div class='row'>
 		<div class='col-md-6'>
 			<small><%= form.label 'Tipo' %></small></br>
-			<%= form.select :doc_type, Publicacion::DOC_TYPES, prompt: "Tipo de documento?" %></br>
+			<%= form.select :doc_type, TipoPublicacion.all.order(:tipo_publicacion).map {|tp| tp.tipo_publicacion}, prompt: "Tipo de documento?" %></br>
 
 			<small><%= form.label 'Author (process)' %></small></br>
 			<%= form.text_field(:d_author, size: 74, class: 'form-control-sm', placeholder: 'Author (process)') %>
@@ -19,16 +19,32 @@
 	<div class='row'>
 		<div class='col-md-6'>
 			<small class='text-info'><%= form.label 'Tipo' %></small></br>
-			<%= form.text_field(:doc_type, size: 74, class: 'form-control-plaintext', readonly: true) %>
+			<% if action_name == 'new' %>
+				<%= form.text_field(:doc_type, size: 74, class: 'form-control-plaintext', readonly: true) %>
+			<% else %>
+				<%= form.select :doc_type, Publicacion::DOC_TYPES, prompt: "Tipo de documento?" %></br>
+			<% end %>
 
 			<small class='text-info'><%= form.label 'Author (process)' %></small></br>
-			<%= form.text_field(:d_author, size: 74, class: 'form-control-plaintext', readonly: true) %>
+			<% if action_name == 'new' %>
+				<%= form.text_field(:d_author, size: 74, class: 'form-control-plaintext', readonly: true) %>
+			<% else %>
+				<%= form.text_field(:d_author, size: 74, class: 'form-control-sm', placeholder: 'Author (process)') %>
+			<% end %>
 
 			<small class='text-info'><%= form.label 'Journal (process)' %></small></br>
-			<%= form.text_field(:d_journal, size: 74, class: 'form-control-plaintext', readonly: true) %>
+			<% if action_name == 'new' %>
+				<%= form.text_field(:d_journal, size: 74, class: 'form-control-plaintext', readonly: true) %>
+			<% else %>
+				<%= form.text_field(:d_journal, size: 74, class: 'form-control-sm', placeholder: 'Journal (process)') %>
+			<% end %>
 
 			<small class='text-info'><%= form.label 'DOI (process)' %></small></br>
-			<%= form.text_field(:d_doi, size: 74, class: 'form-control-plaintext', readonly: true) %>
+			<% if action_name == 'new' %>
+				<%= form.text_field(:d_doi, size: 74, class: 'form-control-plaintext', readonly: true) %>
+			<% else %>
+				<%= form.text_field(:d_doi, size: 74, class: 'form-control-sm', placeholder: 'DOI (process)') %>
+			<% end %>
 
 			<!-- INGRESO -->
 			<div class='inline-form'>
@@ -77,4 +93,5 @@
 
 <%= form.hidden_field :estado %>
 <%= form.hidden_field :origen %>
+<%= form.hidden_field :despliegue %>
 

@@ -163,7 +163,7 @@ module Eda
         conditional_fields: {
             'Publicacion' => [
                 'd_quote',
-                'm_quote',
+                'type_quote',
                 'd_author',
                 'title',
                 'author',

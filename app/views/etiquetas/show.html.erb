@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Etiqueta:</strong>
+  <%= @etiqueta.etiqueta %>
+</p>
+
+<p>
+  <strong>Proyecto:</strong>
+  <%= @etiqueta.proyecto_id %>
+</p>
+
+<%= link_to 'Edit', edit_etiqueta_path(@etiqueta) %> |
+<%= link_to 'Back', etiquetas_path %>

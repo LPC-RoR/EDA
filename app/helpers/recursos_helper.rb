@@ -98,6 +98,13 @@ module RecursosHelper
 			controller_name == 'proyectos'
 		when 'Tabla'
 			objeto.archivo.present? and objeto.encabezados.empty?
+		when 'Etiqueta'
+			case btn
+			when '+'
+				not objeto.publicaciones.ids.include?(@objeto.id)
+			when '-'
+				objeto.publicaciones.ids.include?(@objeto.id)
+			end
 		else
 			true
 		end
@@ -132,6 +139,11 @@ module RecursosHelper
         	[['Desvincular', '/desvincular', true]]
         when 'Tabla'
         	[['Cargar', '/cargar_tabla', true]]
+        when 'Etiqueta'
+        	[
+        		['+', '/asignar', true],
+        		['-', '/desasignar', true]
+        	]
         else
         	[]
 		end		

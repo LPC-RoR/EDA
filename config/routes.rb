@@ -1,10 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :tipo_publicaciones do
-    resources :campos
-  end
-  resources :campos
-  resources :formatos
   # SCOPE APLICACION
   scope module: 'aplicacion' do
     resources :archivos
@@ -65,6 +60,18 @@ Rails.application.routes.draw do
     resources :columnas
     resources :encabezados
   end
+
+  resources :etq_contadores
+  resources :etiquetas do
+    match :nuevo, via: :post, on: :collection
+    match :asignar, via: :get, on: :member
+    match :desasignar, via: :get, on: :member
+  end
+  resources :tipo_publicaciones do
+    resources :campos
+  end
+  resources :campos
+  resources :formatos
 
   resources :asociaciones
   resources :relaciones

@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Etiqueta:</strong>
+  <%= @etq_contador.etiqueta_id %>
+</p>
+
+<p>
+  <strong>Publicacion:</strong>
+  <%= @etq_contador.publicacion_id %>
+</p>
+
+<%= link_to 'Edit', edit_etq_contador_path(@etq_contador) %> |
+<%= link_to 'Back', etq_contadores_path %>

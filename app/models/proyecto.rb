@@ -20,6 +20,7 @@ class Proyecto < ApplicationRecord
 	has_many :carpetas
 	has_many :versiones
 	has_many :etapas
+	has_many :etiquetas
 
 	has_many :coautores
 	has_many :perfiles, through: :coautores

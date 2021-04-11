@@ -1,5 +1,7 @@
 class Publicacion < ApplicationRecord
 
+	attr_accessor :despliegue
+
 	NOMBRES_BIB = ["Author", "Title", "Type", "Year", "Volume", "Pages", "Month", "Number", "Note", "Series", "Meeting", "Note", "Abstract", "Publisher", "Editor", "Booktitle", "Address", "Affiliation", "DOI", "Article-Number", "ISSN", "EISSN", "Keywords", "Keywords-Plus", "Research-Areas", "Web-of-Science-Categories", "Author-Email", "Unique-ID", "DA"]
 
 	DOC_TYPES	 = ['Article', 'Book', 'Tesis', 'Memoir', 'Chapter', 'Generic']
@@ -18,31 +20,9 @@ class Publicacion < ApplicationRecord
 		['year',      'normal']
 	]
 
- 	FORM_FIELDS = [
-		['d_quote',          'show'], 
-		['doc_type',       'normal'], 
-		['m_quote',        'metodo'], 
-		['d_author',        'entry'],
-		['author',          'entry'], 
-		['year',            'entry'], 
-		['title',           'entry'],
-		['editor',          'entry'],
-		['book',            'entry'],
-		['academic_degree', 'entry'],
-		['ciudad_pais',     'entry'],
-		['d_journal',       'entry'],
-		['volume',          'entry'],
-		['pages',           'entry'],
-		['d_doi',           'entry'],
-		['doi',             'entry'],
-		['abstract',    'text_area'],
-
-		['estado',         'hidden']
-	]
-
-	# -------------------- SHOW -------------------------
+# -------------------- SHOW -------------------------
 	SHOW_FIELDS = [
-		['m_quote',         'metodo'], 
+		['type_quote',         'metodo'], 
 		['d_author',        'normal'], 
 		['author',          'normal'], 
 		['year',            'normal'], 
@@ -79,6 +59,9 @@ class Publicacion < ApplicationRecord
 	has_many :asociaciones
 	has_many :proyectos, through: :asociaciones
 
+	has_many :etq_contadores
+	has_many :etiquetas, through: :etq_contadores
+
 	# PENDIENTE DE REVISIÓN
 #	has_many :asignaciones, foreign_key: 'paper_id', class_name: 'Clasificacion'
 #	has_many :areas, through: :asignaciones
@@ -92,17 +75,17 @@ class Publicacion < ApplicationRecord
 		autores = self.author
 		case self.doc_type
 		when 'Article'
-			"#{autores} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} #{self.revista.revista} #{self.volume}: #{self.pages} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
+			"#{autores} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} #{self.q_journal} #{self.volume}: #{self.pages} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
 		when 'Book'
-			"#{autores}#{", #{self.editor} (Ed.)" unless self.editor.blank?} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} #{"#{self.ciudad_pais}: " unless self.ciudad_pais.blank?}#{self.revista.revista} #{self.pages}#{" pp" if self.pages.present?} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
+			"#{autores}#{", #{self.editor} (Ed.)" unless self.editor.blank?} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} #{"#{self.ciudad_pais}: " unless self.ciudad_pais.blank?}#{self.q_journal} #{self.pages}#{" pp" if self.pages.present?} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
 		when 'Tesis'
-			"#{autores} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} Tesis #{self.revista.revista} #{self.pages}#{"pp" if self.pages.present?} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
+			"#{autores} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} Tesis #{self.q_journal} #{self.pages}#{"pp" if self.pages.present?} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
 		when 'Memoir'
-			"#{autores} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} Memoria para optar al Título Profesional de #{self.academic_degree}, #{self.revista.revista} #{self.pages}#{"pp" if self.pages.present?} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
+			"#{autores} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} Memoria para optar al Título Profesional de #{self.academic_degree}, #{self.q_journal} #{self.pages}#{"pp" if self.pages.present?} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
 		when 'Chapter'
-			"#{autores} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} En: #{"#{self.editor} (Ed.), " unless self.editor.blank?}#{self.book} (pp #{self.pages}). #{self.ciudad_pais}#{": " unless self.ciudad_pais.blank?}#{self.revista.revista}. #{"doi: " if self.doi.present?}#{self.doi}".strip
+			"#{autores} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} En: #{"#{self.editor} (Ed.), " unless self.editor.blank?}#{self.book} (pp #{self.pages}). #{self.ciudad_pais}#{": " unless self.ciudad_pais.blank?}#{self.q_journal}. #{"doi: " if self.doi.present?}#{self.doi}".strip
 		when 'Generic'
-			"#{autores} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} #{self.revista.revista} #{self.pages}#{" pp" if self.pages.present?} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
+			"#{autores} (#{self.year}) <b>#{self.title}</b>#{"." unless ['?', '-'].include?(self.title[-1])} #{self.q_journal} #{self.pages}#{" pp" if self.pages.present?} #{"doi: " if self.doi.present?}#{self.doi}".strip+'.'
 		end
 	end
 
@@ -111,7 +94,7 @@ class Publicacion < ApplicationRecord
 	end
 
 	def q_journal
-		self.revista.revista
+		self.revista.present? ? self.revista.revista : 'sin información'
 	end
 
 	def labeled_doi

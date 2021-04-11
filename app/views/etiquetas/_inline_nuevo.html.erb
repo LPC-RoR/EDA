@@ -1,0 +1,6 @@
+<%= form_for :nueva_etiqueta, url: "/etiquetas/nuevo?objeto_id=#{@objeto.id}" do |form| %>
+	<div class='form-inline'>
+		<%= form.text_field(:etiqueta, size: 28, class: 'form-control' ) %>
+		<%= form.submit '+ Etiqueta'  %>
+	</div>
+<% end  %>

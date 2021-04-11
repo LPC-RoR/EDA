@@ -20,7 +20,7 @@
 				<p class='text-info'><small><i><%= "\"#{clasificacion.texto.texto}\""  %></i></small></p>
 				<% clasificacion.texto.publicaciones.each do |publicacion| %>
 					<p><small>| <%= link_to(publicacion.doc_type, publicacion) %> | <%= link_to "https://doi.org/#{publicacion.doi}", "https://doi.org/#{publicacion.doi}", target: :blank unless publicacion.doi.blank? %> |</small></p>
-					<p><small><%= sanitize publicacion.m_quote %></small></p>
+					<p><small><%= sanitize publicacion.type_quote %></small></p>
 				<% end %>
 			<% else %>
 				<h6 class='text-warning'>Texto no encontrado</h3>
