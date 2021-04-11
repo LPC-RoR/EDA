@@ -109,6 +109,10 @@ class Publicacion < ApplicationRecord
 		"#{series}#{volume}#{month}#{pages}"
 	end
 
+	def q_book
+		"En: #{self.editor if self.editor.present?}#{' (Ed.), ' if self.editor.present?}#{self.booktitle}"
+	end
+
 	def type_quote
 		tipo_publicacion = TipoPublicacion.find_by(tipo_publicacion: self.doc_type)
 		if tipo_publicacion.redireccion.present?
