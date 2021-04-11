@@ -44,6 +44,10 @@ module ProcesaCarga
 		      		pub = Publicacion.find_by(doi: hash_articulo['DOI'])
 		    	end
 
+		    	if pub.blank?
+		    		unicidad = 'saltar'
+		    	end
+
 		    	# llenado desde hash para los registros vacíos o por corregir
 		    	if ['remplazar_carga', 'remplazar_doi', 'nuevo', 'colision_titulo'].include?(unicidad)
 			        Publicacion::NOMBRES_BIB.each do |bib|
