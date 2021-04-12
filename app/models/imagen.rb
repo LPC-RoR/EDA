@@ -13,6 +13,7 @@ class Imagen < ApplicationRecord
 		['nota',               'entry'],
 		['imagen',        'file_field'],
 		['linea_id',          'hidden'],
+		['directorio_id',     'hidden']
 	]
 
 	mount_uploader :imagen, ImagenUploader

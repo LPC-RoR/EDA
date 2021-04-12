@@ -75,11 +75,15 @@ class Aplicacion::ImagenesController < ApplicationController
     end
 
     def set_redireccion
-      @redireccion = @objeto.linea
+      if @objeto.directorio.present?
+        @redireccion = @objeto.directorio
+      elsif @objeto.linea.present?
+        @redireccion = @objeto.linea
+      end
     end
 
     # Only allow a list of trusted parameters through.
     def imagen_params
-      params.require(:imagen).permit(:orden, :imagen, :nota, :linea_id)
+      params.require(:imagen).permit(:orden, :imagen, :nota, :linea_id, :directorio_id)
     end
 end

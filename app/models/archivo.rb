@@ -13,6 +13,7 @@ class Archivo < ApplicationRecord
 		['nota',               'entry'],
 		['archivo',       'file_field'],
 		['linea_id',          'hidden'],
+		['directorio_id',     'hidden']
 	]
 
 	mount_uploader :archivo, ArchivoUploader
