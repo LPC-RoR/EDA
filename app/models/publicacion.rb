@@ -115,13 +115,14 @@ class Publicacion < ApplicationRecord
 
 	def type_quote
 		tipo_publicacion = TipoPublicacion.find_by(tipo_publicacion: self.doc_type)
-		if tipo_publicacion.redireccion.present?
-			redireccion = tipo_publicacion.redireccion
-			tipo_publicacion = TipoPublicacion.find_by(tipo_publicacion: redireccion)
-		end
 		if tipo_publicacion.blank?
 			''
 		else
+			if tipo_publicacion.redireccion.present?
+				redireccion = tipo_publicacion.redireccion
+				tipo_publicacion = TipoPublicacion.find_by(tipo_publicacion: redireccion)
+			end
+
 			if tipo_publicacion.campos.empty?
 				tipo_publicacion = TipoPublicacion.find_by(tipo_publicacion: self.doc_type.split(';').first)
 			end
