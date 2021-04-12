@@ -51,7 +51,7 @@
 
 		<% unless @duplicados.empty? %>
 			<% @duplicados.each do |duplicado| %>
-				<h6><%= "| "%><%=link_to duplicado.doc_type, duplicado%><%=" |" %></h6>
+				<h6><%= "| "%><%=link_to duplicado.doc_type, duplicado%><%=" |" %><small><%= duplicado.id  if session[:es_administrador]%></small></h6>
 				<h6><%= sanitize duplicado.type_quote %></h6>
 			<% end %>
 		<% end %>
