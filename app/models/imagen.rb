@@ -4,8 +4,8 @@ class Imagen < ApplicationRecord
 
 	TABLA_FIELDS = [
 		['orden',      'normal'],
-		['imagen',  'link_file'], 
-		['nota',       'normal']
+		['nota',       'normal'],
+		['imagen',  'link_file']
 	]
 
  	FORM_FIELDS = [

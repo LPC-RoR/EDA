@@ -4,8 +4,8 @@ class Archivo < ApplicationRecord
 
 	TABLA_FIELDS = [
 		['orden',      'normal'],
-		['archivo', 'link_file'], 
-		['nota',       'normal']
+		['nota',       'normal'],
+		['archivo', 'link_file']
 	]
 
  	FORM_FIELDS = [
