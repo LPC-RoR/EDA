@@ -17,5 +17,6 @@ class Imagen < ApplicationRecord
 
 	mount_uploader :imagen, ImagenUploader
 
-	belongs_to :linea
+	belongs_to :linea, optional: true
+	belongs_to :directorio, optional: true
 end

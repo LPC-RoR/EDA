@@ -17,10 +17,7 @@ class Aplicacion::ArchivosController < ApplicationController
 
   # GET /archivos/new
   def new
-    case params[:class_name]
-    when 'Linea'
-      padre = Linea.find(params[:objeto_id])
-    end
+    padre = params[:class_name].constantize.find(params[:objeto_id])
     @objeto = padre.archivos.new
   end
 

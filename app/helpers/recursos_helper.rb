@@ -14,6 +14,7 @@ module RecursosHelper
 	        ["Temas",           "/temas",                     'usuario'],
 	        ["Bibliografía",    "/recursos/bibliografia",     'usuario'],
 	        ['Datos',           '/datos',                     'usuario'],
+	        ['Repositorio',     '/directorios',               'usuario'],
 	        ["Cargas",          "/cargas",                    'usuario'],
 	        ['Administración',  '/recursos/administracion',     'admin'],
 	        ["Temas Ayuda",     "/tema_ayudas",                 'admin'],

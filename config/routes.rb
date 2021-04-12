@@ -59,6 +59,10 @@ Rails.application.routes.draw do
     end
     resources :columnas
     resources :encabezados
+    resources :subs
+    resources :directorios do
+      match :nuevo, via: :post, on: :collection
+    end
   end
 
   resources :etq_contadores

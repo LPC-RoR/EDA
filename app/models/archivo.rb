@@ -17,5 +17,6 @@ class Archivo < ApplicationRecord
 
 	mount_uploader :archivo, ArchivoUploader
 
-	belongs_to :linea
+	belongs_to :linea, optional: true
+	belongs_to :directorio, optional: true
 end

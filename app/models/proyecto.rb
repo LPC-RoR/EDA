@@ -22,6 +22,8 @@ class Proyecto < ApplicationRecord
 	has_many :etapas
 	has_many :etiquetas
 
+	has_many :directorios
+
 	has_many :coautores
 	has_many :perfiles, through: :coautores
 

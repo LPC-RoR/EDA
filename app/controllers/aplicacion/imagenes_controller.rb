@@ -17,10 +17,7 @@ class Aplicacion::ImagenesController < ApplicationController
 
   # GET /imagenes/new
   def new
-    case params[:class_name]
-    when 'Linea'
-      padre = Linea.find(params[:objeto_id])
-    end
+    padre = params[:class_name].constantize.find(params[:objeto_id])
     @objeto = padre.imagenes.new
   end
 

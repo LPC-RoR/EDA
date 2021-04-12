@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_11_031914) do
+ActiveRecord::Schema.define(version: 2021_04_12_051145) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,8 @@ ActiveRecord::Schema.define(version: 2021_04_11_031914) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "linea_id"
+    t.integer "directorio_id"
+    t.index ["directorio_id"], name: "index_archivos_on_directorio_id"
     t.index ["linea_id"], name: "index_archivos_on_linea_id"
     t.index ["orden"], name: "index_archivos_on_orden"
   end
@@ -166,6 +168,14 @@ ActiveRecord::Schema.define(version: 2021_04_11_031914) do
     t.index ["institucion_id"], name: "index_departamentos_on_institucion_id"
   end
 
+  create_table "directorios", force: :cascade do |t|
+    t.string "directorio"
+    t.integer "proyecto_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["proyecto_id"], name: "index_directorios_on_proyecto_id"
+  end
+
   create_table "encabezados", force: :cascade do |t|
     t.integer "orden"
     t.string "encabezado"
@@ -271,6 +281,8 @@ ActiveRecord::Schema.define(version: 2021_04_11_031914) do
     t.integer "linea_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "directorio_id"
+    t.index ["directorio_id"], name: "index_imagenes_on_directorio_id"
     t.index ["linea_id"], name: "index_imagenes_on_linea_id"
     t.index ["orden"], name: "index_imagenes_on_orden"
   end
@@ -486,6 +498,15 @@ ActiveRecord::Schema.define(version: 2021_04_11_031914) do
     t.datetime "updated_at", null: false
     t.index ["idioma_id"], name: "index_revistas_on_idioma_id"
     t.index ["revista"], name: "index_revistas_on_revista"
+  end
+
+  create_table "subs", force: :cascade do |t|
+    t.integer "parent_id"
+    t.integer "child_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["child_id"], name: "index_subs_on_child_id"
+    t.index ["parent_id"], name: "index_subs_on_parent_id"
   end
 
   create_table "tablas", force: :cascade do |t|
