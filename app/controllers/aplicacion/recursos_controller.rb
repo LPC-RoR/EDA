@@ -47,7 +47,19 @@ class Aplicacion::RecursosController < ApplicationController
 #  	Texto.delete_all
 #  	Tema.delete_all
 
-  	redirect_to root
+    buscado = Publicacion.find(1687)
+    unless buscado.blank?
+      buscado.evaluaciones.delete_all
+      buscado.textos.delete_all
+      buscado.investigadores.delete_all
+      buscado.cargas.delete_all
+      buscado.carpetas.delete_all
+      buscado.proyectos.delete_all
+      buscado.etiquetas.delete_all
+      buscado.delete
+    end
+
+  	redirect_to root_path
   end
 
   private
