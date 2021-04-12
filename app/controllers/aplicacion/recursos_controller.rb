@@ -47,7 +47,7 @@ class Aplicacion::RecursosController < ApplicationController
 #  	Texto.delete_all
 #  	Tema.delete_all
 
-    buscado = Publicacion.find(1687)
+    buscado = Publicacion.find(1686)
     unless buscado.blank?
       buscado.evaluaciones.delete_all
       buscado.textos.delete_all
