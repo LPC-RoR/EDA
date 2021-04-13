@@ -1,9 +1,9 @@
-		<%= form_for :tema_base, url: "/temas/nuevo?class_name=#{@objeto.class.name}&objeto_id=#{@objeto.id}" do |form| %>
-			<% if @objeto.class.name == 'Publicacion' %>
-				<%= form.select :carpeta_id, @carpetas_creacion_temas.collect { |car| [car.carpeta, car.id] }, include_blank: false, prompt: "Seleccione Carpeta" %>
-			<% end %>
-			<div class='form-inline'>
-				<%= form.text_field(:tema, size: 80, class: 'form-control' ) %>
-				<%= form.submit '+ Tema'  %>
-			</div>
-		<% end  %>
+<%= form_for :tema_base, url: "/temas/nuevo?class_name=#{@objeto.class.name}&objeto_id=#{@objeto.id}" do |form| %>
+	<% if @objeto.class.name == 'Publicacion' %>
+		<%= form.select :carpeta_id, @carpetas_creacion_temas.collect { |car| [car.carpeta, car.id] }, include_blank: false, prompt: "Seleccione Carpeta" %>
+	<% end %>
+	<div class='form-inline'>
+		<%= form.text_field(:tema, size: 80, class: 'form-control' ) %>
+		<%= form.submit '+ Tema'  %>
+	</div>
+<% end  %>

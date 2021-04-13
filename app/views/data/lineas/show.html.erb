@@ -1,1 +1,63 @@
-<%= render partial: 'data/0data/linea/show' %>
+<%= render partial: '0p/general/o_titulo', locals: {o: @objeto, a: action_name, size: '5'} if in_show?(@objeto, :titulo) %>
+<div class='row'>
+	<div class='col-md-12'>
+		<%= render partial: '0p/general/btn', locals: {texto: @objeto.tabla.tabla, link: @objeto.tabla, delete: false, style: 'btn-outline-dark', clr: c_color(controller_name)} %>
+	</div>
+</div>
+</br>
+<div class='row'>
+	<div class='col-md-12'>
+
+		<table class="table table-bordered table-sm  thead-dark">
+			<thead>
+				<tr>
+					<% @objeto.tabla.encabezados.order(:orden).each do |campo| %>
+						<td align='center'><small><i><%= campo.encabezado %></i></small></td>				
+					<% end %>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<% @objeto.columnas.order(:orden).each do |columna| %>
+						<% if @objeto.tabla.encabezados.find_by(orden: columna.orden).tipo == 'valor' %>
+							<td align="right">
+						<% else %>
+							<td>
+						<% end %>
+						<small>
+							<%= columna.columna %>
+						</small></td>
+					<% end %>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+</div>
+<div class='row'>
+	<div class='col-md-6'>
+		<%= render partial: '0p/general/titulo', locals: {c: 'archivos', a: nil, titulo: 'Archivos', size: '5'} %>
+		<%= render partial: '0p/tabla/solo_tabla', locals: {c: alias_tabla('archivos'), a: 'index'} %>
+		<%= render partial: '0p/tabla/ext_btn_nuevo', locals: {o: @objeto, c: 'archivos'} %>
+
+		</br></br>
+
+		<%= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: 'Observaciones', size: '5'} %>
+		<%= render partial: "data/0data/observacion/index" %>
+		<%= render partial: '0p/tabla/ext_btn_nuevo', locals: {o: @objeto, c: 'observaciones'} %>
+
+	</div>
+	<div class='col-md-6'>
+		<%= render partial: '0p/general/titulo', locals: {c: 'imagenes', a: nil, titulo: 'Imagenes', size: '5'} %>
+		<%= render partial: '0p/tabla/solo_tabla', locals: {c: alias_tabla('imagenes'), a: 'index'} %>
+		<%= render partial: '0p/tabla/ext_btn_nuevo', locals: {o: @objeto, c: 'imagenes'} %>
+
+		<% @coleccion['imagenes'].each do |imagen| %>
+			<%= image_tag imagen.imagen.half.url, class: "mx-auto d-block" %>
+			<%= link_to imagen.nota, imagen.imagen.url, class: "mx-auto d-block" %>
+			</br>
+		<% end %>
+
+	</div>
+</div>
+</br>

@@ -32,17 +32,6 @@ module Eda
         nuevo:   {'self' => true,  'show' => false}
     }
 
-    # Se verifica con el helper in_show?(c, label)
-    config.s_default = {
-        titulo:       true,
-        links:        true,
-        clasifica:   false,
-        detalle:     false,
-        inline_form: false,
-        tabla:        true,
-        adjuntos:    false
-    }
-
     config.look_parameters = {
         image_sizes: ['entire', 'half', 'quarter', 'thumb'],
         colors: ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark', 'muted', 'white']
@@ -187,12 +176,7 @@ module Eda
     ## ------------------------------------------------- SHOW
 
     config.show = {
-        titulo: [],
-        show_title: ['Publicacion', 'Linea'],
         partial_links: [],
-        detalle: [],
-        inline_form: [],
-        tabla: [],
         links: ['Publicacion'],
         bt_links: {
             'Publicacion' => ['revista']
@@ -200,13 +184,7 @@ module Eda
         hmt_links: {
             'Publicacion' => ['investigadores']
         },
-        status: [],
-        hidden: {
-            'textos'         => ['clasificaciones', 'citas'],
-            'carpetas'       => ['clasificaciones'],
-            'investigadores' => ['autores'],
-            'temas'          => ['textos', 'herencias'],
-        }
+        status: []
     }
 
   end

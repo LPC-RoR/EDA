@@ -13,12 +13,8 @@ class InvestigadoresController < ApplicationController
   # GET /investigadores/1
   # GET /investigadores/1.json
   def show
-    @tab = params[:tab].blank? ? 'publicaciones' : params[:tab]
-#    @estado = params[:estado].blank? ? @tab.classify.constantize::ESTADOS[0] : params[:estado]
-    # tenemos que cubrir todos los casos
-    # 1. has_many : }
     @coleccion = {}
-    @coleccion[@tab] = @objeto.send(@tab).page(params[:page]) #.where(estado: @estado)
+    @coleccion['publicaciones'] = @objeto.publicaciones.page(params[:page]) 
   end
 
   def perfil

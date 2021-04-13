@@ -14,17 +14,9 @@ class TextosController < ApplicationController
   # GET /textos/1
   # GET /textos/1.json
   def show
-    if params[:html_options].blank?
-      @tab = 'publicaciones'
-    else
-      @tab = params[:html_options][:tab].blank? ? 'publicaciones' : params[:html_options][:tab]
-    end
-    @options = {'tab' => @tab}
-#    @estado = params[:estado].blank? ? @tab.classify.constantize::ESTADOS[0] : params[:estado]
-    # tenemos que cubrir todos los casos
-    # 1. has_many : }
     @coleccion = {}
-    @coleccion[@tab] = @objeto.send(@tab).page(params[:page]) #.where(estado: @estado)
+    @coleccion['publicaciones'] = @objeto.publicaciones.page(params[:page])
+    @coleccion['temas'] = @objeto.temas.order(:temas)
   end
 
   # GET /textos/new

@@ -21,12 +21,8 @@ class CarpetasController < ApplicationController
   # GET /carpetas/1
   # GET /carpetas/1.json
   def show
-    @tab = params[:tab].blank? ? 'publicaciones' : params[:tab]
-#    @estado = params[:estado].blank? ? @tab.classify.constantize::ESTADOS[0] : params[:estado]
-    # tenemos que cubrir todos los casos
-    # 1. has_many : }
     @coleccion = {}
-    @coleccion[@tab] = @objeto.send(@tab).page(params[:page]) #.where(estado: @estado)
+    @coleccion['publicaciones'] = @objeto.publicaciones.page(params[:page]) #.where(estado: @estado)
   end
 
   # GET /carpetas/new
