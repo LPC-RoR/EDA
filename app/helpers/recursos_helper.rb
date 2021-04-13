@@ -182,12 +182,16 @@ module RecursosHelper
 	## ------------------------------------------------------- SHOW
 
 	# Método de apoyo usado en get_new_link (abajo)
-	def objeto_title(objeto)
+	def show_title(objeto)
 		case objeto.class.name
 		when 'Publicacion'
 			objeto.title
 		when 'Linea'
 			objeto.columnas.order(:orden).first.columna
+		when 'Imagen'
+			objeto.nota
+		else
+			objeto.send(objeto.class.name.downcase)
 		end
 	end
 

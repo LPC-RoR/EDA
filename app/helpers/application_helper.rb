@@ -272,12 +272,6 @@ module ApplicationHelper
 		(config_show(label).include?(objeto.class.name) ? (not defecto) : defecto)
 	end
 
-	# SHOW_TITLE con manejo de excepciones
-	# Se usa dentro de la aplicación también
-	def show_title(objeto)
-		Rails.configuration.show[:show_title].include?(objeto.class.name) ? objeto_title(objeto) : objeto.send(objeto.class.name.tableize.singularize)
-	end
-
 	# método de apoyo usado en el método has_many_tabs (arriba)
 	def hidden_childs(controller)
 		config_show(:hidden)[controller].present? ? config_show(:hidden)[controller] : []
