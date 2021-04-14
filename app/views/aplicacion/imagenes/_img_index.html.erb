@@ -5,7 +5,7 @@
 	  	<% coleccion.each do |objeto| %>
 	  		<tr>
 	  			<td>
-					<%= image_tag "#{objeto.imagen? ? objeto.imagen.thumb.url : 'avatar_defecto.png'}", class: "rounded mx-auto d-block img-thumbnail" %>
+					<%= image_tag objeto.imagen.thumb.url, class: "rounded mx-auto d-block img-thumbnail" if objeto.imagen? %>
 				</td>
 				<td>
 					<p>
