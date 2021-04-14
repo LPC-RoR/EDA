@@ -5,11 +5,11 @@
 	  	<% coleccion.each do |objeto| %>
 	  		<tr>
 	  			<td>
-					<%= image_tag "#{objeto.imagen? ? objeto.imagen.thumb.url : 'avatar_defecto.png'}", class: "rounded mx-auto d-block img-thumbnail" if objeto.imagen.present? %>
+					<%= image_tag "#{objeto.imagen? ? objeto.imagen.thumb.url : 'avatar_defecto.png'}", class: "rounded mx-auto d-block img-thumbnail" %>
 				</td>
 				<td>
 					<p>
-					<%= link_to objeto.nota, objeto.imagen.url, target: '_blank' %></br><small><%= objeto.imagen.url.split('/').last %></small>
+					<%= link_to objeto.nota, objeto.imagen.url, target: '_blank' if objeto.imagen? %></br><small><%= objeto.imagen.url.split('/').last if objeto.imagen? %></small>
 					</p>
 				</td>
 				<td><%= render partial: '0p/tabla/btns', locals: {a: 'index', objeto: objeto} %></td>
