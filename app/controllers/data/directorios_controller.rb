@@ -18,7 +18,7 @@ class Data::DirectoriosController < ApplicationController
     @coleccion = {}
     @coleccion['directorios'] = @objeto.children
     @coleccion['archivos'] = @objeto.archivos
-    @coleccion['imagenes'] = @objeto.imagenes 
+    @coleccion['imagenes'] = @objeto.imagenes.page(params[:page]) 
   end
 
   # GET /directorios/new

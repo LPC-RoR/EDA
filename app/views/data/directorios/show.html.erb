@@ -21,7 +21,7 @@
 	</div>
 	<div class='col-md-6'>
 		<%= render partial: '0p/general/titulo', locals: {c: 'imagenes', a: 'index', titulo: 'Imagenes', size: '5'} %>
-		<%#= render partial: '0p/tabla/solo_tabla', locals: {c: 'imagenes', a: 'index'} %>
+		<%= paginate @coleccion['imagenes'] %>
 		<%= render partial: '/aplicacion/imagenes/img_index', locals: {coleccion: @coleccion['imagenes']} %>
 		<%= render partial: '0p/tabla/ext_btn_nuevo', locals: {o: @objeto, c: 'imagenes'} %>
 	</div>
