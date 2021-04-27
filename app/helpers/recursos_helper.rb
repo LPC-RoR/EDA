@@ -1,12 +1,12 @@
 module RecursosHelper
 	## ------------------------------------------------------- MENU
 
-    ## Menu principal de la aplicación
-    # [0] : Item del menú
-    # [1] : Link del ítem
-    # [2] : Tipo de ítem {'admin', 'usuario', 'anonimo', 'excluir'}
-    # se usa directamente en 0p/navbar/_navbar.html.erb
 	def menu
+	    ## Menu principal de la aplicación
+	    # [0] : Item del menú
+	    # [1] : Link del ítem
+	    # [2] : Tipo de ítem {'admin', 'usuario', 'anonimo', 'excluir'}
+	    # se usa directamente en 0p/navbar/_navbar.html.erb
 	    [
 	        ["Publicaciones",   "/publicaciones",             'usuario'],
 	        ["Ingresos",        "/ingresos",                  'usuario'],
@@ -191,7 +191,7 @@ module RecursosHelper
 		when 'Imagen'
 			objeto.nota
 		else
-			objeto.send(objeto.class.name.downcase)
+			objeto.send(objeto.class.name.tableize.singularize)
 		end
 	end
 
