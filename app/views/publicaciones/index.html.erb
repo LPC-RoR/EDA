@@ -4,6 +4,10 @@
 		<%= render partial: '0p/list/selector', locals: {titulo: 'Carpetas', list: @list_selector, sel: @sel, options: @options} %>
 	</div>
 	<div class='col-md-9'>
-		<%= render partial: '0p/tabla/tabla', locals: {c: 'publicaciones', a: 'index'} %>
+		<%= render partial: '0p/tabs/tabs', locals: {tabs: c_tabs('publicaciones'), tag: 'tab', active: @tab} %>
+		<%= paginate @coleccion['publicaciones'], outer_window: 3 %>
+		<small><small><%= page_entries_info(@coleccion['publicaciones']) %></small></small>
+		<%= render partial: '0p/tabla/solo_tabla', locals: {c: 'publicaciones', a: 'index'} %>
+		<%= paginate @coleccion['publicaciones'], outer_window: 3 %>
 	</div>
 </div>

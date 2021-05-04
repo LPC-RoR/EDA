@@ -14,6 +14,8 @@ class PublicacionesController < ApplicationController
   after_action :procesa_doi, only: [:update, :create]
   after_action :asigna_proyecto_activo, only: [:create]
 
+  helper_method :sort_column, :sort_direction
+
   # GET /publicaciones
   # GET /publicaciones.json
   def index
@@ -29,7 +31,8 @@ class PublicacionesController < ApplicationController
     @options = {'sel' => @sel, 'tab' => @tab}
 
     @coleccion = {}
-    @coleccion[controller_name] = carpeta.publicaciones.page(params[:page])
+    publicaciones = carpeta.publicaciones.order(year: :desc)
+    @coleccion[controller_name] = publicaciones.page(params[:page])
   end
 
   # GET /publicaciones/1
@@ -200,6 +203,14 @@ class PublicacionesController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    def sort_column
+      Publicacion.column_names.include?(params[:sort]) ? params[:sort] : "Author"
+    end
+    
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    end
+
     def pre_proceso
       if params[:publicacion][:doc_type].blank?
         redirect_to new_publicacion_path

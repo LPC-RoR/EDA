@@ -143,7 +143,8 @@ module Eda
         alias: {
             'ingresos' => 'publicaciones'
         },
-        sortable: {}
+        sortable: {
+        }
     }
 
     ## ------------------------------------------------- FORM

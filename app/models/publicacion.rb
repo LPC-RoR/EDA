@@ -15,6 +15,7 @@ class Publicacion < ApplicationRecord
 
 	# Campos qeu se despliegan en la tabla
 	TABLA_FIELDS = [
+		['author',    'normal'], 
 		['title',       'show'], 
 		['d_type',    'normal'], 
 		['year',      'normal']
