@@ -1,0 +1,20 @@
+<%= render partial: '0p/general/o_titulo', locals: {o: @objeto, a: action_name, size: '5'} %>
+<div class='row'>
+	<div class='col-md-6'>
+		<%= render partial: '0p/general/titulo', locals: {c: 'carpetas', a: nil, titulo: 'Carpetas', size: '5'} %>
+		<%= render partial: '0p/tabla/solo_tabla', locals: {c: 'carpetas', a: 'index'} if @coleccion['carpetas'].any? %>
+		<%#= render partial: '0p/tabla/ext_btn_nuevo', locals: {c: 'reportes', o: @proyecto_activo} %>
+
+		<%= form_for :carpeta_base, url: "/carpetas/nueva_carpeta_reporte?reporte_id=#{@objeto.id}" do |form| %>
+			<div class='form-inline'>
+				<%= form.select :carpeta_id, @objeto.carpetas_seleccion.collect { |cs| [cs.carpeta, cs.id] }, include_blank: false, prompt: "Seleccione Carpeta" %>
+				<%#= form.text_field(:texto, size: 80, class: 'form-control' ) %>
+				<%= form.submit '+ Carpeta'  %>
+			</div>
+		<% end  %>
+
+	</div>
+	<div class='col-md-6'>
+		<%= link_to 'Reporte.xlsx', xlsx_reporte_path(@objeto, format: 'xlsx') %>
+	</div>
+</div>

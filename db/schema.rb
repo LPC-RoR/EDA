@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_12_051145) do
+ActiveRecord::Schema.define(version: 2021_06_09_195054) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,15 @@ ActiveRecord::Schema.define(version: 2021_04_12_051145) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_administradores_on_email"
     t.index ["usuario_id"], name: "index_administradores_on_usuario_id"
+  end
+
+  create_table "alcances", force: :cascade do |t|
+    t.integer "reporte_id"
+    t.integer "carpeta_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["carpeta_id"], name: "index_alcances_on_carpeta_id"
+    t.index ["reporte_id"], name: "index_alcances_on_reporte_id"
   end
 
   create_table "archivos", force: :cascade do |t|
@@ -489,6 +498,14 @@ ActiveRecord::Schema.define(version: 2021_04_12_051145) do
     t.datetime "updated_at", null: false
     t.index ["child_id"], name: "index_relaciones_on_child_id"
     t.index ["parent_id"], name: "index_relaciones_on_parent_id"
+  end
+
+  create_table "reportes", force: :cascade do |t|
+    t.string "reporte"
+    t.integer "proyecto_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["proyecto_id"], name: "index_reportes_on_proyecto_id"
   end
 
   create_table "revistas", force: :cascade do |t|

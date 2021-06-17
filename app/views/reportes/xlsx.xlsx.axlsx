@@ -1,0 +1,9 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Reporte") do |sheet|
+  sheet.add_row ['Author', 'Title', 'Folders']
+  unless @coleccion['publicaciones'].blank?
+    @coleccion['publicaciones'].each do |publicacion|
+      sheet.add_row [publicacion.xlsx_author, publicacion.title.gsub('\n',''), publicacion.folders.gsub('\n','')]
+    end
+  end
+end

@@ -2,7 +2,7 @@ class CarpetasController < ApplicationController
   before_action :inicia_sesion
   before_action :authenticate_usuario!
   before_action :carga_temas_ayuda
-  before_action :set_carpeta, only: [:show, :edit, :update, :destroy, :desasigna_carpeta, :elimina_carpeta, :btn_asigna]
+  before_action :set_carpeta, only: [:show, :edit, :update, :destroy, :desasigna_carpeta, :elimina_carpeta, :btn_asigna, :sacar_carpeta]
 
   # GET /carpetas
   # GET /carpetas.json
@@ -42,6 +42,17 @@ class CarpetasController < ApplicationController
       end
     end
     redirect_to "/publicaciones/#{publicacion.id}?tab=Proceso"
+  end
+
+  def nueva_carpeta_reporte
+    unless params[:carpeta_base][:carpeta_id].blank?
+      reporte = Reporte.find(params[:reporte_id])
+      carpeta = Carpeta.find(params[:carpeta_base][:carpeta_id])
+      
+      reporte.carpetas << carpeta
+    end
+
+    redirect_to reporte
   end
 
   # GET /carpetas/1/edit
@@ -120,6 +131,15 @@ class CarpetasController < ApplicationController
       @objeto.delete
     end
     redirect_to publicacion
+  end
+
+  # Saca carpeta del reporte
+  def sacar_carpeta
+    reporte = Reporte.find(params[:objeto_id])
+    unless reporte.blank?
+      @objeto.reportes.delete(reporte)
+    end
+    redirect_to reporte
   end
 
   private

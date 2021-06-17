@@ -1,0 +1,27 @@
+<%= form_with(model: alcance, local: true) do |form| %>
+  <% if alcance.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(alcance.errors.count, "error") %> prohibited this alcance from being saved:</h2>
+
+      <ul>
+      <% alcance.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :reporte_id %>
+    <%= form.number_field :reporte_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :carpeta_id %>
+    <%= form.number_field :carpeta_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Alcances</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Reporte</th>
+      <th>Carpeta</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @alcances.each do |alcance| %>
+      <tr>
+        <td><%= alcance.reporte_id %></td>
+        <td><%= alcance.carpeta_id %></td>
+        <td><%= link_to 'Show', alcance %></td>
+        <td><%= link_to 'Edit', edit_alcance_path(alcance) %></td>
+        <td><%= link_to 'Destroy', alcance, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Alcance', new_alcance_path %>

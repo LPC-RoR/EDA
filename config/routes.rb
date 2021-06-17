@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :alcances
   # SCOPE APLICACION
   scope module: 'aplicacion' do
     resources :archivos
@@ -93,6 +94,8 @@ Rails.application.routes.draw do
     match :desasigna_carpeta, via: :get, on: :member
     match :elimina_carpeta, via: :get, on: :member
     match :btn_asigna, via: :get, on: :member
+    match :nueva_carpeta_reporte, via: :post, on: :collection
+    match :sacar_carpeta, via: :get, on: :member
   end
   resources :citas
   resources :clasificaciones do
@@ -136,6 +139,9 @@ Rails.application.routes.draw do
   end
   resources :registros do
     resources :publicaciones
+  end
+  resources :reportes do
+    match :xlsx, via: :get, on: :member
   end
   resources :repositorios do
     end

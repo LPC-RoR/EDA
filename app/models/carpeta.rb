@@ -20,4 +20,7 @@ class Carpeta < ApplicationRecord
 	has_many :herencias
 	has_many :temas, through: :herencias
 
+	has_many :alcances
+	has_many :reportes, through: :alcances
+
 end

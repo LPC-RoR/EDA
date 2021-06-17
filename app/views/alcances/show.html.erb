@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Reporte:</strong>
+  <%= @alcance.reporte_id %>
+</p>
+
+<p>
+  <strong>Carpeta:</strong>
+  <%= @alcance.carpeta_id %>
+</p>
+
+<%= link_to 'Edit', edit_alcance_path(@alcance) %> |
+<%= link_to 'Back', alcances_path %>

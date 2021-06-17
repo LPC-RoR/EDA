@@ -79,6 +79,8 @@ module RecursosHelper
 				controller_name == 'publicaciones' and (not Carpeta::NOT_MODIFY.include?(objeto.carpeta)) and action_name == 'show' and @coleccion['carpetas'].count > 1
 			when 'Eliminar'
 				controller_name == 'publicaciones' and (not Carpeta::NOT_MODIFY.include?(objeto.carpeta)) and action_name == 'show' and objeto.temas.empty? and @coleccion['carpetas'].count > 1
+			when 'Sacar'
+				controller_name == 'reportes' and action_name == 'show'
 			end
 		when 'Carga'
 			objeto.estado == 'ingreso'
@@ -106,6 +108,8 @@ module RecursosHelper
 			when '-'
 				objeto.publicaciones.ids.include?(@objeto.id)
 			end
+		when 'Reporte'
+			false
 		else
 			true
 		end
@@ -116,7 +120,8 @@ module RecursosHelper
 		when 'Carpeta'
 			[
 				['Desasignar', '/desasigna_carpeta', true],
-				['Eliminar', '/elimina_carpeta', true]
+				['Eliminar', '/elimina_carpeta', true],
+				['Sacar', '/sacar_carpeta', true]
 			]
 		when 'Carga'
 			[['Proceso', '/procesa_carga', false]]
@@ -145,6 +150,8 @@ module RecursosHelper
         		['+', '/asignar', true],
         		['-', '/desasignar', true]
         	]
+        when 'Reporte'
+	    	[['xlsx', '/xlsx', false]]
         else
         	[]
 		end		

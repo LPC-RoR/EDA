@@ -2,6 +2,11 @@
 <div class='row'>
 	<div class='col-md-3'>
 		<%= render partial: '0p/list/selector', locals: {titulo: 'Carpetas', list: @list_selector, sel: @sel, options: @options} %>
+
+		</br>
+		<%= render partial: '0p/general/titulo', locals: {c: 'reportes', a: nil, titulo: 'Reportes', size: '5'} %>
+		<%= render partial: '0p/tabla/solo_tabla', locals: {c: 'reportes', a: 'index'} if @coleccion['reportes'].any? %>
+		<%= render partial: '0p/tabla/ext_btn_nuevo', locals: {c: 'reportes', o: @proyecto_activo} %>
 	</div>
 	<div class='col-md-9'>
 		<%= render partial: '0p/tabs/tabs', locals: {tabs: c_tabs('publicaciones'), tag: 'tab', active: @tab} %>

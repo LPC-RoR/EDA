@@ -171,4 +171,12 @@ class Publicacion < ApplicationRecord
 		(Carpeta::NOT_MODIFY & nombres_carpetas).empty?
 	end
 
+	def folders
+		self.carpetas.order(:id).map {|car| car.carpeta}.join(' | ')
+	end
+
+	def xlsx_author
+		self.author.gsub('\n','')
+	end
+
 end
