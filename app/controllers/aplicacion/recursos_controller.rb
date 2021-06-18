@@ -32,7 +32,7 @@ class Aplicacion::RecursosController < ApplicationController
   def procesos
     proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
 
-    huerfanas = proyecto_activo.publicaciones.map {|pub| pub.id if pub.carpetas.empty?}.compact
+    @huerfanas = proyecto_activo.publicaciones.map {|pub| pub.id if pub.carpetas.empty?}.compact
 
   end
 
