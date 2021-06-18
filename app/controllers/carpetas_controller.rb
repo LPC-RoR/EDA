@@ -97,7 +97,7 @@ class CarpetasController < ApplicationController
 
     ids_carpetas_base = proyecto_activo.carpetas_seleccion.ids
 
-    if ids_carpetas_base.include?(@objeto.id) or (publicacion.carpetas.count == 1 and publicacion.carpetas.first.carpeta == 'Aceptadas')
+    if ids_carpetas_base.include?(@objeto.id)
       publicacion.carpetas.delete_all
     end
     publicacion.carpetas << @objeto
