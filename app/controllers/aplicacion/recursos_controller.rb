@@ -32,7 +32,18 @@ class Aplicacion::RecursosController < ApplicationController
   def procesos
     proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
 
+    @carpeta = proyecto_activo.carpetas.find_by(carpeta: 'plant-pollinator interaction')
+    if @carpeta.blank?
+      @carpeta = proyecto_activo.carpetas.create(carpeta: 'plant-pollinator interaction')
+    end
+
     @huerfanas = proyecto_activo.publicaciones.map {|pub| pub.id if pub.carpetas.empty?}.compact
+
+    @pubs = Publicacion.where(id: @huerfanas)
+
+    @pubs.each do |huerfana|
+      huerfana.carpetas << @carpeta
+    end
 
   end
 
