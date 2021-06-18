@@ -29,6 +29,13 @@ class Aplicacion::RecursosController < ApplicationController
     
   end
 
+  def procesos
+    proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
+
+    huerfanas = proyecto_activo.publicaciones.map {|pub| pub.id if pub.carpetas.empty?}.compact
+
+  end
+
   def borrar_archivos
 #  	Autor.delete_all
 #  	Carga.delete_all
@@ -47,17 +54,17 @@ class Aplicacion::RecursosController < ApplicationController
 #  	Texto.delete_all
 #  	Tema.delete_all
 
-    buscado = Publicacion.find(1686)
-    unless buscado.blank?
-      buscado.evaluaciones.delete_all
-      buscado.textos.delete_all
-      buscado.investigadores.delete_all
-      buscado.cargas.delete_all
-      buscado.carpetas.delete_all
-      buscado.proyectos.delete_all
-      buscado.etiquetas.delete_all
-      buscado.delete
-    end
+#    buscado = Publicacion.find(1686)
+#    unless buscado.blank?
+#      buscado.evaluaciones.delete_all
+#      buscado.textos.delete_all
+#      buscado.investigadores.delete_all
+#      buscado.cargas.delete_all
+#      buscado.carpetas.delete_all
+#      buscado.proyectos.delete_all
+#      buscado.etiquetas.delete_all
+#      buscado.delete
+#    end
 
   	redirect_to root_path
   end
