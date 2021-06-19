@@ -1,9 +1,9 @@
 wb = xlsx_package.workbook
 wb.add_worksheet(name: "Reporte") do |sheet|
-  sheet.add_row ['Author', 'Title', 'Folders']
+  sheet.add_row ['Author', 'Title','DOI' , 'Folders']
   unless @coleccion['publicaciones'].blank?
     @coleccion['publicaciones'].each do |publicacion|
-      sheet.add_row [publicacion.xlsx_author, publicacion.title.gsub('\n',''), publicacion.folders.gsub('\n','')]
+      sheet.add_row [publicacion.xlsx_author, publicacion.title.gsub('\n',''),publicacion.doi , publicacion.folders.gsub('\n','')]
     end
   end
 end
