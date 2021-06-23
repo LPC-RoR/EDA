@@ -11,30 +11,18 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
 
     # palabras terminadas en 'or' {'investigador', 'autor'} y en 'en' {origen}
     inflect.plural /(.[eo][rn])$/i, '\1es'
-    inflect.singular /(.[eo][rn])es/i, '\1'
+    inflect.singular /(.[eo][rn])es$/i, '\1'
 
     # palabras terminadas en 'a', no agregue las otras vocales porque no hay problema
-    inflect.plural /(a)$/i, '\1s'
-
-    # palabras terminadas en 'e', no agregue las otras vocales porque no hay problema
-    inflect.singular /(e)s$/i, '\1'
-
-    # palabras terminadas en 'r'
-    inflect.plural /(r)$/i, '\1es'
-    inflect.singular /(r)es/i, '\1'
+    inflect.plural /([ti]a)$/i, '\1s'
 
     # palabras terminadas en 'cion' y 'sion'
     inflect.plural /(ion)$/i, '\1es'
-    inflect.singular /(ion)es/i, '\1'
+    inflect.singular /(ion)es$/i, '\1'
 
-    # palabras terminadas en 'cion' y 'sion'
+    # palabras terminadas en 'l'
     inflect.plural /(l)$/i, '\1es'
-    inflect.singular /(l)es/i, '\1'
-
-    inflect.plural 'imagen', 'imagenes'
-    inflect.plural 'Imagen', 'Imagenes'
-    inflect.singular 'imagenes', 'imagen'
-    inflect.singular 'Imagenes', 'Imagen'
+    inflect.singular /(l)es$/i, '\1'
 
 end
 

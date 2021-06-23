@@ -17,6 +17,7 @@ class Data::EspecificacionesController < ApplicationController
   def new
     padre = Etapa.find(params[:etapa_id]) unless params[:etapa_id].blank?
     padre = Tabla.find(params[:tabla_id]) unless params[:tabla_id].blank?
+    padre = Proyecto.find(params[:proyecto_id]) unless params[:proyecto_id].blank?
 
     @objeto = padre.especificaciones.new
   end
@@ -83,6 +84,6 @@ class Data::EspecificacionesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def especificacion_params
-      params.require(:especificacion).permit(:orden, :especificacion, :detalle, :tabla_id, :etapa_id)
+      params.require(:especificacion).permit(:orden, :especificacion, :detalle, :tabla_id, :etapa_id, :proyecto_id)
     end
 end

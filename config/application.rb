@@ -123,7 +123,7 @@ module Eda
         tabs: {
             'publicaciones' => {
                 'ingresos' => ['ingreso', 'duplicado', 'papelera', 'publicada'],
-                'publicaciones' => ['Selección', 'Proceso']
+                'publicaciones' => ['Selección', 'Proceso'] 
             },
             'proyectos' => {
                 'proyectos' => ['Administrados', 'Participaciones']

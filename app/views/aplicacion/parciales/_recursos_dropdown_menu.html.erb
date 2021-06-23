@@ -1,0 +1,16 @@
+<li class="nav-item dropdown ml-auto">
+  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Recursos
+  </a>
+  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+    <%= link_to 'Temas', temas_path, class: "dropdown-item" %>
+    <%= link_to 'Documentos', documentos_path, class: "dropdown-item" %>
+    <%= link_to 'Bibliografía', bibliografia_recursos_path, class: "dropdown-item" %>
+
+    <div class="dropdown-divider"></div>
+
+    <%= link_to 'Repositorio', directorios_path, class: "dropdown-item" %>
+    <%= link_to 'Datos', datos_path, class: "dropdown-item" %>
+
+  </div>
+</li>

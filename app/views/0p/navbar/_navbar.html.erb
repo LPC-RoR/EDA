@@ -21,6 +21,7 @@
               <%= render partial: '0p/navbar/btn', locals: {nombre: item[0].capitalize, link: item[1], active: item_active(item[1]), delete: false} if display_item_menu?(item[0], item[2]) %>
             <% end %>
         <% end %>
+        <%= render partial: 'aplicacion/parciales/recursos_dropdown_menu' if usuario_signed_in? %>
       </ul>
 
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">

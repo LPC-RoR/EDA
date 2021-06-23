@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_09_195054) do
+ActiveRecord::Schema.define(version: 2021_06_22_195810) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,7 +42,9 @@ ActiveRecord::Schema.define(version: 2021_06_09_195054) do
     t.datetime "updated_at", null: false
     t.integer "linea_id"
     t.integer "directorio_id"
+    t.integer "documento_id"
     t.index ["directorio_id"], name: "index_archivos_on_directorio_id"
+    t.index ["documento_id"], name: "index_archivos_on_documento_id"
     t.index ["linea_id"], name: "index_archivos_on_linea_id"
     t.index ["orden"], name: "index_archivos_on_orden"
   end
@@ -183,6 +185,14 @@ ActiveRecord::Schema.define(version: 2021_06_09_195054) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["proyecto_id"], name: "index_directorios_on_proyecto_id"
+  end
+
+  create_table "documentos", force: :cascade do |t|
+    t.string "documento"
+    t.integer "proyecto_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["proyecto_id"], name: "index_documentos_on_proyecto_id"
   end
 
   create_table "encabezados", force: :cascade do |t|

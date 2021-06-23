@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   # SCOPE APLICACION
   scope module: 'aplicacion' do
     resources :archivos
+    resources :documentos do
+      resources :archivos
+    end
     resources :imagenes
     resources :administradores
 #    resources :mejoras
@@ -130,6 +133,12 @@ Rails.application.routes.draw do
     resources :versiones
     resources :etapas
     resources :carpetas
+    scope module: :aplicacion do
+        resources :documentos
+    end    
+    scope module: :data do
+        resources :especificaciones
+    end    
   end
   resources :publicaciones do
     match :cambia_evaluacion, via: :get, on: :member

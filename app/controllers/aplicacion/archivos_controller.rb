@@ -79,11 +79,13 @@ class Aplicacion::ArchivosController < ApplicationController
         @redireccion = @objeto.directorio
       elsif @objeto.linea.present?
         @redireccion = @objeto.linea
+      elsif @objeto.documento.present?
+        @redireccion = @objeto.documento
       end
     end
 
     # Only allow a list of trusted parameters through.
     def archivo_params
-      params.require(:archivo).permit(:orden, :archivo, :nota, :linea_id, :directorio_id)
+      params.require(:archivo).permit(:orden, :archivo, :nota, :linea_id, :directorio_id, :documento_id)
     end
 end

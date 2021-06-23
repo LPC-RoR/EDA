@@ -21,7 +21,9 @@ class PublicacionesController < ApplicationController
   def index
     @proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
 
+    # @tabs = ['Seleccion', 'Proceso', 'Especificaciones']
     @tab = params[:html_options].blank? ? 'Selección' : (params[:html_options]['tab'].blank? ? 'Selección' : params[:html_options]['tab'])
+    # No se agrega criterio para @tab == 'Especificaciones' porque se invisibilizan las carpetas en ese tab
     carpetas = (@tab == 'Selección' ? @proyecto_activo.carpetas_seleccion : @proyecto_activo.carpetas_proceso)
     @list_selector = carpetas.map {|car| [car.carpeta, car.publicaciones.count]}
     carpeta = params[:html_options].blank? ? carpetas.first : (params[:html_options]['sel'].blank? ? carpetas.first : carpetas.find_by(carpeta: params[:html_options]['sel']))
@@ -35,6 +37,7 @@ class PublicacionesController < ApplicationController
     @coleccion[controller_name] = publicaciones.page(params[:page])
 
     @coleccion['reportes'] = @proyecto_activo.reportes
+
   end
 
   # GET /publicaciones/1
