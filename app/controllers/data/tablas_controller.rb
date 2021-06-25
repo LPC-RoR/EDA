@@ -20,7 +20,7 @@ class Data::TablasController < ApplicationController
 
     @coleccion = {}
     @coleccion['lineas'] = @objeto.lineas.order(:orden)
-    @coleccion['especificaciones'] = @objeto.especificaciones.order(:orden)
+    @coleccion['documentos'] = @objeto.documentos.order(:documento)
     @coleccion['observaciones'] = @objeto.observaciones.order(created_at: :desc)
   end
 
@@ -74,12 +74,12 @@ class Data::TablasController < ApplicationController
         linea_carga.each_with_index do |nombre, index_nombre|
           @objeto.encabezados.create(orden: index_nombre+1, encabezado: nombre)
         end
-      when 2
-        linea_carga.each_with_index do |tipo, index_nombre|
-          encabezado = @objeto.encabezados.find_by(orden: index_nombre+1)
-          encabezado.tipo = tipo
-          encabezado.save
-        end
+#      when 2
+#        linea_carga.each_with_index do |tipo, index_nombre|
+#          encabezado = @objeto.encabezados.find_by(orden: index_nombre+1)
+#          encabezado.tipo = tipo
+#          encabezado.save
+#        end
       else
         linea = @objeto.lineas.create(orden: linea_proceso-2)
         linea_carga.each_with_index do |columna, index_columna|

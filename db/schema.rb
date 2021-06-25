@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_22_195810) do
+ActiveRecord::Schema.define(version: 2021_06_24_141354) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -192,7 +192,11 @@ ActiveRecord::Schema.define(version: 2021_06_22_195810) do
     t.integer "proyecto_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "etapa_id"
+    t.integer "tabla_id"
+    t.index ["etapa_id"], name: "index_documentos_on_etapa_id"
     t.index ["proyecto_id"], name: "index_documentos_on_proyecto_id"
+    t.index ["tabla_id"], name: "index_documentos_on_tabla_id"
   end
 
   create_table "encabezados", force: :cascade do |t|

@@ -22,8 +22,14 @@ class Aplicacion::DocumentosController < ApplicationController
 
   # GET /documentos/new
   def new
-    proyecto_activo = Proyecto.find(session[:proyecto_activo]['id'])
-    @objeto = proyecto_activo.documentos.new
+    if params[:etapa_id].present?
+      padre = Etapa.find(params[:etapa_id])
+    elsif params[:tabla_id].present?
+      padre = Tabla.find(params[:tabla_id])
+    else
+      padre = Proyecto.find(session[:proyecto_activo]['id'])
+    end
+    @objeto = padre.documentos.new
   end
 
   # GET /documentos/1/edit
@@ -80,11 +86,17 @@ class Aplicacion::DocumentosController < ApplicationController
     end
 
     def set_redireccion
-      @redireccion = documentos_path
+      if @objeto.proyecto.present?
+        @redireccion = documentos_path
+      elsif @objeto.tabla.present?
+        @redireccion = @objeto.tabla
+      elsif @objeto.etapa.present?
+        @redireccion = datos_path
+      end
     end
 
     # Only allow a list of trusted parameters through.
     def documento_params
-      params.require(:documento).permit(:documento, :proyecto_id)
+      params.require(:documento).permit(:documento, :proyecto_id, :etapa_id, :tabla_id)
     end
 end

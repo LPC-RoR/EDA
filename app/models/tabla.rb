@@ -23,7 +23,7 @@ class Tabla < ApplicationRecord
 	has_many :encabezados
 
 	has_many :lineas
-	has_many :especificaciones
+	has_many :documentos
 	has_many :observaciones
 
 	mount_uploader :archivo, TablaUploader

@@ -1,4 +1,5 @@
 class Data::EncabezadosController < ApplicationController
+  before_action :carga_temas_ayuda
   before_action :set_encabezado, only: [:show, :edit, :update, :destroy]
 
   # GET /encabezados
@@ -28,7 +29,8 @@ class Data::EncabezadosController < ApplicationController
 
     respond_to do |format|
       if @objeto.save
-        format.html { redirect_to @objeto, notice: 'Encabezado was successfully created.' }
+        set_redireccion
+        format.html { redirect_to @redireccion, notice: 'Encabezado was successfully created.' }
         format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
@@ -42,7 +44,8 @@ class Data::EncabezadosController < ApplicationController
   def update
     respond_to do |format|
       if @objeto.update(encabezado_params)
-        format.html { redirect_to @objeto, notice: 'Encabezado was successfully updated.' }
+        set_redireccion
+        format.html { redirect_to @redireccion, notice: 'Encabezado was successfully updated.' }
         format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
@@ -54,9 +57,10 @@ class Data::EncabezadosController < ApplicationController
   # DELETE /encabezados/1
   # DELETE /encabezados/1.json
   def destroy
+    set_redireccion
     @objeto.destroy
     respond_to do |format|
-      format.html { redirect_to encabezados_url, notice: 'Encabezado was successfully destroyed.' }
+      format.html { redirect_to @redireccion, notice: 'Encabezado was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -67,8 +71,12 @@ class Data::EncabezadosController < ApplicationController
       @objeto = Encabezado.find(params[:id])
     end
 
+    def set_redireccion
+      @redireccion = @objeto.tabla
+    end
+
     # Only allow a list of trusted parameters through.
     def encabezado_params
-      params.require(:encabezado).permit(:orden, :encabezado, :tipo)
+      params.require(:encabezado).permit(:orden, :encabezado, :tipo, :tabla_id)
     end
 end

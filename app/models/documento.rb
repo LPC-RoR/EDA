@@ -7,10 +7,14 @@ class Documento < ApplicationRecord
 
  	FORM_FIELDS = [
 		['documento',        'entry'],
-		['proyecto_id',     'hidden']
+		['proyecto_id',     'hidden'],
+		['etapa_id',        'hidden'],
+		['tabla_id',        'hidden']
 	]
 
-	belongs_to :proyecto
+	belongs_to :proyecto, optional: true
+	belongs_to :etapa, optional: true
+	belongs_to :tabla, optional: true
 
 	has_many :archivos
 

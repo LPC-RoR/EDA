@@ -1,0 +1,5 @@
+<small class='text-info'><%= form.label 'Encabezado' %></small></br>
+<%= form.text_field(:encabezado, size: 74, class: 'form-control-sm', placeholder: 'Encabezado') %></br>
+<small class='text-info'><%= form.label 'Tipo' %></small></br>
+<%= form.select :tipo, Encabezado::TIPOS, prompt: "Seleccione Tipo de Encabezado" %></br>
+

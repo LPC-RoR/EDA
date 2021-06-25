@@ -46,11 +46,9 @@ Rails.application.routes.draw do
     resources :datos
     resources :etapas do
       resources :tablas
-      resources :especificaciones
     end
     resources :tablas do 
-      resources :especificaciones
-      resources :observaciones
+          resources :observaciones
       match :cargar_tabla, via: :get, on: :member
     end
     resources :especificaciones do
@@ -135,9 +133,6 @@ Rails.application.routes.draw do
     resources :carpetas
     scope module: :aplicacion do
         resources :documentos
-    end    
-    scope module: :data do
-        resources :especificaciones
     end    
   end
   resources :publicaciones do

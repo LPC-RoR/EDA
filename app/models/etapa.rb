@@ -14,5 +14,5 @@ class Etapa < ApplicationRecord
 	belongs_to :proyecto
 
 	has_many :tablas, foreign_key: 'padre_id', class_name: 'Tabla'
-	has_many :especificaciones
+	has_many :documentos
 end
