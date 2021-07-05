@@ -50,6 +50,7 @@ Rails.application.routes.draw do
     resources :tablas do 
           resources :observaciones
       match :cargar_tabla, via: :get, on: :member
+      match :descargar_tabla, via: :get, on: :member
     end
     resources :especificaciones do
       match :nuevo, via: :post, on: :collection
@@ -64,6 +65,13 @@ Rails.application.routes.draw do
     resources :subs
     resources :directorios do
       match :nuevo, via: :post, on: :collection
+    end
+    resources :opciones
+    resources :caracteristicas
+    resources :caracterizaciones do
+      resources :caracteristicas
+      match :crear_tabla, via: :get, on: :member
+      match :eliminar_tabla, via: :get, on: :member
     end
   end
 

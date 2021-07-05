@@ -179,4 +179,9 @@ class Publicacion < ApplicationRecord
 		self.author.gsub('\n','')
 	end
 
+	# método para obtener las líneas para desplegar caracteristicas de distintas caracterizaciones
+	def linea
+		Linea.where(referencia_class: 'Publicacion').find_by(referencia_id: self.id)
+	end
+
 end

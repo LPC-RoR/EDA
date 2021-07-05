@@ -39,6 +39,9 @@
 			</table>
 		<% end %>
 
+		<%= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: 'Características', size: '5'} %>
+		<%= render partial: 'publicaciones/s_partials/caracteristicas', locals: {o: @objeto} %>
+
 	</div>
 
 	<div class='col-md-8'>

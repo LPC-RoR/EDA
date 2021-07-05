@@ -96,7 +96,12 @@ module RecursosHelper
 		when 'Perfil'
 			controller_name == 'proyectos'
 		when 'Tabla'
-			objeto.archivo.present? and objeto.encabezados.empty?
+			case btn
+			when 'Cargar'
+				objeto.archivo.present? and objeto.encabezados.empty? and objeto.lineas.empty?
+			when 'Descargar'
+				objeto.encabezados.any? or objeto.lineas.any?
+			end
 		when 'Etiqueta'
 			case btn
 			when '+'
@@ -106,6 +111,13 @@ module RecursosHelper
 			end
 		when 'Reporte'
 			false
+		when 'Caracterizacion'
+			case btn
+			when 'Crear Tabla'
+				not objeto.tabla?
+			when 'Eliminar Tabla'
+				objeto.tabla?
+			end
 		else
 			true
 		end
@@ -140,7 +152,10 @@ module RecursosHelper
         when 'Perfil'
         	[['Desvincular', '/desvincular', true]]
         when 'Tabla'
-        	[['Cargar', '/cargar_tabla', true]]
+        	[
+        		['Cargar', '/cargar_tabla', true],
+        		['Descargar', '/descargar_tabla', true]
+        	]
         when 'Etiqueta'
         	[
         		['+', '/asignar', true],
@@ -148,6 +163,11 @@ module RecursosHelper
         	]
         when 'Reporte'
 	    	[['xlsx', '/xlsx', false]]
+        when 'Caracterizacion'
+	    	[
+	    		['Crear Tabla', '/crear_tabla', false],
+	    		['Eliminar Tabla', '/eliminar_tabla', false]
+	    	]
         else
         	[]
 		end		

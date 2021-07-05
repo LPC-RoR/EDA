@@ -1,4 +1,5 @@
 class Data::ColumnasController < ApplicationController
+  before_action :carga_temas_ayuda
   before_action :set_columna, only: [:show, :edit, :update, :destroy]
 
   # GET /columnas
@@ -14,11 +15,18 @@ class Data::ColumnasController < ApplicationController
 
   # GET /columnas/new
   def new
-    @objeto = Columna.new
+    publicacion = Publicacion.find(params[:o])
+    @caracteristica = Caracteristica.find(params[:c])
+     if publicacion.linea.blank?
+      Linea.create(tabla_id: @caracteristica.caracterizacion.tabla.id, referencia_id: publicacion.id, referencia_class: 'Publicacion')
+     end
+     # Aquí ya la línea está creada
+    @objeto = publicacion.linea.columnas.new(orden: @caracteristica.orden)
   end
 
   # GET /columnas/1/edit
   def edit
+    @caracteristica = Caracteristica.find_by(orden: @objeto.orden)
   end
 
   # POST /columnas
@@ -28,7 +36,8 @@ class Data::ColumnasController < ApplicationController
 
     respond_to do |format|
       if @objeto.save
-        format.html { redirect_to @objeto, notice: 'Columna was successfully created.' }
+        set_redireccion
+        format.html { redirect_to @redireccion, notice: 'Columna was successfully created.' }
         format.json { render :show, status: :created, location: @objeto }
       else
         format.html { render :new }
@@ -42,7 +51,8 @@ class Data::ColumnasController < ApplicationController
   def update
     respond_to do |format|
       if @objeto.update(columna_params)
-        format.html { redirect_to @objeto, notice: 'Columna was successfully updated.' }
+        set_redireccion
+        format.html { redirect_to @redireccion, notice: 'Columna was successfully updated.' }
         format.json { render :show, status: :ok, location: @objeto }
       else
         format.html { render :edit }
@@ -54,9 +64,10 @@ class Data::ColumnasController < ApplicationController
   # DELETE /columnas/1
   # DELETE /columnas/1.json
   def destroy
+    set_redireccion
     @objeto.destroy
     respond_to do |format|
-      format.html { redirect_to columnas_url, notice: 'Columna was successfully destroyed.' }
+      format.html { redirect_to @redireccion, notice: 'Columna was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -67,8 +78,12 @@ class Data::ColumnasController < ApplicationController
       @objeto = Columna.find(params[:id])
     end
 
+    def set_redireccion
+      @redireccion = (@objeto.linea.referencia.present? ? @objeto.linea.referencia : @objeto.linea.tabla)
+    end
+
     # Only allow a list of trusted parameters through.
     def columna_params
-      params.require(:columna).permit(:orden, :linea_id)
+      params.require(:columna).permit(:orden, :linea_id, :columna)
     end
 end

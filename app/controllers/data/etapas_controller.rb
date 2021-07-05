@@ -21,7 +21,7 @@ class Data::EtapasController < ApplicationController
 
     @coleccion = {}
     @coleccion['tablas'] = @objeto.tablas
-    @coleccion['especificaciones'] = @objeto.especificaciones
+#    @coleccion['especificaciones'] = @objeto.especificaciones
 
   end
   # GET /etapas/new

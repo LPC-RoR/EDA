@@ -1,0 +1,34 @@
+<% @coleccion['caracterizaciones'].each do |caracterizacion| %>
+
+	<% if caracterizacion.tabla? %>
+
+		<h5><%= caracterizacion.caracterizacion %></h5>
+
+		<table class="table table-striped table-sm  thead-dark">
+		  <thead>
+		  	<th><i>Característica</i></th>
+		  	<th><i>Valor</i></th>
+		  </thead>
+
+		  <tbody>
+		  	<% unless caracterizacion.caracteristicas.empty? %>
+			<% caracterizacion.caracteristicas.each do |caracteristica| %>
+				<tr>
+				<td><small><small><%= caracteristica.caracteristica %></small></small></td>
+				<td <%= 'align=right' if caracteristica.tipo == 'valor' %>><small><small>
+					<% if caracteristica.valor_referencia(o).blank? %>
+						<%= link_to 'Ingresar', new_columna_path(o: o, c: caracteristica) %>
+					<% else %>
+						<%= link_to caracteristica.valor_referencia(o), edit_columna_path(caracteristica.columna(o)) %>
+					<% end %>
+				</small></small></td>
+				</tr>
+			<% end %>
+			<% end %>
+
+		  </tbody>
+		</table>
+
+	<% end %>
+
+<% end %>

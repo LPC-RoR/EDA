@@ -1,6 +1,6 @@
 class Data::TablasController < ApplicationController
   before_action :carga_temas_ayuda
-  before_action :set_tabla, only: [:show, :edit, :update, :destroy, :cargar_tabla]
+  before_action :set_tabla, only: [:show, :edit, :update, :destroy, :cargar_tabla, :descargar_tabla]
 
   # GET /tablas
   # GET /tablas.json
@@ -26,7 +26,11 @@ class Data::TablasController < ApplicationController
 
   # GET /tablas/new
   def new
-    @objeto = Tabla.new(padre_id: params[:etapa_id])
+    if params[:etapa_id].present?
+      p_id = params[:etapa_id]
+      p_class = 'Etapa'
+    end
+    @objeto = Tabla.new(padre_id: p_id, padre_class: p_class)
   end
 
   # GET /tablas/1/edit
@@ -74,12 +78,6 @@ class Data::TablasController < ApplicationController
         linea_carga.each_with_index do |nombre, index_nombre|
           @objeto.encabezados.create(orden: index_nombre+1, encabezado: nombre)
         end
-#      when 2
-#        linea_carga.each_with_index do |tipo, index_nombre|
-#          encabezado = @objeto.encabezados.find_by(orden: index_nombre+1)
-#          encabezado.tipo = tipo
-#          encabezado.save
-#        end
       else
         linea = @objeto.lineas.create(orden: linea_proceso-2)
         linea_carga.each_with_index do |columna, index_columna|
@@ -89,7 +87,16 @@ class Data::TablasController < ApplicationController
       end
       linea_proceso += 1
     end
-    redirect_to @objeto.etapa
+    redirect_to datos_path
+  end
+
+  def descargar_tabla
+    @objeto.encabezados.delete_all
+    @objeto.lineas.each do |linea|
+      linea.columnas.delete_all
+      linea.delete
+    end
+    redirect_to datos_path
   end
 
   # DELETE /tablas/1
@@ -115,6 +122,6 @@ class Data::TablasController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def tabla_params
-      params.require(:tabla).permit(:tabla, :padre_id, :archivo, :orden, :archivos, :imagenes)
+      params.require(:tabla).permit(:tabla, :padre_id, :padre_class, :archivo, :orden, :archivos, :imagenes)
     end
 end

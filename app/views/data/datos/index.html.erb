@@ -1,1 +1,27 @@
-<%= render partial: 'data/0data/etapa/index' %>
+<%= render partial: '0p/general/titulo', locals: {c: 'etapas', a: nil, titulo: 'Etapas', size: '5'} %>
+<% @etapas.each do |etapa| %>
+	<table class="table table-striped table-sm  thead-dark">
+		<tbody>
+			<tr><td><%= etapa.orden %></td><td><%= etapa.etapa %></td><td><%= render partial: '0p/tabla/btns', locals: {a: 'index', objeto: etapa} %></td></tr>
+		</tbody>
+	</table>
+
+	<div class='row'>
+		<div class='col-md-6'>
+			<%= render partial: '0p/general/titulo', locals: {c: 'tablas', a: nil, titulo: 'Tablas', size: '5'} %>
+			<%= render partial: '0p/tabla/tabla_coleccion', locals: {c: 'tablas', a: 'index', coleccion: etapa.tablas} %>
+			<%= render partial: '0p/tabla/inline_btn_nuevo', locals: {c: 'tablas', o: etapa} %>
+		</div>
+		<div class='col-md-6'>
+			<%= render partial: '0p/general/titulo', locals: {c: 'documentos', a: nil, titulo: 'Documentos', size: '5'} %>
+			<%= render partial: '0p/tabla/tabla_coleccion', locals: {c: 'documentos', a: 'index', coleccion: etapa.documentos} %>
+			<%= link_to  "/documentos/new?etapa_id=#{etapa.id}", class: "btn btn-outline-#{c_color('documentos')} btn-sm" do %>
+			    <%= "+ Documento" %>
+			<% end %>
+
+		</div>
+	</div>
+	</br>
+<% end %>
+</br></br>
+<%= render partial: '0p/tabla/btn_nuevo', locals: {c: 'etapas'} %>

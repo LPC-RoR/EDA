@@ -36,7 +36,8 @@ class PublicacionesController < ApplicationController
     publicaciones = carpeta.publicaciones.order(year: :desc)
     @coleccion[controller_name] = publicaciones.page(params[:page])
 
-    @coleccion['reportes'] = @proyecto_activo.reportes
+    @coleccion['reportes'] = @proyecto_activo.reportes.order(:reporte)
+    @coleccion['caracterizaciones'] = @proyecto_activo.caracterizaciones.order(:caracterizacion)
 
   end
 
@@ -68,6 +69,8 @@ class PublicacionesController < ApplicationController
 #    @coleccion['temas']    = proyecto_activo.temas
     @coleccion['carpetas'] = @objeto.carpetas
     @coleccion['etiquetas'] = proyecto_activo.etiquetas.order(:etiqueta)
+
+    @coleccion['caracterizaciones'] = proyecto_activo.caracterizaciones.order(:caracterizacion)
 
     @temas_seleccion = proyecto_activo.temas_seleccion
 

@@ -8,17 +8,7 @@ class Tabla < ApplicationRecord
 		['archivo', 'link_file']
 	]
 
-	# -------------------- FORM  -----------------------
- 	FORM_FIELDS = [
-		['orden',        'entry'],
-		['tabla',        'entry'],
-		['archivo', 'file_field'],
-		['padre_id',    'hidden'],
-		['archivos', 'check_box'],
-		['imagenes', 'check_box']
-	]
-
-	belongs_to :etapa, foreign_key: 'padre_id'
+	# -------------------- FORM DETAIL  -----------------------
 
 	has_many :encabezados
 
@@ -27,5 +17,13 @@ class Tabla < ApplicationRecord
 	has_many :observaciones
 
 	mount_uploader :archivo, TablaUploader
+
+	def caracterizacion
+		self.padre_class == 'Caracterizacion' ? Caracterizacion.find(self.padre_id) : nil
+	end
+
+	def etapa
+		self.padre_class == 'Etapa' ? Etapa.find(self.padre_id) : nil
+	end
 
 end

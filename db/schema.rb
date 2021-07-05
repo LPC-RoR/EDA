@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_24_141354) do
+ActiveRecord::Schema.define(version: 2021_06_30_200630) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,6 +83,26 @@ ActiveRecord::Schema.define(version: 2021_06_24_141354) do
     t.index ["negrita"], name: "index_campos_on_negrita"
     t.index ["orden"], name: "index_campos_on_orden"
     t.index ["tipo_publicacion_id"], name: "index_campos_on_tipo_publicacion_id"
+  end
+
+  create_table "caracteristicas", force: :cascade do |t|
+    t.string "caracteristica"
+    t.string "tipo"
+    t.integer "caracterizacion_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "orden"
+    t.string "nombre_columna"
+    t.index ["caracterizacion_id"], name: "index_caracteristicas_on_caracterizacion_id"
+    t.index ["orden"], name: "index_caracteristicas_on_orden"
+  end
+
+  create_table "caracterizaciones", force: :cascade do |t|
+    t.string "caracterizacion"
+    t.integer "proyecto_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["proyecto_id"], name: "index_caracterizaciones_on_proyecto_id"
   end
 
   create_table "cargas", force: :cascade do |t|
@@ -350,7 +370,11 @@ ActiveRecord::Schema.define(version: 2021_06_24_141354) do
     t.string "linea"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "referencia_id"
+    t.string "referencia_class"
     t.index ["orden"], name: "index_lineas_on_orden"
+    t.index ["referencia_class"], name: "index_lineas_on_referencia_class"
+    t.index ["referencia_id"], name: "index_lineas_on_referencia_id"
     t.index ["tabla_id"], name: "index_lineas_on_tabla_id"
   end
 
@@ -392,6 +416,14 @@ ActiveRecord::Schema.define(version: 2021_06_24_141354) do
     t.index ["linea_id"], name: "index_observaciones_on_linea_id"
     t.index ["orden"], name: "index_observaciones_on_orden"
     t.index ["tabla_id"], name: "index_observaciones_on_tabla_id"
+  end
+
+  create_table "opciones", force: :cascade do |t|
+    t.string "opcion"
+    t.integer "caracteristica_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["caracteristica_id"], name: "index_opciones_on_caracteristica_id"
   end
 
   create_table "pasos", force: :cascade do |t|
@@ -549,9 +581,11 @@ ActiveRecord::Schema.define(version: 2021_06_24_141354) do
     t.string "archivo"
     t.boolean "archivos"
     t.boolean "imagenes"
+    t.string "padre_class"
     t.index ["archivos"], name: "index_tablas_on_archivos"
     t.index ["imagenes"], name: "index_tablas_on_imagenes"
     t.index ["orden"], name: "index_tablas_on_orden"
+    t.index ["padre_class"], name: "index_tablas_on_padre_class"
     t.index ["padre_id"], name: "index_tablas_on_padre_id"
   end
 

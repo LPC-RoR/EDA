@@ -1,0 +1,12 @@
+<%= form.label @caracteristica.caracteristica %></br>
+<% case @caracteristica.tipo %>
+<% when 'texto' %>
+	<%= form.text_field(:columna, size: 57, class: 'form-control' ) %>
+<% when 'valor' %>
+	<%= form.number_field(:columna, size: 57, class: 'form-control') %>
+<% else %>
+	<%= form.select :columna, @caracteristica.tipo.split(','), include_blank: false, prompt: "Seleccione Clasificacion" %>
+<% end %>
+
+<%= form.hidden_field :orden %>
+<%= form.hidden_field :linea_id %>

@@ -13,6 +13,9 @@ class Etapa < ApplicationRecord
 
 	belongs_to :proyecto
 
-	has_many :tablas, foreign_key: 'padre_id', class_name: 'Tabla'
 	has_many :documentos
+
+	def tablas
+		Tabla.where(padre_class: 'Etapa').where(padre_id: self.id)
+	end
 end
