@@ -1,0 +1,63 @@
+<div class='row'>
+	<div class='col-md-6'>
+		<%= render partial: '0p/general/titulo', locals: {c: 'documentos', a: nil, titulo: 'Documentos', size: '5'} %>
+		<%= render partial: '0p/tabla/solo_tabla', locals: {c: 'documentos', a: 'index'} %>
+		<%= link_to  "/documentos/new?tabla_id=#{objeto.id}", class: "btn btn-outline-#{c_color('documentos')} btn-sm" do %>
+		    <%= "+ Documento" %>
+		<% end %>
+	</div>
+	<div class='col-md-6'>
+		<%= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: 'Observaciones', size: '5'} %>
+
+		<%= render partial: "data/0data/observacion/index" %>
+		<%= render partial: '0p/tabla/ext_btn_nuevo', locals: {o: objeto, c: 'observaciones'} %>
+
+	</div>
+</div>
+</br>
+
+<div class='row'>
+	<div class='col-md-12'>
+
+		<table class="table table-bordered table-sm  thead-dark">
+			<thead>
+				<tr>
+					<% objeto.encabezados.order(:orden).each do |campo| %>
+						<td align='center'><small><i><%= link_to campo.encabezado, edit_encabezado_path(campo) %></i></small></td>				
+					<% end %>
+				</tr>
+			</thead>
+			<tbody>
+
+				<% objeto.lineas.order(:orden).each do |linea| %>
+					<tr>
+
+						<% objeto.encabezados.order(:orden).each do |campo| %>
+							<% if campo.tipo == 'valor' %>
+								<td align="right">
+							<% else %>
+								<td>
+							<% end %>
+							<small>
+
+							<% if linea.columna_n(campo.orden).blank? %>
+								-
+							<% else %>
+								<% if campo.orden == 1 %>
+									<%= link_to linea.columna_n(campo.orden).columna, linea %>
+								<% else %>
+									<%= linea.columna_n(campo.orden).columna %>
+								<% end %>
+							<% end %>
+
+							</small></td>
+						<% end %>
+
+					</tr>
+				<% end %>
+
+			</tbody>
+		</table>
+
+	</div>
+</div>

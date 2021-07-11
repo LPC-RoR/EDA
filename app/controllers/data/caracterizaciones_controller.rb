@@ -11,8 +11,22 @@ class Data::CaracterizacionesController < ApplicationController
   # GET /caracterizaciones/1
   # GET /caracterizaciones/1.json
   def show
+
+    if params[:html_options].blank?
+      @tab = 'Características'
+    else
+      @tab = (params[:html_options][:tab].blank? ? 'Características' : params[:html_options][:tab])
+    end
+    @options = {'tab' => @tab}
+
     @coleccion = {}
-    @coleccion['caracteristicas'] = @objeto.caracteristicas.order(:orden)
+    if @tab == 'Características'
+      @coleccion['caracteristicas'] = @objeto.caracteristicas.order(:orden)
+    elsif @tab == 'Tablas'
+      @coleccion['observaciones'] = @objeto.tabla.observaciones.order(created_at: :desc)
+      @coleccion['documentos'] = @objeto.tabla.documentos.order(:documento)
+    elsif @tab == 'Gráficos'
+    end
   end
 
   # GET /caracterizaciones/new

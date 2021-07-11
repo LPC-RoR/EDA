@@ -1,5 +1,13 @@
 <%= render partial: '0p/general/o_titulo', locals: {o: @objeto, a: action_name, size: '5'} %>
 
-<%= render partial: '0p/general/titulo', locals: {c: 'caracteristicas', a: nil, titulo: 'Caracteristicas', size: '5'} %>
-<%= render partial: '0p/tabla/solo_tabla', locals: {c: 'caracteristicas', a: 'index'} if @coleccion['caracteristicas'].any? %>
-<%= render partial: '0p/tabla/btn_nuevo', locals: {c: 'caracteristicas', a: 'index'} %>
+<%= render partial: '0p/tabs/tabs', locals: {tabs: ['Características', 'Tablas', 'Gráficos'], tag: 'tab', active: @tab} %>
+
+<% if @tab == 'Características' %>
+	<%#= render partial: '0p/general/titulo', locals: {c: 'caracteristicas', a: nil, titulo: 'Caracteristicas', size: '5'} %>
+	<%= render partial: '0p/tabla/solo_tabla', locals: {c: 'caracteristicas', a: 'index'} if @coleccion['caracteristicas'].any? %>
+	<%= render partial: '0p/tabla/btn_nuevo', locals: {c: 'caracteristicas', a: 'index'} %>
+<% elsif @tab == 'Tablas' %>
+	<%= render partial: 'data/tablas/show', locals: {objeto: @objeto.tabla} %>
+<% elsif @tab == 'Gráficos' %>
+<% end %>
+

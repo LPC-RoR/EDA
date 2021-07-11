@@ -27,4 +27,8 @@ class Linea < ApplicationRecord
 	def referencia?
 		self.referencia.present?
 	end
+
+	def columna_n(orden)
+		self.columnas.find_by(orden: orden)
+	end
 end

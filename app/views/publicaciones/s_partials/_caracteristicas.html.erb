@@ -12,7 +12,7 @@
 
 		  <tbody>
 		  	<% unless caracterizacion.caracteristicas.empty? %>
-			<% caracterizacion.caracteristicas.each do |caracteristica| %>
+			<% caracterizacion.caracteristicas.order(:orden).each do |caracteristica| %>
 				<tr>
 				<td><small><small><%= caracteristica.caracteristica %></small></small></td>
 				<td <%= 'align=right' if caracteristica.tipo == 'valor' %>><small><small>
