@@ -22,10 +22,38 @@ class Data::CaracterizacionesController < ApplicationController
     @coleccion = {}
     if @tab == 'Características'
       @coleccion['caracteristicas'] = @objeto.caracteristicas.order(:orden)
-    elsif @tab == 'Tablas'
+    elsif @tab == 'Tabla'
       @coleccion['observaciones'] = @objeto.tabla.observaciones.order(created_at: :desc)
       @coleccion['documentos'] = @objeto.tabla.documentos.order(:documento)
+
     elsif @tab == 'Gráficos'
+      tabla = @objeto.tabla
+      lineas = tabla.lineas.count
+
+      tabla.encabezados.each do |encabezado|
+        #borrar lo que tenía
+        encabezado.sumarios.delete_all
+        # se captura info de las columnas
+        ids_columnas = []
+        tabla.lineas.each do |linea|
+          ids_columnas = ids_columnas.union(linea.columnas.where(orden: encabezado.orden).ids)
+        end
+        # se llenan sumarios
+        columnas = Columna.where(id: ids_columnas)
+        n_llenos = 0
+        columnas.each do |columna|
+          sumario = encabezado.sumarios.find_by(clave: columna.columna)
+          if sumario.blank?
+            encabezado.sumarios.create(clave: columna.columna, valor: 1)
+          else
+            sumario.valor += 1
+            sumario.save
+          end
+          n_llenos += 1
+        end
+        encabezado.sumarios.create(clave: '-', valor: lineas - n_llenos) unless (lineas == n_llenos)
+      end
+
     end
   end
 

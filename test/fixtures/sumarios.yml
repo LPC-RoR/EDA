@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  clave: MyString
+  valor: 1
+  encabezado_id: 1
+
+two:
+  clave: MyString
+  valor: 1
+  encabezado_id: 1

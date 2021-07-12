@@ -18,39 +18,4 @@
 </div>
 </br>
 
-<div class='row'>
-	<div class='col-md-12'>
-
-		<table class="table table-bordered table-sm  thead-dark">
-			<thead>
-				<tr>
-					<% @objeto.encabezados.order(:orden).each do |campo| %>
-						<td align='center'><small><i><%= link_to campo.encabezado, edit_encabezado_path(campo) %></i></small></td>				
-					<% end %>
-				</tr>
-			</thead>
-			<tbody>
-				<% @objeto.lineas.order(:orden).each do |linea| %>
-					<tr>
-						<% linea.columnas.order(:orden).each do |columna| %>
-							<% if @objeto.encabezados.find_by(orden: columna.orden).tipo == 'valor' %>
-								<td align="right">
-							<% else %>
-								<td>
-							<% end %>
-							<small>
-								<%# if (columna.orden == 1 and (@objeto.archivos == true or @objeto.imagenes == true)) %>
-								<% if columna.orden == 1 %>
-									<%= link_to "[ #{columna.columna} ]", linea %>
-								<% else %>
-									<%= columna.columna %>
-								<% end %>
-							</small></td>
-						<% end %>
-					</tr>
-				<% end %>
-			</tbody>
-		</table>
-
-	</div>
-</div>
+<%= render partial: 'data/tablas/show', locals: { objeto: @objeto} %>

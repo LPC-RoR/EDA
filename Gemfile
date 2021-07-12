@@ -12,6 +12,8 @@ gem 'devise'
 
 gem 'kaminari'
 
+gem "chartkick"
+
 gem 'carrierwave', '~> 2.0'
 
 gem "roo", "~> 2.8.0"

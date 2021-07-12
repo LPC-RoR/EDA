@@ -1,0 +1,2 @@
+module SumariosHelper
+end

@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Sumarios</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Clave</th>
+      <th>Valor</th>
+      <th>Encabezado</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sumarios.each do |sumario| %>
+      <tr>
+        <td><%= sumario.clave %></td>
+        <td><%= sumario.valor %></td>
+        <td><%= sumario.encabezado_id %></td>
+        <td><%= link_to 'Show', sumario %></td>
+        <td><%= link_to 'Edit', edit_sumario_path(sumario) %></td>
+        <td><%= link_to 'Destroy', sumario, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Sumario', new_sumario_path %>

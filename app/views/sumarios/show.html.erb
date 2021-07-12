@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Clave:</strong>
+  <%= @sumario.clave %>
+</p>
+
+<p>
+  <strong>Valor:</strong>
+  <%= @sumario.valor %>
+</p>
+
+<p>
+  <strong>Encabezado:</strong>
+  <%= @sumario.encabezado_id %>
+</p>
+
+<%= link_to 'Edit', edit_sumario_path(@sumario) %> |
+<%= link_to 'Back', sumarios_path %>

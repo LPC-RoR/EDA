@@ -9,4 +9,6 @@ class Encabezado < ApplicationRecord
 	]
 
 	belongs_to :tabla
+
+	has_many :sumarios
 end

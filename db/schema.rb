@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_30_200630) do
+ActiveRecord::Schema.define(version: 2021_07_12_144714) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -570,6 +570,16 @@ ActiveRecord::Schema.define(version: 2021_06_30_200630) do
     t.datetime "updated_at", null: false
     t.index ["child_id"], name: "index_subs_on_child_id"
     t.index ["parent_id"], name: "index_subs_on_parent_id"
+  end
+
+  create_table "sumarios", force: :cascade do |t|
+    t.string "clave"
+    t.integer "valor"
+    t.integer "encabezado_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["clave"], name: "index_sumarios_on_clave"
+    t.index ["encabezado_id"], name: "index_sumarios_on_encabezado_id"
   end
 
   create_table "tablas", force: :cascade do |t|

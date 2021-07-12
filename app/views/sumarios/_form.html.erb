@@ -1,0 +1,32 @@
+<%= form_with(model: sumario, local: true) do |form| %>
+  <% if sumario.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(sumario.errors.count, "error") %> prohibited this sumario from being saved:</h2>
+
+      <ul>
+      <% sumario.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :clave %>
+    <%= form.text_field :clave %>
+  </div>
+
+  <div class="field">
+    <%= form.label :valor %>
+    <%= form.number_field :valor %>
+  </div>
+
+  <div class="field">
+    <%= form.label :encabezado_id %>
+    <%= form.number_field :encabezado_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

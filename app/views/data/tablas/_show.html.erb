@@ -1,22 +1,4 @@
 <div class='row'>
-	<div class='col-md-6'>
-		<%= render partial: '0p/general/titulo', locals: {c: 'documentos', a: nil, titulo: 'Documentos', size: '5'} %>
-		<%= render partial: '0p/tabla/solo_tabla', locals: {c: 'documentos', a: 'index'} %>
-		<%= link_to  "/documentos/new?tabla_id=#{objeto.id}", class: "btn btn-outline-#{c_color('documentos')} btn-sm" do %>
-		    <%= "+ Documento" %>
-		<% end %>
-	</div>
-	<div class='col-md-6'>
-		<%= render partial: '0p/general/titulo', locals: {c: controller_name, a: nil, titulo: 'Observaciones', size: '5'} %>
-
-		<%= render partial: "data/0data/observacion/index" %>
-		<%= render partial: '0p/tabla/ext_btn_nuevo', locals: {o: objeto, c: 'observaciones'} %>
-
-	</div>
-</div>
-</br>
-
-<div class='row'>
 	<div class='col-md-12'>
 
 		<table class="table table-bordered table-sm  thead-dark">

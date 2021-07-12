@@ -62,6 +62,8 @@ module RecursosHelper
 			controller_name == 'datos'
 		when 'Perfil'
 			false
+		when 'Sumario'
+			false
 		else
 			['TemaAyuda', 'Tutorial', 'Paso'].include?(objeto.class.name) ? (usuario_signed_in? ? session[:es_administrador] : false) : true
 		end

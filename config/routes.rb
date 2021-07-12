@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :sumarios
   resources :alcances
   # SCOPE APLICACION
   scope module: 'aplicacion' do
