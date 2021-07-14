@@ -1,0 +1,22 @@
+<%= form_with(model: formato_carga, local: true) do |form| %>
+  <% if formato_carga.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(formato_carga.errors.count, "error") %> prohibited this formato_carga from being saved:</h2>
+
+      <ul>
+      <% formato_carga.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :formato_carga %>
+    <%= form.text_field :formato_carga %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

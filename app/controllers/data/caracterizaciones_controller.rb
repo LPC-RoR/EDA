@@ -22,10 +22,6 @@ class Data::CaracterizacionesController < ApplicationController
     @coleccion = {}
     if @tab == 'Características'
       @coleccion['caracteristicas'] = @objeto.caracteristicas.order(:orden)
-    elsif @tab == 'Tabla'
-      @coleccion['observaciones'] = @objeto.tabla.observaciones.order(created_at: :desc)
-      @coleccion['documentos'] = @objeto.tabla.documentos.order(:documento)
-
     elsif @tab == 'Gráficos'
       tabla = @objeto.tabla
       lineas = tabla.lineas.count

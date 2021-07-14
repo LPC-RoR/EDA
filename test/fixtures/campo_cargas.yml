@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  campo_carga: MyString
+  campo_tabla: MyString
+  formato_carga_id: 1
+
+two:
+  campo_carga: MyString
+  campo_tabla: MyString
+  formato_carga_id: 1

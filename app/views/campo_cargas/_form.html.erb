@@ -1,0 +1,32 @@
+<%= form_with(model: campo_carga, local: true) do |form| %>
+  <% if campo_carga.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(campo_carga.errors.count, "error") %> prohibited this campo_carga from being saved:</h2>
+
+      <ul>
+      <% campo_carga.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :campo_carga %>
+    <%= form.text_field :campo_carga %>
+  </div>
+
+  <div class="field">
+    <%= form.label :campo_tabla %>
+    <%= form.text_field :campo_tabla %>
+  </div>
+
+  <div class="field">
+    <%= form.label :formato_carga_id %>
+    <%= form.number_field :formato_carga_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

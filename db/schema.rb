@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_12_144714) do
+ActiveRecord::Schema.define(version: 2021_07_12_205036) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,6 +65,17 @@ ActiveRecord::Schema.define(version: 2021_07_12_144714) do
     t.datetime "updated_at", null: false
     t.index ["investigador_id"], name: "index_autores_on_investigador_id"
     t.index ["publicacion_id"], name: "index_autores_on_publicacion_id"
+  end
+
+  create_table "campo_cargas", force: :cascade do |t|
+    t.string "campo_carga"
+    t.string "campo_tabla"
+    t.integer "formato_carga_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campo_carga"], name: "index_campo_cargas_on_campo_carga"
+    t.index ["campo_tabla"], name: "index_campo_cargas_on_campo_tabla"
+    t.index ["formato_carga_id"], name: "index_campo_cargas_on_formato_carga_id"
   end
 
   create_table "campos", force: :cascade do |t|
@@ -291,6 +302,12 @@ ActiveRecord::Schema.define(version: 2021_07_12_144714) do
     t.index ["aspecto"], name: "index_evaluaciones_on_aspecto"
     t.index ["perfil_id"], name: "index_evaluaciones_on_perfil_id"
     t.index ["publicacion_id"], name: "index_evaluaciones_on_publicacion_id"
+  end
+
+  create_table "formato_cargas", force: :cascade do |t|
+    t.string "formato_carga"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "formatos", force: :cascade do |t|

@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Formato Cargas</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Formato carga</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @formato_cargas.each do |formato_carga| %>
+      <tr>
+        <td><%= formato_carga.formato_carga %></td>
+        <td><%= link_to 'Show', formato_carga %></td>
+        <td><%= link_to 'Edit', edit_formato_carga_path(formato_carga) %></td>
+        <td><%= link_to 'Destroy', formato_carga, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Formato Carga', new_formato_carga_path %>

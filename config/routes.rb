@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   resources :sumarios
   resources :alcances
   # SCOPE APLICACION
@@ -63,6 +62,7 @@ Rails.application.routes.draw do
     end
     resources :columnas
     resources :encabezados
+
     resources :subs
     resources :directorios do
       match :nuevo, via: :post, on: :collection
@@ -87,6 +87,11 @@ Rails.application.routes.draw do
   end
   resources :campos
   resources :formatos
+
+  resources :campo_cargas
+  resources :formato_cargas do
+    resources :campo_cargas
+  end
 
   resources :asociaciones
   resources :relaciones

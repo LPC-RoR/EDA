@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Campo Cargas</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Campo carga</th>
+      <th>Campo tabla</th>
+      <th>Formato carga</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @campo_cargas.each do |campo_carga| %>
+      <tr>
+        <td><%= campo_carga.campo_carga %></td>
+        <td><%= campo_carga.campo_tabla %></td>
+        <td><%= campo_carga.formato_carga_id %></td>
+        <td><%= link_to 'Show', campo_carga %></td>
+        <td><%= link_to 'Edit', edit_campo_carga_path(campo_carga) %></td>
+        <td><%= link_to 'Destroy', campo_carga, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Campo Carga', new_campo_carga_path %>

@@ -26,6 +26,7 @@ class Aplicacion::RecursosController < ApplicationController
     @coleccion['administradores'] = Administrador.all
     @coleccion['perfiles'] = Perfil.all
     @coleccion['tipo_publicaciones'] = TipoPublicacion.all.order(:tipo_publicacion)
+    @coleccion['formato_cargas'] = FormatoCarga.all.order(:formato_carga)
     
   end
 
