@@ -41,11 +41,15 @@ class PublicacionesController < ApplicationController
 
     # Resumen de Publicaciones
     ids_pubs = []
+    unique_id_pubs = []
     @proyecto_activo.cargas.each do |carga|
       ids_pubs = ids_pubs.union(carga.publicaciones.ids)
+      unique_id_pubs = unique_id_pubs.union(carga.publicaciones.map {|ppp| ppp.unique_id})
     end
     ids_pubs = ids_pubs.uniq
+    unique_id_pubs = unique_id_pubs.uniq
     @n_ids_pubs = ids_pubs.length
+    @n_unique_ids_pubs = unique_id_pubs.length
 
   end
 
