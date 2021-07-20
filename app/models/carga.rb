@@ -10,6 +10,7 @@ class Carga < ApplicationRecord
 	TABLA_FIELDS = [
 		['archivo_carga', 'url'], 
 		['status',     'normal'],
+		['d_n',        'normal'],
 		['nota',       'normal'],
 		['estado',     'normal']
 	]
@@ -32,6 +33,10 @@ class Carga < ApplicationRecord
 
 	def status
 		self.n_procesados.blank? ? '[ sin procesar ]' : "[ #{self.n_procesados} | N:#{self.n_nuevos} + D:#{self.n_duplicados} + V:#{self.n_vinculados} + E:#{self.n_existentes} ]"
+	end
+
+	def d_n
+		self.publicaciones.count
 	end
 
 end
