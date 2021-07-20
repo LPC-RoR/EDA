@@ -39,6 +39,14 @@ class PublicacionesController < ApplicationController
     @coleccion['reportes'] = @proyecto_activo.reportes.order(:reporte)
     @coleccion['caracterizaciones'] = @proyecto_activo.caracterizaciones.order(:caracterizacion)
 
+    # Resumen de Publicaciones
+    ids_pubs = []
+    @proyecto_activo.cargas.each do |carga|
+      ids_pubs = ids_pubs.union(carga.publicaciones.ids)
+    end
+    ids_pubs = ids_pubs.uniq
+    @n_ids_pubs = ids_pubs.length
+
   end
 
   # GET /publicaciones/1

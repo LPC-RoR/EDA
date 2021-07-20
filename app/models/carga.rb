@@ -10,7 +10,7 @@ class Carga < ApplicationRecord
 	TABLA_FIELDS = [
 		['archivo_carga', 'url'], 
 		['status',     'normal'],
-		['d_n',        'normal'],
+		['d_n',         'valor'],
 		['nota',       'normal'],
 		['estado',     'normal']
 	]
