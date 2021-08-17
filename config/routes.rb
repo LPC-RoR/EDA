@@ -3,19 +3,6 @@ Rails.application.routes.draw do
   resources :alcances
   # SCOPE APLICACION
   scope module: 'aplicacion' do
-    resources :archivos
-    resources :documentos do
-      resources :archivos
-    end
-    resources :imagenes
-    resources :administradores
-#    resources :mejoras
-    resources :observaciones do
-      match :nuevo, via: :post, on: :collection
-    end
-    resources :perfiles do
-      match :desvincular, via: :get, on: :member
-    end
     resources :recursos do
       collection do
         match :home, via: :get
@@ -25,6 +12,19 @@ Rails.application.routes.draw do
         match :administracion, via: :get
         match :borrar_archivos, via: :get
       end
+    end
+    resources :perfiles do
+      match :desvincular, via: :get, on: :member
+    end
+    resources :administradores
+    resources :archivos
+    resources :documentos do
+      resources :archivos
+    end
+    resources :imagenes
+#    resources :mejoras
+    resources :observaciones do
+      match :nuevo, via: :post, on: :collection
     end
     resources :licencias
   end

@@ -2,11 +2,13 @@
 <%= render partial: '0p/tabla/btn', locals: {texto: "Proceso", link: publicaciones_path(html_options: {tab: 'Proceso'}), delete: false, clr: 
  'dark' }  %>
 
- <% if @carpetas_seleccion.any? %>
- 	<% @carpetas_seleccion.each do |carpeta| %>
- 		<%= render partial: '0p/tabla/btn', locals: {texto: carpeta.carpeta, link: "/carpetas/#{carpeta.id}/btn_asigna?publicacion_id=#{@objeto.id}", delete: false, clr: 'success' }  %>
- 	<% end %>
- <% end %>
+<% unless @carpetas_seleccion.blank? %>
+	<% if @carpetas_seleccion.any? %>
+ 		<% @carpetas_seleccion.each do |carpeta| %>
+ 			<%= render partial: '0p/tabla/btn', locals: {texto: carpeta.carpeta, link: "/carpetas/#{carpeta.id}/btn_asigna?publicacion_id=#{@objeto.id}", delete: false, clr: 'success' }  %>
+ 		<% end %>
+	<% end %>
+<% end %>
 
 </br></br>
 
