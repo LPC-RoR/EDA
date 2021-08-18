@@ -97,8 +97,13 @@ class CarpetasController < ApplicationController
 
     ids_carpetas_base = proyecto_activo.carpetas_seleccion.ids
 
+    # si la carpeta a la que se está asignando pertenece a las NOT_MODIFY
     if ids_carpetas_base.include?(@objeto.id)
       publicacion.carpetas.delete_all
+    else 
+      # hay que borrar carpeta 'Aceptadas' si es que existe
+      aceptada = proyecto_activo.carpetas.find_by(carpeta: 'Aceptadas')
+      publicacion.carpetas.delete(aceptada) unless aceptada.blank?
     end
     publicacion.carpetas << @objeto
 
