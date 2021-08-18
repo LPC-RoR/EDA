@@ -1,3 +1,4 @@
+<!-- o: es la PUBLICACION -->
 <% @coleccion['caracterizaciones'].each do |caracterizacion| %>
 
 	<% if caracterizacion.tabla? %>
@@ -16,10 +17,10 @@
 				<tr>
 				<td><small><small><%= caracteristica.caracteristica %></small></small></td>
 				<td <%= 'align=right' if caracteristica.tipo == 'valor' %>><small><small>
-					<% if caracteristica.valor_referencia(o).blank? %>
+					<% if caracteristica.valor_referencia(o, caracterizacion).blank? %>
 						<%= link_to 'Ingresar', new_columna_path(o: o, c: caracteristica) %>
 					<% else %>
-						<%= link_to caracteristica.valor_referencia(o), edit_columna_path(caracteristica.columna(o)) %>
+						<%= link_to caracteristica.valor_referencia(o, caracterizacion), edit_columna_path(caracteristica.columna(o, caracterizacion)) %>
 					<% end %>
 				</small></small></td>
 				</tr>

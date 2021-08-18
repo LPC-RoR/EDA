@@ -19,10 +19,10 @@ class Caracteristica < ApplicationRecord
 
 	has_many :opciones
 
-	def columna(objeto)
-		if objeto.linea.present?
-			if objeto.linea.columnas.any?
-				objeto.linea.columnas.find_by(orden: self.orden)
+	def columna(objeto, caracterizacion)
+		if objeto.linea(caracterizacion).present?
+			if objeto.linea(caracterizacion).columnas.any?
+				objeto.linea(caracterizacion).columnas.find_by(orden: self.orden)
 			else
 				nil
 			end
@@ -31,7 +31,7 @@ class Caracteristica < ApplicationRecord
 		end
 	end
 
-	def valor_referencia(objeto)
-		(self.columna(objeto).blank? ? nil : self.columna(objeto).columna)
+	def valor_referencia(objeto, caracterizacion)
+		(self.columna(objeto, caracterizacion).blank? ? nil : self.columna(objeto, caracterizacion).columna)
 	end
 end
