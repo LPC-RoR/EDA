@@ -17,11 +17,11 @@ class Data::ColumnasController < ApplicationController
   def new
     publicacion = Publicacion.find(params[:o])
     @caracteristica = Caracteristica.find(params[:c])
-     if publicacion.linea.blank?
+     if publicacion.linea(@caracteristica.caracterizacion).blank?
       Linea.create(tabla_id: @caracteristica.caracterizacion.tabla.id, referencia_id: publicacion.id, referencia_class: 'Publicacion')
      end
      # Aquí ya la línea está creada
-    @objeto = publicacion.linea.columnas.new(orden: @caracteristica.orden)
+    @objeto = publicacion.linea(@caracteristica.caracterizacion).columnas.new(orden: @caracteristica.orden)
   end
 
   # GET /columnas/1/edit
